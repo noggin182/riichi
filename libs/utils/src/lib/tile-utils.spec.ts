@@ -45,6 +45,5 @@ describe('Tile utils', () => {
 
     it('should translate hands to unicode', () => {
         expect(utils.handToUnicode([Tile.Chun, Tile.Hatsu, Tile.Man1, Tile.Pin2])).toMatch('🀄 🀅 🀇 🀚');
-        
     });
 });
