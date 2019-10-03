@@ -20,7 +20,7 @@ export function makeTile(suit: TileSuit, value: number) {
     return (suit + (value % valuesInSuit(suit))) as Tile;
 }
 
-function valuesInSuit(suit: TileSuit) {
+export function valuesInSuit(suit: TileSuit) {
     switch (suit) {
         case TileSuit.Man: 
         case TileSuit.Sou:
