@@ -17,7 +17,8 @@
     "baseUrl": ".",
     "paths": {
       "@riichi/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@riichi/definitions": ["libs/definitions/src/index.ts"]
+      "@riichi/definitions": ["libs/definitions/src/index.ts"],
+      "@riichi/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -3,5 +3,5 @@
   "compilerOptions": {
     "types": ["node", "jest"]
   },
-  "include": ["**/*.ts", "../utils/src/lib/tile-utils.ts"]
+  "include": ["**/*.ts"]
 }
