@@ -29,7 +29,6 @@
   },
   "private": true,
   "dependencies": {
-    "@nrwl/angular": "8.6.0-beta.1",
     "@angular/animations": "^8.2.0",
     "@angular/common": "^8.2.0",
     "@angular/compiler": "^8.2.0",
@@ -38,13 +37,15 @@
     "@angular/platform-browser": "^8.2.0",
     "@angular/platform-browser-dynamic": "^8.2.0",
     "@angular/router": "^8.2.0",
-    "core-js": "^2.5.4",
-    "rxjs": "~6.4.0",
-    "zone.js": "^0.9.1",
     "@nestjs/common": "^6.2.4",
     "@nestjs/core": "^6.2.4",
     "@nestjs/platform-express": "^6.2.4",
-    "reflect-metadata": "^0.1.12"
+    "@nrwl/angular": "8.6.0-beta.1",
+    "@nrwl/web": "^8.6.0",
+    "core-js": "^2.5.4",
+    "reflect-metadata": "^0.1.12",
+    "rxjs": "~6.4.0",
+    "zone.js": "^0.9.1"
   },
   "devDependencies": {
     "@angular/cli": "8.3.3",

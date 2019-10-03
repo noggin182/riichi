@@ -16,7 +16,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@riichi/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@riichi/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@riichi/definitions": ["libs/definitions/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
