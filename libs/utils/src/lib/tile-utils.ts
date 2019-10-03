@@ -51,3 +51,7 @@ export function tileToUnicode(tile: Tile) {
 export function handToUnicode(tiles: Tile[]) {
     return tiles.map(tileToUnicode).join(' ')
 }
+
+export function createNewDeck(): Tile[] {
+    return [].concat(...Object.keys(Tile).map(name => Tile[name]).filter(t => t && typeof t === 'number').map((t: Tile) => [t, t, t, t]));
+}

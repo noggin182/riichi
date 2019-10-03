@@ -56,4 +56,15 @@ describe('Tile utils', () => {
             }
         }
     });
+
+    it('should create new decks', () => {
+        const deck = utils.createNewDeck();
+        expect(deck.length).toBe(136);
+        console.log(utils.handToUnicode(deck));
+
+        for (const tile of Object.keys(Tile).map(k => Tile[k]).filter(t => t && typeof t === 'number')) {
+            const numberOfTheseTiles = deck.filter(t => t === tile);
+            expect(numberOfTheseTiles.length).toBe(4) 
+        }
+    });
 });
