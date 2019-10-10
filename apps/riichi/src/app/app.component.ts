@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { handFromNotation, handToUnicode, countYaku, checkForMahjong } from '@riichi/utils';
-import { Tile, Mahjong, Wind } from '@riichi/definitions';
-import { WinningHand } from 'libs/utils/src/lib/winning-hand';
+import { Tile, Mahjong, Wind, allTiles } from '@riichi/definitions';
+import { WinningHand } from '@riichi/utils';
 
 @Component({
     selector: 'riichi-root',
@@ -9,27 +9,26 @@ import { WinningHand } from 'libs/utils/src/lib/winning-hand';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-    notation = "P1 P2 P3 M5 M5 M5 S6 S7 S8 E E E C C";
-    hand: Tile[];
+    hand: Tile[] = [];
 
     handToUnicode = handToUnicode;
     mahjongs: Mahjong[];
+    allTiles = allTiles;
 
     constructor() {
-        this.update();
     }
     
-    update() {
-        const hand = handFromNotation(this.notation.toUpperCase().trim());
-        if (hand.every(t => t && !isNaN(t)) || hand.length === 13 || hand.length === 14) {
-            this.hand = hand;
+    pushToHand(tile: Tile) {
+        this.hand.push(tile);
+        
+        this.mahjongs = [];
 
-            if (hand.length === 14) {
-                this.mahjongs = checkForMahjong(hand, [])
-            }
-            
-            // this.yaku = countYaku()
+        if (this.hand.length === 14) {
+            this.mahjongs = checkForMahjong(this.hand, [])
+        } else if (this.hand.length === 12) {
+        
         }
+
     }
 
     countYakus(mahjong: Mahjong) {
@@ -49,5 +48,9 @@ export class AppComponent {
         winning.doraIndicator = [];
         
         return countYaku(winning);
+    }
+
+    has4Tiles(tile: Tile) {
+        return this.hand.filter(t => t === tile).length >= 4;
     }
 }

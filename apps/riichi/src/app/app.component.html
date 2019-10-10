@@ -1,14 +1,19 @@
-<h1>Welcome to riichi!</h1>
 
-Hand: <input [(ngModel)]="notation" (ngModelChange)="update()" style="width: 400px" />
-<div style="font-size: 20px">{{handToUnicode(hand)}}</div>
+<div style="width:650px">
+    <button *ngFor="let tile of allTiles" (click)="pushToHand(tile)" [disabled]="hand.length >= 14 || has4Tiles(tile)" style="font-size: 50px">{{handToUnicode([tile])}}</button>
+</div>
+
+
+
+Hand: <button (click)="hand = []">clear</button>
+<div style="font-size: 50px">{{handToUnicode(hand)}}</div> 
 
 <div *ngFor="let m of mahjongs; let index = index">
     <h3>Hand {{index + 1}}</h3>
-    <span *ngFor="let c of m.concealed" style="border: 1px solid silver; margin: 4px; padding: 4px; font-size: 20px">
+    <span *ngFor="let c of m.concealed" style="border: 1px solid silver; margin: 4px; padding: 4px; font-size: 30px">
         {{handToUnicode(c)}}
     </span>
-    <span style="border: 1px solid silver; margin: 4px; padding: 4px; font-size: 20px">
+    <span style="border: 1px solid silver; margin: 4px; padding: 4px; font-size: 30px">
         {{handToUnicode(m.pair)}}
     </span>
 
@@ -16,8 +21,6 @@ Hand: <input [(ngModel)]="notation" (ngModelChange)="update()" style="width: 400
         <li *ngFor="let yaku of countYakus(m)">
             <span style="display: inline-block; white-space: nowrap; min-width: 50px; text-align: right">
                 {{yaku.fan === 13 ? 'Yakuman' : yaku.fan + ' fan'}} 
-                <ng-container *ngIf="yaku.extras.length">
-                </ng-container>
             </span>
             &nbsp;
             <span style="display: inline-block; white-space: nowrap;">
@@ -27,9 +30,15 @@ Hand: <input [(ngModel)]="notation" (ngModelChange)="update()" style="width: 400
             <span style="display: inline-block; white-space: nowrap; color: #666">
                 ({{yaku.yaku.name[1]}})
             </span>
-            <ng-container *ngIf="yaku.extras.length">
+            <ng-container *ngFor="let extra of yaku.extras">
                 <br />
-                <div *ngFor="let extra of yaku.extras" style="color: green; padding-left: 70px">+1 {{extra.name[0]}}</div>
+                <span style="display: inline-block; white-space: nowrap; min-width: 50px; text-align: right">
+                    +1
+                </span>
+                &nbsp;
+                <span style="display: inline-block; white-space: nowrap;">
+                    {{extra.name[0]}}
+                </span>
             </ng-container>
             
         </li>
