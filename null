@@ -1,0 +1,6 @@
+Starting type checking service...
+Using 6 workers with 2048MB memory limit
+Hash: [1mb29b7bd1d9c2a1da1209[39m[22m
+Built at: 10/09/2019 [1m10:54:55 PM[39m[22m
+Entrypoint [1mmain[39m[22m = [1m[32mmain.js[39m[22m [1m[32mmain.js.map[39m[22m
+chunk {[1m[33mmain[39m[22m} [1m[32mmain.js, main.js.map[39m[22m (main) 9.96 KiB[1m[33m [entry][39m[22m[1m[32m [rendered][39m[22m

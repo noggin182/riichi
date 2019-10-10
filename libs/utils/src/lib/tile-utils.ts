@@ -1,4 +1,4 @@
-import { Tile, TileSuit } from "@riichi/definitions";
+import { Tile, TileSuit, TILEMASK_HONOR, allTiles } from "@riichi/definitions";
 
 export function getSuitFromTile(tile: Tile) {
     // tslint:disable-next-line: no-bitwise
@@ -53,5 +53,44 @@ export function handToUnicode(tiles: Tile[]) {
 }
 
 export function createNewDeck(): Tile[] {
-    return [].concat(...Object.keys(Tile).map(name => Tile[name]).filter(t => t && typeof t === 'number').map((t: Tile) => [t, t, t, t]));
+    return [].concat(...allTiles.map((t: Tile) => [t, t, t, t]));
+}
+
+export function isHonor(tile: Tile) {
+    return tile >= TILEMASK_HONOR;
+}
+
+export function isSuited(tile: Tile) {
+    return tile < TILEMASK_HONOR;
+}
+
+export function isSimple(tile: Tile) {
+    const value = getValueFromTile(tile);
+    return isSuited(tile) && value > 0 && value < 8;
+}
+
+export function isTerminal(tile: Tile) {
+    const value = getValueFromTile(tile);
+    return isSuited(tile) && (value === 0 || value === 8);
+}
+
+export function isTerminalOrHonor(tile: Tile) {
+    const value = getValueFromTile(tile);
+    return isHonor(tile) || value === 0 || value === 8;
+}
+
+export function handFromNotation(hand: string) {
+    return hand.split(' ').map(s => {
+        switch (s.charAt(0)) {
+            case 'M': return makeTile(TileSuit.Man, parseInt(s.charAt(1), 10) - 1);
+            case 'S': return s.length === 1 ? Tile.Nan : makeTile(TileSuit.Sou, parseInt(s.charAt(1), 10) - 1);
+            case 'P': return makeTile(TileSuit.Pin, parseInt(s.charAt(1), 10) - 1);
+            case 'N': return Tile.Pei;
+            case 'E': return Tile.Ton;
+            case 'W': return Tile.Shaa;
+            case 'C': return Tile.Chun;
+            case 'H': return Tile.Hatsu;
+            case 'B': return Tile.Haku;
+        }
+    });
 }

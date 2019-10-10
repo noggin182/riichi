@@ -21,8 +21,13 @@
             "polyfills": "apps/riichi/src/polyfills.ts",
             "tsConfig": "apps/riichi/tsconfig.app.json",
             "aot": false,
-            "assets": ["apps/riichi/src/favicon.ico", "apps/riichi/src/assets"],
-            "styles": ["apps/riichi/src/styles.scss"],
+            "assets": [
+              "apps/riichi/src/favicon.ico",
+              "apps/riichi/src/assets"
+            ],
+            "styles": [
+              "apps/riichi/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -82,7 +87,10 @@
               "apps/riichi/tsconfig.app.json",
               "apps/riichi/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/riichi/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/riichi/**"
+            ]
           }
         },
         "test": {
@@ -116,8 +124,13 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/riichi-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/riichi-e2e/**"]
+            "tsConfig": [
+              "apps/riichi-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/riichi-e2e/**"
+            ]
           }
         }
       }
@@ -135,7 +148,9 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
+            "assets": [
+              "apps/api/src/assets"
+            ]
           },
           "configurations": {
             "production": {
@@ -164,7 +179,10 @@
               "apps/api/tsconfig.app.json",
               "apps/api/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/api/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/api/**"
+            ]
           }
         },
         "test": {
@@ -189,7 +207,10 @@
               "libs/api-interfaces/tsconfig.lib.json",
               "libs/api-interfaces/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/api-interfaces/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/api-interfaces/**"
+            ]
           }
         },
         "test": {
@@ -214,7 +235,10 @@
               "libs/definitions/tsconfig.lib.json",
               "libs/definitions/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/definitions/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/definitions/**"
+            ]
           }
         },
         "test": {
@@ -239,7 +263,10 @@
               "libs/utils/tsconfig.lib.json",
               "libs/utils/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/utils/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/utils/**"
+            ]
           }
         },
         "test": {
@@ -247,6 +274,65 @@
           "options": {
             "jestConfig": "libs/utils/jest.config.js",
             "tsConfig": "libs/utils/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "10fan": {
+      "root": "apps/10fan",
+      "sourceRoot": "apps/10fan/src",
+      "projectType": "application",
+      "prefix": "10fan",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/10fan",
+            "main": "apps/10fan/src/main.ts",
+            "tsConfig": "apps/10fan/tsconfig.app.json",
+            "assets": [
+              "apps/10fan/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/10fan/src/environments/environment.ts",
+                  "with": "apps/10fan/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "10fan:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/10fan/tsconfig.app.json",
+              "apps/10fan/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/10fan/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/10fan/jest.config.js",
+            "tsConfig": "apps/10fan/tsconfig.spec.json"
           }
         }
       }
