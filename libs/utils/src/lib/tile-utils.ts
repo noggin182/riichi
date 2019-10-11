@@ -49,7 +49,7 @@ export function tileToUnicode(tile: Tile) {
 }
 
 export function handToUnicode(tiles: Tile[]) {
-    return tiles.map(tileToUnicode).join('')
+    return tiles.map(tileToUnicode).join(' ')
 }
 
 export function createNewDeck(): Tile[] {

@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
+import { TilePipe } from './tile.pipe';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, TilePipe],
   imports: [BrowserModule, HttpClientModule, FormsModule],
-  providers: [],
+  providers: [TilePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

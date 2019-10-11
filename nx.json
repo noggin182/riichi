@@ -28,6 +28,12 @@
     },
     "10fan": {
       "tags": []
+    },
+    "scorer-e2e": {
+      "tags": []
+    },
+    "scorer": {
+      "tags": []
     }
   }
 }

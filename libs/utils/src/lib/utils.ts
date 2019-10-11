@@ -5,4 +5,4 @@ export * from "./yaku";
 export * from "./yakus";
 export * from "./yaku.def";
 export * from "./winning-hand";
-
+export * from "./points-calculator";

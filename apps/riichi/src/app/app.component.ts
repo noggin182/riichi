@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { handFromNotation, handToUnicode, countYaku, checkForMahjong } from '@riichi/utils';
+import { handFromNotation, handToUnicode, countYaku, checkForMahjong, calculateFu } from '@riichi/utils';
 import { Tile, Mahjong, Wind, allTiles } from '@riichi/definitions';
 import { WinningHand } from '@riichi/utils';
+import { State } from './state';
 
 @Component({
     selector: 'riichi-root',
@@ -15,7 +16,7 @@ export class AppComponent {
     mahjongs: Mahjong[];
     allTiles = allTiles;
 
-    constructor() {
+    constructor(readonly state: State) {
     }
     
     pushToHand(tile: Tile) {
@@ -31,7 +32,7 @@ export class AppComponent {
 
     }
 
-    countYakus(mahjong: Mahjong) {
+    private createWinningHand(mahjong: Mahjong) {
         const winning = new WinningHand(mahjong, this.hand[this.hand.length - 1])
         winning.firstRound = false;
         winning.selfDrawn = true;
@@ -46,8 +47,15 @@ export class AppComponent {
         winning.seatedWind = Wind.East;
 
         winning.doraIndicator = [];
-        
-        return countYaku(winning);
+        return winning;
+    }
+
+    countYakus(mahjong: Mahjong) {
+        return countYaku(this.createWinningHand(mahjong));
+    }
+
+    countFu(mahjong: Mahjong) {
+        return calculateFu(this.createWinningHand(mahjong));
     }
 
     has4Tiles(tile: Tile) {

@@ -21,13 +21,8 @@
             "polyfills": "apps/riichi/src/polyfills.ts",
             "tsConfig": "apps/riichi/tsconfig.app.json",
             "aot": false,
-            "assets": [
-              "apps/riichi/src/favicon.ico",
-              "apps/riichi/src/assets"
-            ],
-            "styles": [
-              "apps/riichi/src/styles.scss"
-            ],
+            "assets": ["apps/riichi/src/favicon.ico", "apps/riichi/src/assets"],
+            "styles": ["apps/riichi/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -87,10 +82,7 @@
               "apps/riichi/tsconfig.app.json",
               "apps/riichi/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/riichi/**"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/riichi/**"]
           }
         },
         "test": {
@@ -124,13 +116,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "apps/riichi-e2e/tsconfig.e2e.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/riichi-e2e/**"
-            ]
+            "tsConfig": ["apps/riichi-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/riichi-e2e/**"]
           }
         }
       }
@@ -148,9 +135,7 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": [
-              "apps/api/src/assets"
-            ]
+            "assets": ["apps/api/src/assets"]
           },
           "configurations": {
             "production": {
@@ -179,10 +164,7 @@
               "apps/api/tsconfig.app.json",
               "apps/api/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/api/**"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/api/**"]
           }
         },
         "test": {
@@ -207,10 +189,7 @@
               "libs/api-interfaces/tsconfig.lib.json",
               "libs/api-interfaces/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/api-interfaces/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/api-interfaces/**"]
           }
         },
         "test": {
@@ -235,10 +214,7 @@
               "libs/definitions/tsconfig.lib.json",
               "libs/definitions/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/definitions/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/definitions/**"]
           }
         },
         "test": {
@@ -263,10 +239,7 @@
               "libs/utils/tsconfig.lib.json",
               "libs/utils/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/utils/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/utils/**"]
           }
         },
         "test": {
@@ -291,9 +264,7 @@
             "outputPath": "dist/apps/10fan",
             "main": "apps/10fan/src/main.ts",
             "tsConfig": "apps/10fan/tsconfig.app.json",
-            "assets": [
-              "apps/10fan/src/assets"
-            ]
+            "assets": ["apps/10fan/src/assets"]
           },
           "configurations": {
             "production": {
@@ -322,10 +293,7 @@
               "apps/10fan/tsconfig.app.json",
               "apps/10fan/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/10fan/**"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/10fan/**"]
           }
         },
         "test": {
@@ -333,6 +301,126 @@
           "options": {
             "jestConfig": "apps/10fan/jest.config.js",
             "tsConfig": "apps/10fan/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "scorer": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/scorer",
+      "sourceRoot": "apps/scorer/src",
+      "prefix": "riichi",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/scorer",
+            "index": "apps/scorer/src/index.html",
+            "main": "apps/scorer/src/main.ts",
+            "polyfills": "apps/scorer/src/polyfills.ts",
+            "tsConfig": "apps/scorer/tsconfig.app.json",
+            "aot": false,
+            "assets": ["apps/scorer/src/favicon.ico", "apps/scorer/src/assets", "apps/scorer/src/riichi-mahjong-tiles"],
+            "styles": ["apps/scorer/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/scorer/src/environments/environment.ts",
+                  "with": "apps/scorer/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "scorer:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "scorer:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "scorer:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/scorer/tsconfig.app.json",
+              "apps/scorer/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/scorer/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/scorer/jest.config.js",
+            "tsConfig": "apps/scorer/tsconfig.spec.json",
+            "setupFile": "apps/scorer/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "scorer-e2e": {
+      "root": "apps/scorer-e2e",
+      "sourceRoot": "apps/scorer-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/scorer-e2e/cypress.json",
+            "tsConfig": "apps/scorer-e2e/tsconfig.e2e.json",
+            "devServerTarget": "scorer:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "scorer:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/scorer-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/scorer-e2e/**"]
           }
         }
       }

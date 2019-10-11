@@ -54,7 +54,7 @@ export const yakuDefs: Yaku[] = [
         description: "Four chow and valueless pair",
         style: ConcealedType.MustBeConcealed,
         check: hand => !hand.pons.length
-                      && hand.sets.some(s => (s[0] === hand.winningTile && getValueFromTile(s[0]) !== 6)
+                      && hand.sets.some(s => (s[0] === hand.winningTile && getValueFromTile(s[2]) !== 6)
                                           || (s[2] === hand.winningTile && getValueFromTile(s[0]) !== 2))
                       && getSuitFromTile(hand.pairTile) !== TileSuit.Dragon
                       && hand.pairTile !== hand.prevailingWindTile
@@ -352,33 +352,37 @@ export const yakuDefs: Yaku[] = [
     }
 ];
 
-function isPonOrKan(set: Tile[]) {
+export function isPon(set: Tile[]) {
+    return set[0] === set[1] && set.length === 3;
+}
+
+export function isPonOrKan(set: Tile[]) {
     return set[0] === set[1];
 }
 
-function isKan(set: Tile[]) {
+export function isKan(set: Tile[]) {
     return set.length === 4;
 }
 
-function isChi(set: Tile[]) {
+export function isChi(set: Tile[]) {
     return set[0] !== set[1];
 }
 
-function distinct<T>(item: T, index: number, array: T[]) {
+export function distinct<T>(item: T, index: number, array: T[]) {
     return array.indexOf(item) === index;
 }
 
-function allSuits(sets: Tile[][]) {
+export function allSuits(sets: Tile[][]) {
     const suits = sets.map(s => getSuitFromTile(s[0]));
     return suits.includes(TileSuit.Man)
         && suits.includes(TileSuit.Sou)
         && suits.includes(TileSuit.Pin);
 }
 
-function sameValue(set1: Tile[], set2: Tile[]) {
+export function sameValue(set1: Tile[], set2: Tile[]) {
     return getValueFromTile(set1[0]) === getValueFromTile(set2[0])
 }
 
-function sameSuit(set1: Tile[], set2: Tile[]) {
+export function sameSuit(set1: Tile[], set2: Tile[]) {
     return getSuitFromTile(set1[0]) === getSuitFromTile(set2[0])
 }
