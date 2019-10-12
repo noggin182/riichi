@@ -18,7 +18,7 @@ export class State {
 
     winningResults: {
         mahjong: Mahjong,
-        yakus: CountedYaku[],
+        yaku: CountedYaku[],
         fu: CountedFu[]
     }[];
 
@@ -54,7 +54,7 @@ export class State {
                 const winningHand = this.buildWinningHand(m, this.hand.concealed[this.hand.concealed.length - 1]);
                 return {
                     mahjong: m,
-                    yakus: countYaku(winningHand),
+                    yaku: countYaku(winningHand),
                     fu: calculateFu(winningHand)
                 };
             });

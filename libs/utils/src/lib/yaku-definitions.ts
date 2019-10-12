@@ -1,10 +1,10 @@
-import { ConcealedType, Yaku, ExtraFan } from './yaku.def';
+import { ConcealedType, YakuDefinition, ExtraFan } from './yaku.def';
 import { Tile, TileSuit, HandStyle, Wind } from '@riichi/definitions';
 import { isHonor, getSuitFromTile, getValueFromTile, isSimple, isTerminalOrHonor, isSuited, isTerminal, getDoraFromIndicator } from './tile-utils';
 
 export const YakumanFan = 13;
 
-export const noneYakus: Yaku[] = [
+export const doraYaku: YakuDefinition[] = [
     {
         fan: 1,
         name: ["Dora", "Dora"],
@@ -20,7 +20,7 @@ const extraIfConcealed: ExtraFan = {
     check: hand => hand.mahjong.melds.length === 0
 }
 
-export const yakuDefs: Yaku[] = [
+export const yakuDefinitions: YakuDefinition[] = [
     // ================== 1 fan ==================
     {
         fan: 1,

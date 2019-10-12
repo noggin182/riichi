@@ -1,7 +1,7 @@
 import { WinningHand } from './winning-hand';
 import { HandStyle, Tile, TileSuit } from '@riichi/definitions';
 import {  isSimple, isTerminalOrHonor, getSuitFromTile, getValueFromTile } from './tile-utils';
-import { isPon, isKan, isChi, distinct } from './yakus';
+import { isPon, isKan, isChi, distinct } from './yaku-definitions';
 
 export interface FuDefinition {
     fu: number,

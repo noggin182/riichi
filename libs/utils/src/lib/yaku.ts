@@ -1,10 +1,10 @@
 import { WinningHand } from './winning-hand';
-import { Yaku, ConcealedType, ExtraFan } from './yaku.def';
-import { yakuDefs, YakumanFan, noneYakus } from './yakus';
+import { YakuDefinition, ExtraFan } from './yaku.def';
+import { yakuDefinitions, YakumanFan, doraYaku } from './yaku-definitions';
 import { HandStyle } from '@riichi/definitions';
 
 export interface CountedYaku {
-    yaku: Readonly<Yaku>;
+    definition: Readonly<YakuDefinition>;
     fan: number;
     extras: Readonly<ExtraFan[]>;
 }
@@ -12,14 +12,14 @@ export interface CountedYaku {
 export function countYaku(hand: WinningHand) {
     const countedYaku: CountedYaku[] = [];
     let yakuman = false;
-    function collectYakus(yakus: Yaku[]) {
-        for (const yaku of yakus) {
+    function collectYaku(yakuDefs: YakuDefinition[]) {
+        for (const yaku of yakuDefs) {
             if (hand.mahjong.style === (yaku.handStyle || HandStyle.Mahjong)) {
                 const result = yaku.check(hand);
                 if (result) {
                     const fan = result === true ? yaku.fan : result * yaku.fan;
                     countedYaku.push({
-                        yaku,
+                        definition: yaku,
                         fan,
                         extras: yaku.extras ? yaku.extras.filter(e => e.check(hand)) : []
                     });
@@ -32,11 +32,11 @@ export function countYaku(hand: WinningHand) {
         }
     }
 
-    collectYakus(yakuDefs);
+    collectYaku(yakuDefinitions);
 
     if (countedYaku.length) {
-        collectYakus(noneYakus);
+        collectYaku(doraYaku);
     }
 
-    return yakuman ? countedYaku.filter(cy => cy.yaku.fan === YakumanFan) : countedYaku;
+    return yakuman ? countedYaku.filter(cy => cy.definition.fan === YakumanFan) : countedYaku;
 }

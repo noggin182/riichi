@@ -13,7 +13,7 @@ export interface ExtraFan {
     check: (hand: WinningHand) => boolean
 }
 
-export interface Yaku {
+export interface YakuDefinition {
     fan: number;
     name: [string, string],
     description: string,

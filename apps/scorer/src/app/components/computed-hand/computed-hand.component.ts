@@ -16,14 +16,14 @@ export class ComputedHandComponent implements OnChanges {
 
     @Input() index: number;
     @Input() mahjong: Mahjong;
-    @Input() yakus: CountedYaku[];
+    @Input() yaku: CountedYaku[];
     @Input() fu: CountedFu[];
 
     totalFan: number;
     totalFu: number;
 
     ngOnChanges() {
-        this.totalFan = this.yakus.reduce((total, yaku) => total + yaku.fan + yaku.extras.length, 0);
+        this.totalFan = this.yaku.reduce((total, yaku) => total + yaku.fan + yaku.extras.length, 0);
         this.totalFu = this.fu.reduce((total, fu) => total + fu.definition.fu, 0);
     }
 
