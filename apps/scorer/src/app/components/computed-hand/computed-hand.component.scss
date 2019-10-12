@@ -1,0 +1,96 @@
+@import 'theming';
+
+scorer-computed-hand {
+    background-color: $card-background;
+    border: 1px solid $card-border-color;
+    padding: 16px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;    
+    align-self: center;
+    display: grid;
+    column-gap: 16px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+        "tiles      tiles"
+        "yaku       fu"
+        "rule       rule"
+        "limit      points";
+
+    h3 {
+        position: absolute;
+        bottom: 100%;
+    }
+
+    .scorer-computed-hand__tiles      { grid-area: tiles;  }
+    .scorer-computed-hand__yaku       { grid-area: yaku;   }
+    .scorer-computed-hand__fu         { grid-area: fu;     }
+    hr                                { grid-area: rule;   }
+    .scorer-computed-hand__limit      { grid-area: limit;  }
+    .scorer-computed-hand__points     { grid-area: points; }
+
+    .scorer-computed-hand__tiles {
+        display: flex;
+        > div:not(:first-child) {
+            margin-left: 16px;
+        }
+    }
+
+    
+    .scorer-computed-hand__yaku, .scorer-computed-hand__fu {
+        h4 {
+            color: $primary-color;
+            border-bottom: 1px solid $card-border-color;
+            margin: 16px 0 8px 0;
+            display: flex;
+            justify-content: space-between;
+
+            span {
+                font-weight: 500;
+            }
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+    
+        li {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+    
+            span {
+                color: $secondary-text;
+            }
+        }
+    }
+
+    .scorer-computed-hand__yaku-total, .scorer-computed-hand__fu-total {
+        color: $primary-color;
+        font-weight: 500;
+        text-align: right;
+        justify-self: right;
+        min-width: 60px;
+    }
+
+    .scorer-computed-hand__limit, .scorer-computed-hand__points {
+        color: $primary-color;
+        font-weight: 800;
+    }
+
+    .scorer-computed-hand__points {
+        justify-self: right;
+    }
+
+    hr {
+        border-color: $card-border-color;
+        border-width: 0 0 1px 0;
+        border-style: solid;
+        height: 0;
+        margin: 16px 0 8px 0;
+    }
+
+}

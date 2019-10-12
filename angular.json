@@ -1,127 +1,6 @@
 {
   "version": 1,
   "projects": {
-    "riichi": {
-      "projectType": "application",
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      },
-      "root": "apps/riichi",
-      "sourceRoot": "apps/riichi/src",
-      "prefix": "riichi",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/apps/riichi",
-            "index": "apps/riichi/src/index.html",
-            "main": "apps/riichi/src/main.ts",
-            "polyfills": "apps/riichi/src/polyfills.ts",
-            "tsConfig": "apps/riichi/tsconfig.app.json",
-            "aot": false,
-            "assets": ["apps/riichi/src/favicon.ico", "apps/riichi/src/assets"],
-            "styles": ["apps/riichi/src/styles.scss"],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/riichi/src/environments/environment.ts",
-                  "with": "apps/riichi/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "riichi:build",
-            "proxyConfig": "apps/riichi/proxy.conf.json"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "riichi:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "riichi:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/riichi/tsconfig.app.json",
-              "apps/riichi/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!apps/riichi/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/riichi/jest.config.js",
-            "tsConfig": "apps/riichi/tsconfig.spec.json",
-            "setupFile": "apps/riichi/src/test-setup.ts"
-          }
-        }
-      }
-    },
-    "riichi-e2e": {
-      "root": "apps/riichi-e2e",
-      "sourceRoot": "apps/riichi-e2e/src",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/riichi-e2e/cypress.json",
-            "tsConfig": "apps/riichi-e2e/tsconfig.e2e.json",
-            "devServerTarget": "riichi:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "riichi:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["apps/riichi-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/riichi-e2e/**"]
-          }
-        }
-      }
-    },
     "api": {
       "root": "apps/api",
       "sourceRoot": "apps/api/src",
@@ -314,7 +193,7 @@
       },
       "root": "apps/scorer",
       "sourceRoot": "apps/scorer/src",
-      "prefix": "riichi",
+      "prefix": "scorer",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -438,5 +317,5 @@
       "unitTestRunner": "jest"
     }
   },
-  "defaultProject": "riichi"
+  "defaultProject": "scorer"
 }

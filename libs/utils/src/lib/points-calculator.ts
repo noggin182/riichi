@@ -1,7 +1,7 @@
 import { WinningHand } from './winning-hand';
 import { HandStyle, Tile, TileSuit } from '@riichi/definitions';
 import {  isSimple, isTerminalOrHonor, getSuitFromTile, getValueFromTile } from './tile-utils';
-import { isPon, isKan, isChi } from './yakus';
+import { isPon, isKan, isChi, distinct } from './yakus';
 
 export interface FuDefinition {
     fu: number,
@@ -10,9 +10,8 @@ export interface FuDefinition {
 }
 
 export interface CountedFu {
-    fu: number,
     definition: FuDefinition,
-    tiles: Tile[][] | null; // for melded sets, this will reference the tile array from the meld
+    tiles: Tile[] | null; // for melded sets, this will reference the tile array from the meld
 }
 
 const SevenPairsFu: FuDefinition = {
@@ -131,7 +130,6 @@ const Fus: FuDefinition[] = [
 export function calculateFu(hand: WinningHand): CountedFu[] {
     if (hand.mahjong.style === HandStyle.SevenPairs) {
         return [{
-            fu: SevenPairsFu.fu,
             definition: SevenPairsFu,
             tiles: null
         }]
@@ -140,13 +138,38 @@ export function calculateFu(hand: WinningHand): CountedFu[] {
     const counted: CountedFu[] = [];
     for (const fuDef of Fus) {
         const result = fuDef.check(hand);
-        if (result && (result === true || (result.length && result[0]))) {
-            counted.push({
-                fu: result === true ? fuDef.fu : fuDef.fu * result.length,
-                definition: fuDef,
-                tiles: result === true ? null : result
-            });
+        if (result) {
+            if (result === true) {
+                counted.push({
+                    definition: fuDef,
+                    tiles: null
+                });
+            } else {
+                counted.push(...result.map(set => ({
+                    definition: fuDef,
+                    tiles: set
+                })));
+            }
         }
+    }
+
+    if (counted.length === 1) {
+        counted.push({
+            definition: OpenPinfu,
+            tiles: null
+        });
+    }
+
+    const digit = counted.reduce((total, c) => total + c.definition.fu, 0) % 10;
+    if (digit) {
+        counted.push({
+            definition: {
+                fu: 10 - digit,
+                name: ['Round up', 'Round up'],
+                check: () => true
+            },
+            tiles: null
+        });
     }
 
     return counted;

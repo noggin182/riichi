@@ -14,6 +14,8 @@ export class TileComponent implements OnChanges {
     constructor(private state: State) {
     }
 
+    @HostBinding('attr.data-size')
+    @Input() size: 'normal' | 'small' | 'tiny' = 'normal';
     @Input() tile: Tile = Tile.Blank;
     Tile = Tile;
 

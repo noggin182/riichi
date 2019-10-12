@@ -6,9 +6,11 @@ import { TileComponent } from './components/tile/tile.component';
 import { PaletteComponent } from './components/palette/palette.component';
 import { TileButtonComponent } from './components/tile-button/tile-button.component';
 import { HandComponent } from './components/hand/hand.component';
+import { ComputedHandComponent } from './components/computed-hand/computed-hand.component';
+import { NamePipe } from './pipes/name.pipe';
 
 @NgModule({
-  declarations: [AppComponent, TileComponent, PaletteComponent, TileButtonComponent, HandComponent ],
+  declarations: [AppComponent, TileComponent, PaletteComponent, TileButtonComponent, HandComponent, ComputedHandComponent, NamePipe ],
   imports: [BrowserModule],
   providers: [],
   bootstrap: [AppComponent]
