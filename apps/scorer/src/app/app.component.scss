@@ -1,4 +1,17 @@
-:host {
+@import 'theming';
+
+scorer-root {
     display: flex;
     flex-direction: column;
+}
+
+scorer-root > header {
+    background-color: $header-color;
+    color: white;
+
+}
+
+h1 {
+    margin: 0 0.5em;
+    line-height: 1.5em;
 }

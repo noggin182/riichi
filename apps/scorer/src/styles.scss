@@ -1,36 +1,101 @@
+@import 'theming';
 
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
-// Plus imports for other components in your app.
+html, body {
+    height: 100%;
+    background-color: #F5F5F5;
+}
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat-core();
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$scorer-primary: mat-palette($mat-indigo);
-$scorer-accent: mat-palette($mat-pink, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$scorer-warn: mat-palette($mat-red);
-
-// Create the theme object (a Sass map containing all of the palettes).
-$scorer-theme: mat-dark-theme($scorer-primary, $scorer-accent, $scorer-warn);
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($scorer-theme);
-
-/* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .scorer-spacer {
     flex: 1 1 auto;
+}
+
+section {
+    display: inline-flex;
+    flex-direction: column;
+
+    > h2 {
+        background-color: $primary-color;
+        color: $contrast-text;
+        padding: 4px;
+        border-radius: 4px;
+        text-align: center;
+        font-weight: normal;
+        font-size: 18px;
+    }
+    
+    .scorer-radio-group[role=group] {
+        margin-bottom: 16px;
+    }
+}
+
+.scorer-radio-group[role=group] {
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+
+    > legend:first-child {
+        position: absolute;
+        bottom: 100%;
+    }
+
+    > input[type=radio] {
+        position: absolute;
+        bottom: 100%;
+    }
+
+    > label {
+        display: block;
+        width: 2px;
+        flex: 1 1 auto;
+        text-align: center;
+        background-color: $button-color;
+        border: 1px solid #999;
+        line-height: 1.75em;
+        cursor: pointer;
+
+        &:first-of-type {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+
+        &:not(:first-of-type) {
+            margin-left: -1px;
+        }
+
+        &:last-of-type {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        
+    }
+
+    > input[type=radio][disabled] + label {
+        cursor: not-allowed;
+        opacity: 0.6
+    }
+
+    > input[type=radio]:checked + label {
+        background-color: $accent-color;
+        color: $contrast-text;
+    }
+
+    > input[type=radio]:active + label {
+        background-color: $accent-color-lighter;
+        color: $contrast-text;
+    }
+
+    > input[type=radio]:focus + label {
+        z-index: 20;
+        border-color: $accent-color-lighter;
+    }
 }

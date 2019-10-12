@@ -1,0 +1,46 @@
+$margin: 5%;
+
+:host {
+    display: inline-flex;
+    align-self: flex-start;
+    width: 50px;
+    height: 50px * 4/3;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    background: linear-gradient(to bottom, #fff 0%, #F5F5F5 100%);
+    border-radius: 8%/6%;
+    border-width: 1px;
+    border-color: #ccc;
+    border-style: solid;
+}
+
+:host:before {
+    content: "";
+    background-size: contain;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    position: absolute;
+    top:    $margin;
+    left:   $margin;
+    bottom: $margin;
+    right:  $margin;
+};
+
+span {
+    position: absolute;
+    bottom: 100%;
+}
+
+$tiles:
+    'Man1', 'Man2', 'Man3', 'Man4', 'Man5', 'Man6', 'Man7', 'Man8', 'Man9',
+    'Sou1', 'Sou2', 'Sou3', 'Sou4', 'Sou5', 'Sou6', 'Sou7', 'Sou8', 'Sou9',
+    'Pin1', 'Pin2', 'Pin3', 'Pin4', 'Pin5', 'Pin6', 'Pin7', 'Pin8', 'Pin9',
+    'Ton',  'Nan',  'Shaa', 'Pei',
+    'Chun', 'Hatsu', 'Haku';
+
+@each $tile in $tiles {
+    :host[data-tile=#{$tile}]:before {
+        background-image: url('/riichi-mahjong-tiles/Regular/#{$tile}.svg');
+    }
+}

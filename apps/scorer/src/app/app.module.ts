@@ -2,14 +2,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule } from '@angular/material/toolbar'
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { TileComponent } from './components/tile/tile.component'
+import { TileComponent } from './components/tile/tile.component';
+import { PaletteComponent } from './components/palette/palette.component';
+import { TileButtonComponent } from './components/tile-button/tile-button.component';
+import { HandComponent } from './components/hand/hand.component';
 
 @NgModule({
-  declarations: [AppComponent, TileComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, MatToolbarModule, MatButtonToggleModule],
+  declarations: [AppComponent, TileComponent, PaletteComponent, TileButtonComponent, HandComponent ],
+  imports: [BrowserModule],
   providers: [],
   bootstrap: [AppComponent]
 })

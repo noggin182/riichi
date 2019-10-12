@@ -29,13 +29,10 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^8.2.0",
-    "@angular/cdk": "~8.2.3",
     "@angular/common": "^8.2.0",
     "@angular/compiler": "^8.2.0",
     "@angular/core": "^8.2.0",
     "@angular/forms": "^8.2.0",
-    "@angular/material": "^8.2.3",
     "@angular/platform-browser": "^8.2.0",
     "@angular/platform-browser-dynamic": "^8.2.0",
     "@angular/router": "^8.2.0",
@@ -45,7 +42,6 @@
     "@nrwl/angular": "8.6.0-beta.1",
     "@nrwl/web": "^8.6.0",
     "core-js": "^2.5.4",
-    "hammerjs": "^2.0.8",
     "reflect-metadata": "^0.1.12",
     "rxjs": "~6.4.0",
     "zone.js": "^0.9.1"
