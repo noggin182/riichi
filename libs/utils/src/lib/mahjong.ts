@@ -75,7 +75,7 @@ function walk(remainingTiles: Tile[], currentSets: ConcealedSet[], hands: Concea
     }
 
     const tile = remainingTiles.shift();
-    if (!isHonor(tile) && getValueFromTile(tile) <= 6) {
+    if (!isHonor(tile) && getValueFromTile(tile) <= 7) {
         const tile1 = tile + 1;
         const tile2 = tile + 2;
         if (remainingTiles.includes(tile1) && remainingTiles.includes(tile2)) {

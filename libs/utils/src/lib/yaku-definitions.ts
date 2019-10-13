@@ -63,8 +63,8 @@ export const yakuDefinitions: YakuDefinition[] = [
         description: "Four chow and valueless pair",
         style: ConcealedType.MustBeConcealed,
         check: hand => !hand.pons.length
-                    && hand.chis.some(s => (s[0] === hand.winningTile && getValueFromTile(s[2]) !== 6)
-                                        || (s[2] === hand.winningTile && getValueFromTile(s[0]) !== 2))
+                    && hand.chis.some(s => (s[0] === hand.winningTile && getValueFromTile(s[2]) !== 7)
+                                        || (s[2] === hand.winningTile && getValueFromTile(s[0]) !== 3))
                     && getSuitFromTile(hand.pairTile) !== TileSuit.Dragon
                     && hand.pairTile !== hand.prevailingWindTile
                     && hand.pairTile !== hand.seatedWindTile
@@ -97,9 +97,9 @@ export const yakuDefinitions: YakuDefinition[] = [
         description: "The three chow 1-2-3, 4-5-6 and 7-8-9, of the same suit",
         style: ConcealedType.CanBeOpen,
         extras: [extraIfConcealed],
-        check: hand => hand.chis.some(s => getValueFromTile(s[0]) === 0
-                                        && hand.chis.some(s2 => sameSuit(s, s2) && getValueFromTile(s2[2]) === 3)
-                                        && hand.chis.some(s3 => sameSuit(s, s3) && getValueFromTile(s3[2]) === 6))
+        check: hand => hand.chis.some(s => getValueFromTile(s[0]) === 1
+                                        && hand.chis.some(s2 => sameSuit(s, s2) && getValueFromTile(s2[2]) === 4)
+                                        && hand.chis.some(s3 => sameSuit(s, s3) && getValueFromTile(s3[2]) === 7))
     },
     {
         fan: 1,
@@ -281,7 +281,7 @@ export const yakuDefinitions: YakuDefinition[] = [
         style: ConcealedType.MustBeConcealed,
         check: hand => hand.allTiles.every(isSuited)
                     && hand.allTiles.map(getSuitFromTile).filter(distinct).length === 1
-                    && [0,1,2,3,4,5,6,7,8].every(v => hand.allTiles.some(t => getValueFromTile(t) === v))
+                    && [1,2,3,4,5,6,7,8,9].every(v => hand.allTiles.some(t => getValueFromTile(t) === v))
     },
     {
         fan: YakumanFan,

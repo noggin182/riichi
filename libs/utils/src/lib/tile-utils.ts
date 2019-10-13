@@ -7,7 +7,7 @@ export function getSuitFromTile(tile: Tile) {
 
 export function getValueFromTile(tile: Tile) {
     // tslint:disable-next-line: no-bitwise
-    return tile & 0x0F;
+    return (tile & 0x0F) + 1;
 }
 
 export function getDoraFromIndicator(doraIndicator: Tile): Tile {
@@ -17,7 +17,7 @@ export function getDoraFromIndicator(doraIndicator: Tile): Tile {
 }
 
 export function makeTile(suit: TileSuit, value: number) {
-    return (suit + (value % valuesInSuit(suit))) as Tile;
+    return (suit + ((value - 1) % valuesInSuit(suit))) as Tile;
 }
 
 export function valuesInSuit(suit: TileSuit) {
@@ -37,7 +37,7 @@ export function valuesInSuit(suit: TileSuit) {
 }
 
 export function tileToUnicode(tile: Tile) {
-    const value = getValueFromTile(tile);
+    const value = getValueFromTile(tile) - 1;
     switch (getSuitFromTile(tile)) {
         case TileSuit.Wind:   return String.fromCodePoint(0x1F000 + value);
         case TileSuit.Dragon: return String.fromCodePoint(0x1F004 + value);
@@ -66,25 +66,25 @@ export function isSuited(tile: Tile) {
 
 export function isSimple(tile: Tile) {
     const value = getValueFromTile(tile);
-    return isSuited(tile) && value > 0 && value < 8;
+    return isSuited(tile) && value > 1 && value < 9;
 }
 
 export function isTerminal(tile: Tile) {
     const value = getValueFromTile(tile);
-    return isSuited(tile) && (value === 0 || value === 8);
+    return isSuited(tile) && (value === 1 || value === 9);
 }
 
 export function isTerminalOrHonor(tile: Tile) {
     const value = getValueFromTile(tile);
-    return isHonor(tile) || value === 0 || value === 8;
+    return isHonor(tile) || value === 1 || value === 9;
 }
 
 export function handFromNotation(hand: string) {
     return hand.split(' ').map(s => {
         switch (s.charAt(0)) {
-            case 'M': return makeTile(TileSuit.Man, parseInt(s.charAt(1), 10) - 1);
-            case 'S': return s.length === 1 ? Tile.Nan : makeTile(TileSuit.Sou, parseInt(s.charAt(1), 10) - 1);
-            case 'P': return makeTile(TileSuit.Pin, parseInt(s.charAt(1), 10) - 1);
+            case 'M': return makeTile(TileSuit.Man, parseInt(s.charAt(1), 10));
+            case 'S': return s.length === 1 ? Tile.Nan : makeTile(TileSuit.Sou, parseInt(s.charAt(1), 10));
+            case 'P': return makeTile(TileSuit.Pin, parseInt(s.charAt(1), 10));
             case 'N': return Tile.Pei;
             case 'E': return Tile.Ton;
             case 'W': return Tile.Shaa;

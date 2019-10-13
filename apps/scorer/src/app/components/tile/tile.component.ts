@@ -1,6 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy, OnChanges, HostBinding } from '@angular/core';
-import { Tile, TileSuit } from '@riichi/definitions';
-import { getSuitFromTile, getValueFromTile } from '@riichi/utils';
+import { Tile } from '@riichi/definitions';
 
 import { State } from '../../state';
 

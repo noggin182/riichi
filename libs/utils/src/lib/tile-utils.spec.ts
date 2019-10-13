@@ -49,7 +49,7 @@ describe('Tile utils', () => {
 
     it('should make/deconstruct tiles correctly', () => {
         for (const suit of [TileSuit.None, TileSuit.Man, TileSuit.Sou, TileSuit.Pin, TileSuit.Wind, TileSuit.Dragon]) {
-            for (let value = 0; value < utils.valuesInSuit(suit); value++) {
+            for (let value = 1; value <= utils.valuesInSuit(suit); value++) {
                 const tile = utils.makeTile(suit, value);
                 expect(utils.getSuitFromTile(tile)).toBe(suit);
                 expect(utils.getValueFromTile(tile)).toBe(value);

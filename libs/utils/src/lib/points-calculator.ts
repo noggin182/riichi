@@ -115,8 +115,8 @@ const Fus: FuDefinition[] = [
         name: ['Edge wait', 'penchan-machi'],
         check: hand => hand.winningTile !== hand.pairTile
                     && !hand.mahjong.concealed.filter(isChi).some(s => s[1] === hand.winningTile)
-                    && hand.mahjong.concealed.filter(isChi).map(s => [s]).find(ss => (ss[0][0] === hand.winningTile && getValueFromTile(ss[0][2]) !== 6)
-                                                                                  || (ss[0][2] === hand.winningTile && getValueFromTile(ss[0][0]) !== 2)) || false
+                    && hand.mahjong.concealed.filter(isChi).map(s => [s]).find(ss => (ss[0][0] === hand.winningTile && getValueFromTile(ss[0][2]) !== 7)
+                                                                                  || (ss[0][2] === hand.winningTile && getValueFromTile(ss[0][0]) !== 3)) || false
     },
 
     // ============ Hand Style =============
