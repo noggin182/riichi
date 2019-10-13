@@ -5,14 +5,7 @@ export interface Meld {
     tiles: Tile[];
 }
 
-export enum HandStyle {
-    Mahjong,
-    SevenPairs,
-    ThirteenOrphans
-}
-
 export interface Mahjong {
-    style: HandStyle,
     melds: Meld[];
     concealed: Tile[][];
     pair: Tile[] | null; // null for 7 pairs and 13 orphans

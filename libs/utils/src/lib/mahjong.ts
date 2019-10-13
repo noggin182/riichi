@@ -1,4 +1,4 @@
-import { Tile, Meld, Mahjong, allTiles, HandStyle } from '@riichi/definitions';
+import { Tile, Meld, Mahjong, allTiles } from '@riichi/definitions';
 import { isTerminalOrHonor, getValueFromTile, isHonor } from './tile-utils';
 
 type ConcealedSet = Tile[];
@@ -32,7 +32,6 @@ export function checkForMahjong(hand: Tile[], melds: Meld[]): Mahjong[] {
         // manual check for 13 orphans
         if (distinctTiles.length === 13 && distinctTiles.every(isTerminalOrHonor)) {
             return [{
-                style: HandStyle.ThirteenOrphans,
                 melds: [],
                 concealed: [hand],
                 pair: null
@@ -41,7 +40,6 @@ export function checkForMahjong(hand: Tile[], melds: Meld[]): Mahjong[] {
         // manual check for 7 pairs
         if (distinctTiles.length === 7 && distinctTiles.every(t => count(hand, t) === 2)) {
             mahjong.push({
-                style: HandStyle.SevenPairs,
                 melds: [],
                 concealed: distinctTiles.map(t => [t, t]),
                 pair: null});
@@ -58,7 +56,6 @@ export function checkForMahjong(hand: Tile[], melds: Meld[]): Mahjong[] {
         const hands: ConcealedHand[] = [];
         walk(current, [], hands);
         mahjong.push(...hands.map(sets => ({
-            style: HandStyle.Mahjong,
             melds,
             concealed: sets.concat(),
             pair

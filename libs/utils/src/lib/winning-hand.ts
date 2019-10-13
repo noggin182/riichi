@@ -9,6 +9,9 @@ export class WinningHand {
         this.pons = this.sets.filter(s => s[0] === s[1]);
         this.pairTile = mahjong.pair ? mahjong.pair[0] : Tile.Blank;
         this.allTiles = [].concat(...this.sets, ...(mahjong.pair || []));
+
+        this.isSevenPairs = this.sets.length === 7;
+        this.isThirteenOrphans = this.sets.length === 1;
     }
 
     readonly allTiles: Readonly<Tile[]>;
@@ -16,6 +19,9 @@ export class WinningHand {
     readonly sets: Readonly<Tile[][]>;
     readonly chis: Readonly<Tile[][]>;
     readonly pons: Readonly<Tile[][]>;
+    
+    readonly isSevenPairs: boolean;
+    readonly isThirteenOrphans: boolean;
 
     firstRound: boolean;
     selfDrawn: boolean;

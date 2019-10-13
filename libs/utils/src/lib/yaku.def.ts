@@ -18,7 +18,6 @@ export interface YakuDefinition {
     name: [string, string],
     description: string,
     style: ConcealedType,
-    handStyle?: HandStyle,
     check: (hand: WinningHand) => boolean | number,
     extras?: ExtraFan[]
 }

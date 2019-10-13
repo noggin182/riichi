@@ -1,7 +1,7 @@
 import { WinningHand } from './winning-hand';
-import { HandStyle, Tile, TileSuit } from '@riichi/definitions';
-import {  isSimple, isTerminalOrHonor, getSuitFromTile, getValueFromTile } from './tile-utils';
-import { isPon, isKan, isChi, distinct } from './yaku-definitions';
+import { Tile, TileSuit } from '@riichi/definitions';
+import { isSimple, isTerminalOrHonor, getSuitFromTile, getValueFromTile } from './tile-utils';
+import { isPon, isKan, isChi } from './yaku-definitions';
 
 export interface FuDefinition {
     fu: number,
@@ -17,7 +17,7 @@ export interface CountedFu {
 const SevenPairsFu: FuDefinition = {
     fu: 25,
     name: ['Seven Pairs', 'Chii Toitsu'],
-    check: hand => hand.mahjong.style === HandStyle.SevenPairs
+    check: hand => hand.isSevenPairs
 }
 
 const OpenPinfu: FuDefinition = {
@@ -30,7 +30,7 @@ const Fus: FuDefinition[] = [
     {
         fu: 20,
         name: ['Winning hand', 'Fūtei'],
-        check: hand => hand.mahjong.style === HandStyle.Mahjong
+        check: () => true // always award the base points
     },
     {
         fu: 10,
@@ -128,7 +128,7 @@ const Fus: FuDefinition[] = [
 ]
     
 export function calculateFu(hand: WinningHand): CountedFu[] {
-    if (hand.mahjong.style === HandStyle.SevenPairs) {
+    if (hand.isSevenPairs) {
         return [{
             definition: SevenPairsFu,
             tiles: null
