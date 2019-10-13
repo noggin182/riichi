@@ -12,7 +12,7 @@
 
 <scorer-computed-hand *ngFor="let result of state.winningResults || []; let index = index"
     [index]="index"
-    [mahjong]="result.mahjong"
+    [winningHand]="result.winningHand"
     [yaku]="result.yaku"
     [fu]="result.fu"
 ></scorer-computed-hand>

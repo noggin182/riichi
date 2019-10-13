@@ -1,7 +1,9 @@
 import { WinningHand } from './winning-hand';
-import { Tile, TileSuit } from '@riichi/definitions';
-import { isSimple, isTerminalOrHonor, getSuitFromTile, getValueFromTile } from './tile-utils';
-import { isPon, isKan, isChi } from './yaku-definitions';
+import { Tile, TileSuit, Wind } from '@riichi/definitions';
+import { isSimple, isTerminalOrHonor, getSuitFromTile, getValueFromTile, isSuited } from './tile-utils';
+import { isPon, isKan, isChi, yakuDefinitions, YakumanFan } from './yaku-definitions';
+import { CountedYaku } from './yaku';
+import { Extractor } from '@angular/compiler';
 
 export interface FuDefinition {
     fu: number,
@@ -114,9 +116,11 @@ const Fus: FuDefinition[] = [
         fu: 2,
         name: ['Edge wait', 'penchan-machi'],
         check: hand => hand.winningTile !== hand.pairTile
+                    && (getValueFromTile(hand.winningTile))
                     && !hand.mahjong.concealed.filter(isChi).some(s => s[1] === hand.winningTile)
-                    && hand.mahjong.concealed.filter(isChi).map(s => [s]).find(ss => (ss[0][0] === hand.winningTile && getValueFromTile(ss[0][2]) !== 7)
-                                                                                  || (ss[0][2] === hand.winningTile && getValueFromTile(ss[0][0]) !== 3)) || false
+                    && !(yakuDefinitions.find(y => y.name[0] === 'Pinfu').check(hand)) // TODO: better way for this. if the winning tile can be used in a different set to claim pinfu, don't count these points
+                    && (hand.chis.map(s => [s]).find(ss => ss[0][0] === hand.winningTile && getValueFromTile(ss[0][2]) === 9
+                                                        || ss[0][2] === hand.winningTile && getValueFromTile(ss[0][2]) === 1)) || false
     },
 
     // ============ Hand Style =============
@@ -173,4 +177,60 @@ export function calculateFu(hand: WinningHand): CountedFu[] {
     }
 
     return counted;
+}
+
+const limits: {name: string, check: (fu: number, points: number, yaku: CountedYaku[]) => number}[] = [
+    {
+        name: 'Mangan',
+        check: (fan, points) => fan >= 5 || points >= 2000 ? 2000 : 0
+    },
+    {
+        name: 'Haneman',
+        check: fan => fan >= 6 ? 3000 : 0
+    },
+    {
+        name: 'Baiman',
+        check: fan => fan >= 8 ? 4000 : 0
+    },
+    {
+        name: 'Sanbaiman',
+        check: fan => fan >= 11 ? 6000 : 0
+    },
+    {
+        name: 'Yakuman',
+        check: (_, __, yaku) => yaku.filter(y => y.definition.fan === YakumanFan).length * 8000
+    }
+]
+
+function roundPoints(limitName: string, points: number, otherPoints?: number) {
+    return otherPoints
+         ? [limitName, Math.ceil(points / 100) * 100, Math.ceil(otherPoints / 100) * 100]
+         : [limitName, Math.ceil(points / 100) * 100];
+}
+
+export function calculatePoints(hand: WinningHand, yaku: CountedYaku[], fu: CountedFu[]) {
+    const totalFu = fu.reduce((total, f) => total + f.definition.fu, 0);
+    const fan = yaku.reduce((total, y) => total + y.fan + y.extras.length , 0);
+
+    let basePoints = totalFu * 2 ** (fan + 2);
+
+    let limitName = '';
+    for (const limit of limits.slice().reverse()) {
+        const newPoints = limit.check(fan, basePoints, yaku);
+        if (newPoints) {
+            basePoints = newPoints;
+            limitName = limit.name;
+            break;
+        }
+    }
+        
+    if (hand.seatedWind === Wind.East) {        
+        return roundPoints(limitName, basePoints * (hand.selfDrawn ? 2 : 6));        
+    }
+    
+    if (hand.selfDrawn) {
+        return roundPoints(limitName, basePoints * 2, basePoints);
+    }
+
+    return roundPoints(limitName, basePoints * 4);
 }

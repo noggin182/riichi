@@ -3,13 +3,13 @@
 
 <div class="scorer-computed-hand__tiles">
 
-    <div *ngFor="let set of mahjong.concealed">
+    <div *ngFor="let set of winningHand.mahjong.concealed">
         <scorer-tile *ngFor="let tile of set" [tile]="tile" size="small"></scorer-tile>
     </div>
-    <div *ngIf="mahjong.pair">
-        <scorer-tile *ngFor="let tile of mahjong.pair" [tile]="tile" size="small"></scorer-tile>
+    <div *ngIf="winningHand.mahjong.pair">
+        <scorer-tile *ngFor="let tile of winningHand.mahjong.pair" [tile]="tile" size="small"></scorer-tile>
     </div>
-    <div *ngFor="let meld of mahjong.melds; let index=index">
+    <div *ngFor="let meld of winningHand.mahjong.melds; let index=index">
         <scorer-tile *ngFor="let tile of meld.tiles" [tile]="tile" size="small" [attr.data-rotated]="index === 1 || null"></scorer-tile>
     </div>
 </div>
@@ -17,12 +17,12 @@
 <div class="scorer-computed-hand__yaku">
     <h4>Yaku <span>{{totalFan}} Fan</span></h4>
     <ul>
-        <ng-container *ngFor="let yaku of yaku">
+        <ng-container *ngFor="let y of yaku">
             <li>
-                {{ yaku.yaku | name }}
-                <span>{{ yaku.fan }} Fan</span>
+                {{ y.definition | name }}
+                <span>{{ y.fan }} Fan</span>
             </li>
-            <li *ngFor="let extra of yaku.extras" class="scorer-computed-hand__extra">
+            <li *ngFor="let extra of y.extras" class="scorer-computed-hand__extra">
                 {{ extra | name }}
                 <span>+1 Fan</span>
             </li>
@@ -43,9 +43,12 @@
 <hr />
 
 <div class="scorer-computed-hand__limit">
-    Mangan
+    {{points[0]}}
 </div>
 
 <div class="scorer-computed-hand__points">
-    1600 / 3200
+    {{points[1]}}
+    <ng-container *ngIf="points[2]">
+        / {{points[2]}}
+    </ng-container>
 </div>

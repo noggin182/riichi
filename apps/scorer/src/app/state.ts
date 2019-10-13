@@ -17,7 +17,7 @@ export class State {
     appendStyle = AppendStyle.Concealed;
 
     winningResults: {
-        mahjong: Mahjong,
+        winningHand: WinningHand,
         yaku: CountedYaku[],
         fu: CountedFu[]
     }[];
@@ -53,7 +53,7 @@ export class State {
             this.winningResults = checkForMahjong(this.hand.concealed, this.hand.melds).map(m => {
                 const winningHand = this.buildWinningHand(m, this.hand.concealed[this.hand.concealed.length - 1]);
                 return {
-                    mahjong: m,
+                    winningHand: winningHand,
                     yaku: countYaku(winningHand),
                     fu: calculateFu(winningHand)
                 };
