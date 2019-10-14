@@ -98,8 +98,8 @@ export const yakuDefinitions: YakuDefinition[] = [
         style: ConcealedType.CanBeOpen,
         extras: [extraIfConcealed],
         check: hand => hand.chis.some(s => getValueFromTile(s[0]) === 1
-                                        && hand.chis.some(s2 => sameSuit(s, s2) && getValueFromTile(s2[2]) === 4)
-                                        && hand.chis.some(s3 => sameSuit(s, s3) && getValueFromTile(s3[2]) === 7))
+                                        && hand.chis.some(s2 => sameSuit(s, s2) && getValueFromTile(s2[0]) === 4)
+                                        && hand.chis.some(s3 => sameSuit(s, s3) && getValueFromTile(s3[0]) === 7))
     },
     {
         fan: 1,
@@ -320,7 +320,7 @@ export const yakuDefinitions: YakuDefinition[] = [
         name: ["All Green", "Ryuu iisou"],
         description: "Hand of green tiles: bamboo 2, 3, 4, 6, 8 and green dragon",
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.allTiles.every(t => t === Tile.Hatsu || (getSuitFromTile(t) === TileSuit.Sou && [2, 3, 4, 6, 8].includes(getValueFromTile(t) + 1)))
+        check: hand => hand.allTiles.every(t => t === Tile.Hatsu || (getSuitFromTile(t) === TileSuit.Sou && [2, 3, 4, 6, 8].includes(getValueFromTile(t))))
     },
     {
         fan: YakumanFan,

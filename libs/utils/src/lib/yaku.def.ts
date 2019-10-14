@@ -1,5 +1,4 @@
 import { WinningHand } from './winning-hand';
-import { HandStyle } from '@riichi/definitions';
 
 export enum ConcealedType {
     CanBeOpen,

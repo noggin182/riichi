@@ -21,7 +21,7 @@ export class ComputedHandComponent implements OnChanges {
 
     totalFan: number;
     totalFu: number;
-    points: number[];
+    points: (number | string)[];
 
     ngOnChanges() {
         this.totalFan = this.yaku.reduce((total, yaku) => total + yaku.fan + yaku.extras.length, 0);
