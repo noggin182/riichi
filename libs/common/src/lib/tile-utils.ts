@@ -1,4 +1,5 @@
-import { Tile, TileSuit, TILEMASK_HONOR, allTiles } from '@riichi/common';
+import { Tile, TileSuit, TILEMASK_HONOR, allTiles } from './definitions/tiles';
+
 
 export function getSuitFromTile(tile: Tile) {
     // tslint:disable-next-line: no-bitwise

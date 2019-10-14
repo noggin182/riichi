@@ -1,9 +1,8 @@
 import { WinningHand } from './winning-hand';
-import { Tile, TileSuit, Wind } from '@riichi/common';
-import { isSimple, isTerminalOrHonor, getSuitFromTile, getValueFromTile, isSuited } from './tile-utils';
-import { isPon, isKan, isChi, yakuDefinitions, YakumanFan } from './yaku-definitions';
+import { isSimple, isTerminalOrHonor, getSuitFromTile, getValueFromTile } from './tile-utils';
+import { isPon, isKan, isChi, yakuDefinitions, YAKUMAN_FAN } from './yaku-definitions';
 import { CountedYaku } from './yaku';
-import { Extractor } from '@angular/compiler';
+import { Tile, TileSuit, Wind } from './definitions/tiles';
 
 export interface FuDefinition {
     fu: number;
@@ -198,7 +197,7 @@ const limits: {name: string, check: (fu: number, points: number, yaku: CountedYa
     },
     {
         name: 'Yakuman',
-        check: (_, __, yaku) => yaku.filter(y => y.definition.fan === YakumanFan).length * 8000
+        check: (_, __, yaku) => yaku.filter(y => y.definition.fan === YAKUMAN_FAN).length * 8000
     }
 ];
 

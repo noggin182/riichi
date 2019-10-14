@@ -1,8 +1,8 @@
 import { ConcealedType, YakuDefinition, ExtraFan } from './yaku.def';
-import { Tile, TileSuit, Wind } from '@riichi/common';
 import { isHonor, getSuitFromTile, getValueFromTile, isSimple, isTerminalOrHonor, isSuited, isTerminal, getDoraFromIndicator } from './tile-utils';
+import { TileSuit, Wind, Tile } from './definitions/tiles';
 
-export const YakumanFan = 13;
+export const YAKUMAN_FAN = -1;
 
 export const doraYaku: YakuDefinition[] = [
     {
@@ -268,14 +268,14 @@ export const yakuDefinitions: YakuDefinition[] = [
 
     // ================== Yakuman ==================
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['Thirteen Orphans', 'Kokushi musou'],
         description: 'One of each honour and terminal and one duplicate',
         style: ConcealedType.MustBeConcealed,
         check: (hand) => hand.isThirteenOrphans
     },
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['Nine Gates', 'Chuuren pooto'],
         description: '1112345678999 + one duplicate of the same suit',
         style: ConcealedType.MustBeConcealed,
@@ -284,7 +284,7 @@ export const yakuDefinitions: YakuDefinition[] = [
                     && [1, 2, 3, 4, 5, 6, 7, 8, 9].every(v => hand.allTiles.some(t => getValueFromTile(t) === v))
     },
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['Blessing of Heaven', 'Tenho'],
         description: 'East mahjong on initial fourteen tiles',
         style: ConcealedType.MustBeConcealed,
@@ -293,7 +293,7 @@ export const yakuDefinitions: YakuDefinition[] = [
                     && hand.seatedWind === Wind.East
     },
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['Blessing of Earth', 'Chiho'],
         description: 'Mahjong on self-draw in the first round',
         style: ConcealedType.MustBeConcealed,
@@ -302,49 +302,49 @@ export const yakuDefinitions: YakuDefinition[] = [
                     && hand.seatedWind !== Wind.East
     },
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['Four Concealed Pungs', 'Suu ankou'],
         description: 'Four concealed pungs/kongs and a pair',
         style: ConcealedType.MustBeConcealed,
         check: hand => hand.mahjong.concealed.filter(isPonOrKan).length === 4
     },
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['Four Kongs', 'Suu kan tsu'],
         description: 'Four kongs and a pair',
         style: ConcealedType.CanBeOpen,
         check: hand => hand.sets.filter(isKan).length === 4
     },
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['All Green', 'Ryuu iisou'],
         description: 'Hand of green tiles: bamboo 2, 3, 4, 6, 8 and green dragon',
         style: ConcealedType.CanBeOpen,
         check: hand => hand.allTiles.every(t => t === Tile.Hatsu || (getSuitFromTile(t) === TileSuit.Sou && [2, 3, 4, 6, 8].includes(getValueFromTile(t))))
     },
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['All Terminals', 'Chinrouto'],
         description: 'All sets consist of terminals',
         style: ConcealedType.CanBeOpen,
         check: hand => hand.allTiles.every(isTerminal)
     },
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['All Honours', 'Tsuu iisou'],
         description: 'All sets consist of honours',
         style: ConcealedType.CanBeOpen,
         check: hand => hand.allTiles.every(isHonor)
     },
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['Big Three Dragons', 'Dai sangen'],
         description: 'Three pungs/kongs of dragons',
         style: ConcealedType.CanBeOpen,
         check: hand => hand.pons.filter(s => getSuitFromTile(s[0]) === TileSuit.Dragon).length === 3
     },
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['Little Four Winds', 'Shou suushii'],
         description: 'Three pungs/kongs of winds and a pair of winds',
         style: ConcealedType.CanBeOpen,
@@ -352,7 +352,7 @@ export const yakuDefinitions: YakuDefinition[] = [
                     && getSuitFromTile(hand.pairTile) === TileSuit.Wind
     },
     {
-        fan: YakumanFan,
+        fan: YAKUMAN_FAN,
         name: ['Big Four Winds', 'Dai suushii'],
         description: 'Four pungs/kongs of winds',
         style: ConcealedType.CanBeOpen,

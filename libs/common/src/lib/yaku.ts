@@ -1,6 +1,6 @@
 import { WinningHand } from './winning-hand';
 import { YakuDefinition, ExtraFan } from './yaku.def';
-import { yakuDefinitions, YakumanFan, doraYaku } from './yaku-definitions';
+import { yakuDefinitions, YAKUMAN_FAN, doraYaku } from './yaku-definitions';
 
 export interface CountedYaku {
     definition: Readonly<YakuDefinition>;
@@ -21,8 +21,8 @@ export function countYaku(hand: WinningHand) {
                     fan,
                     extras: yaku.extras ? yaku.extras.filter(e => e.check(hand)) : []
                 });
-                
-                if (yaku.fan === YakumanFan) {
+
+                if (yaku.fan === YAKUMAN_FAN) {
                     yakuman = true;
                 }
             }
@@ -35,5 +35,5 @@ export function countYaku(hand: WinningHand) {
         collectYaku(doraYaku);
     }
 
-    return yakuman ? countedYaku.filter(cy => cy.definition.fan === YakumanFan) : countedYaku;
+    return yakuman ? countedYaku.filter(cy => cy.definition.fan === YAKUMAN_FAN) : countedYaku;
 }

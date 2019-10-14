@@ -1,5 +1,6 @@
-import { Mahjong, Tile, Wind, TileSuit } from '@riichi/common';
 import { makeTile } from './tile-utils';
+import { Tile, Wind, TileSuit } from './definitions/tiles';
+import { Mahjong } from './definitions/mahjong-definition';
 
 export class WinningHand {
 

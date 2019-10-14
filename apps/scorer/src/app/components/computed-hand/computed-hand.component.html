@@ -15,12 +15,12 @@
 </div>
 
 <div class="scorer-computed-hand__yaku">
-    <h4>Yaku <span>{{totalFan}} Fan</span></h4>
+    <h4>Yaku <span *ngIf="totalFan > 0">{{totalFan}} Fan</span></h4>
     <ul>
         <ng-container *ngFor="let y of yaku">
             <li>
                 {{ y.definition | name }}
-                <span>{{ y.fan }} Fan</span>
+                <span *ngIf="totalFan > 0">{{ y.fan }} Fan</span>
             </li>
             <li *ngFor="let extra of y.extras" class="scorer-computed-hand__extra">
                 {{ extra | name }}
@@ -44,6 +44,7 @@
 
 <div class="scorer-computed-hand__limit">
     {{points[0]}}
+    <ng-container *ngIf="totalFan < -1">x {{-totalFan}}</ng-container>
 </div>
 
 <div class="scorer-computed-hand__points">

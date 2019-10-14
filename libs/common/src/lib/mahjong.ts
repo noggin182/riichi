@@ -1,5 +1,6 @@
-import { Tile, Meld, Mahjong, allTiles } from '@riichi/common';
 import { isTerminalOrHonor, getValueFromTile, isHonor } from './tile-utils';
+import { Tile, allTiles } from './definitions/tiles';
+import { Meld, Mahjong } from './definitions/mahjong-definition';
 
 type ConcealedSet = Tile[];
 type ConcealedHand = ConcealedSet[];
@@ -82,15 +83,14 @@ function walk(remainingTiles: Tile[], currentSets: ConcealedSet[], hands: Concea
             // make a run
             walk(removeTiles(remainingTiles, tile1, tile2),
                  currentSets.concat([[tile, tile1, tile2]]),
-                 hands)
+                 hands);
         }
     }
     if (tile === remainingTiles[0] && tile === remainingTiles[1]
-        && tile !== remainingTiles[2] /* don't take a pon if there are 4, we already took the chi */)
-     {
+        && tile !== remainingTiles[2] /* don't take a pon if there are 4, we already took the chi */) {
         walk(removeTiles(remainingTiles, tile, tile),
              currentSets.concat([[tile, tile, tile]]),
-             hands)
+             hands);
     }
-    
+
 }
