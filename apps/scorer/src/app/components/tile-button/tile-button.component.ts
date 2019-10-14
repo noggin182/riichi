@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { Tile } from '@riichi/definitions';
+import { Tile } from '@riichi/common';
 
 @Component({
   // tslint:disable-next-line: component-selector

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { allTiles } from '@riichi/definitions';
+import { allTiles } from '@riichi/common';
 import { State, AppendStyle } from '../../state';
 
 @Component({

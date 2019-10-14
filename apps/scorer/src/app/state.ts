@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { Tile, Meld, Mahjong, Wind } from '@riichi/definitions';
-import { countYaku, WinningHand, checkForMahjong, calculateFu, CountedYaku, CountedFu } from '@riichi/utils';
+import { Injectable } from '@angular/core';
+import { Tile, Meld, Mahjong, Wind } from '@riichi/common';
+import { countYaku, WinningHand, checkForMahjong, calculateFu, CountedYaku, CountedFu } from '@riichi/common';
 
 export enum AppendStyle {
     Concealed,
     Chi,
-    Pon, 
+    Pon,
     Kan,
     ClosedKan
 }
@@ -41,7 +41,7 @@ export class State {
     hand: {
         concealed: Tile[];
         melds: Meld[]
-    } = {concealed: [], melds: []}
+    } = {concealed: [], melds: []};
 
     appendTile(tile: Tile) {
         if (this.appendStyle === AppendStyle.Concealed) {

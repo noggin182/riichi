@@ -1,6 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy, ViewEncapsulation, OnChanges } from '@angular/core';
-import { Mahjong } from '@riichi/definitions';
-import { CountedYaku, CountedFu, WinningHand, calculatePoints } from '@riichi/utils';
+import { CountedYaku, CountedFu, WinningHand, calculatePoints } from '@riichi/common';
 import { State } from '../../state';
 
 @Component({

@@ -1,33 +1,21 @@
 {
-  "npmScope": "riichi",
-  "implicitDependencies": {
-    "angular.json": "*",
-    "package.json": "*",
-    "tsconfig.json": "*",
-    "tslint.json": "*",
-    "nx.json": "*"
-  },
-  "projects": {
-    "api": {
-      "tags": []
+    "npmScope": "riichi",
+    "implicitDependencies": {
+        "angular.json": "*",
+        "package.json": "*",
+        "tsconfig.json": "*",
+        "tslint.json": "*",
+        "nx.json": "*"
     },
-    "api-interfaces": {
-      "tags": []
-    },
-    "definitions": {
-      "tags": []
-    },
-    "utils": {
-      "tags": []
-    },
-    "10fan": {
-      "tags": []
-    },
-    "scorer-e2e": {
-      "tags": []
-    },
-    "scorer": {
-      "tags": []
+    "projects": {
+        "10fan": {
+            "tags": []
+        },
+        "scorer": {
+            "tags": []
+        },
+        "common": {
+            "tags": []
+        }
     }
-  }
 }

@@ -1,16 +1,16 @@
-import { Meld, Wind, Tile } from '@riichi/definitions';
-import { calculateWaits, tileToUnicode, handFromNotation } from '@riichi/utils'
+import { Meld, Wind, Tile } from '@riichi/common';
+import { calculateWaits, tileToUnicode, handFromNotation } from '@riichi/common';
 console.log('Welcome to 10 Fan chombo!');
-console.log("==============================");
+console.log('==============================');
 
 const command = process.argv[2];
 switch (command) {
-    case "waits": {
+    case 'waits': {
         calcWaits();
         break;
     }
     default:
-        console.log("Supported commands are: waits");
+        console.log('Supported commands are: waits');
 }
 
 function calcWaits() {
@@ -18,7 +18,7 @@ function calcWaits() {
     const melds: Meld[] = []
     let target: Tile[] = hand;
     for (const token of process.argv.slice(3)) {
-        if (token === ":") {
+        if (token === ':') {
             target = [];
             melds.push({from: Wind.East, tiles: target})
         } else {
@@ -32,8 +32,8 @@ function calcWaits() {
     
     const waits = calculateWaits(hand, melds)
     if (waits.length === 0) {
-        console.log("You are not tenpai");
+        console.log('You are not tenpai');
     } else {
-        console.log("You are waiting for: ", waits.map(tileToUnicode).join(' '));
+        console.log('You are waiting for: ', waits.map(tileToUnicode).join(' '));
     }
 }

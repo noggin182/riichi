@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy, OnChanges, HostBinding } from '@angular/core';
-import { Tile } from '@riichi/definitions';
+import { Tile } from '@riichi/common';
 
 import { State } from '../../state';
 

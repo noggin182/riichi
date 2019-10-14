@@ -1,1 +1,1 @@
-@ng b 10fan > null && node .\dist\apps\10fan\main.js %*
+@ng b 10fan > nul && node .\dist\apps\10fan\main.js %*
