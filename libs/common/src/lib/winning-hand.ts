@@ -1,4 +1,4 @@
-import { makeTile } from './tile-utils';
+import { makeTile, getValueFromTile, getSuitFromTile } from './tile-utils';
 import { Tile, Wind, TileSuit } from './definitions/tiles';
 import { Mahjong } from './definitions/mahjong-definition';
 
@@ -13,6 +13,13 @@ export class WinningHand {
 
         this.isSevenPairs = this.sets.length === 7;
         this.isThirteenOrphans = this.sets.length === 1;
+
+        this.isPinfu = !this.pons.length
+                    && this.chis.some(s => (s[0] === this.winningTile && getValueFromTile(s[2]) !== 7)
+                                        || (s[2] === this.winningTile && getValueFromTile(s[0]) !== 3))
+                    && getSuitFromTile(this.pairTile) !== TileSuit.Dragon
+                    && this.pairTile !== this.prevailingWindTile
+                    && this.pairTile !== this.seatedWindTile;
     }
 
     readonly allTiles: Readonly<Tile[]>;
@@ -23,6 +30,7 @@ export class WinningHand {
 
     readonly isSevenPairs: boolean;
     readonly isThirteenOrphans: boolean;
+    readonly isPinfu: boolean;
 
     firstRound: boolean;
     selfDrawnAfterKan: boolean;

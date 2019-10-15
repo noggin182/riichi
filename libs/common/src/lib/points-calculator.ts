@@ -117,7 +117,7 @@ const Fus: FuDefinition[] = [
         check: hand => hand.winningTile !== hand.pairTile
                     && (getValueFromTile(hand.winningTile))
                     && !hand.mahjong.concealed.filter(isChi).some(s => s[1] === hand.winningTile)
-                    && !(yakuDefinitions.find(y => y.name[0] === 'Pinfu').check(hand)) // TODO: better way for this. if the winning tile can be used in a different set to claim pinfu, don't count these points
+                    && hand.isPinfu
                     && (hand.chis.map(s => [s]).find(ss => ss[0][0] === hand.winningTile && getValueFromTile(ss[0][2]) === 9
                                                         || ss[0][2] === hand.winningTile && getValueFromTile(ss[0][2]) === 1)) || false
     },
@@ -126,7 +126,7 @@ const Fus: FuDefinition[] = [
     {
         fu: 2,
         name: ['Self draw', 'Tsumo'],
-        check: hand => hand.selfDrawn && !(yakuDefinitions.find(y => y.name[0] === 'Pinfu').check(hand))
+        check: hand => hand.selfDrawn && !hand.isPinfu
     }
 ];
 

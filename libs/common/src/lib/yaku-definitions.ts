@@ -62,12 +62,7 @@ export const yakuDefinitions: YakuDefinition[] = [
         name: ['Pinfu', 'Pinfu'],
         description: 'Four chow and valueless pair',
         style: ConcealedType.MustBeConcealed,
-        check: hand => !hand.pons.length
-                    && hand.chis.some(s => (s[0] === hand.winningTile && getValueFromTile(s[2]) !== 7)
-                                        || (s[2] === hand.winningTile && getValueFromTile(s[0]) !== 3))
-                    && getSuitFromTile(hand.pairTile) !== TileSuit.Dragon
-                    && hand.pairTile !== hand.prevailingWindTile
-                    && hand.pairTile !== hand.seatedWindTile
+        check: hand => hand.isPinfu
     },
     {
         fan: 1,
