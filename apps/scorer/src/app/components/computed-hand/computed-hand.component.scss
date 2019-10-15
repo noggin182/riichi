@@ -61,6 +61,10 @@ scorer-computed-hand {
             padding: 0;
             display: flex;
             justify-content: space-between;
+
+            &.scorer-computed-hand__extra {
+                margin-left: 20px;
+            }
     
             span {
                 color: $secondary-text;

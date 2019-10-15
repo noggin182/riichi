@@ -126,7 +126,7 @@ const Fus: FuDefinition[] = [
     {
         fu: 2,
         name: ['Self draw', 'Tsumo'],
-        check: hand => hand.selfDrawn
+        check: hand => hand.selfDrawn && !(yakuDefinitions.find(y => y.name[0] === 'Pinfu').check(hand))
     }
 ];
 
@@ -156,7 +156,7 @@ export function calculateFu(hand: WinningHand): CountedFu[] {
         }
     }
 
-    if (counted.length === 1) {
+    if (counted.length === 1 && OpenPinfu.check(hand)) {
         counted.push({
             definition: OpenPinfu,
             tiles: null
@@ -178,58 +178,74 @@ export function calculateFu(hand: WinningHand): CountedFu[] {
     return counted;
 }
 
-const limits: {name: string, check: (fu: number, points: number, yaku: CountedYaku[]) => number}[] = [
+const limits: {name: string, points: number, check: (fan: number, points: number) => boolean}[] = [
     {
-        name: 'Mangan',
-        check: (fan, points) => fan >= 5 || points >= 2000 ? 2000 : 0
-    },
-    {
-        name: 'Haneman',
-        check: fan => fan >= 6 ? 3000 : 0
-    },
-    {
-        name: 'Baiman',
-        check: fan => fan >= 8 ? 4000 : 0
+        name: 'Yakuman',
+        points: 8000,
+        check: fan => fan < 0
     },
     {
         name: 'Sanbaiman',
-        check: fan => fan >= 11 ? 6000 : 0
+        points: 6000,
+        check: fan => fan >= 11
     },
     {
-        name: 'Yakuman',
-        check: (_, __, yaku) => yaku.filter(y => y.definition.fan === YAKUMAN_FAN).length * 8000
+        name: 'Baiman',
+        points: 4000,
+        check: fan => fan >= 8
+    },
+    {
+        name: 'Haneman',
+        points: 3000,
+        check: fan => fan >= 6
+    },
+    {
+        name: 'Mangan',
+        points: 2000,
+        check: (fan, points) => fan >= 5 || points >= 2000
     }
 ];
 
-function roundPoints(limitName: string, points: number, otherPoints?: number) {
-    return otherPoints
-         ? [limitName, Math.ceil(points / 100) * 100, Math.ceil(otherPoints / 100) * 100]
-         : [limitName, Math.ceil(points / 100) * 100];
+
+export interface PaymentInfo {
+    basePoints: number;
+    limit: string;
+    payments: {
+        from: Wind;
+        ammount: number;
+    }[];
 }
 
-export function calculatePoints(hand: WinningHand, yaku: CountedYaku[], fu: CountedFu[]) {
+
+export function calculatePoints(hand: WinningHand, yaku: CountedYaku[], fu: CountedFu[]): PaymentInfo {
     const totalFu = fu.reduce((total, f) => total + f.definition.fu, 0);
     const fan = yaku.reduce((total, y) => total + y.fan + y.extras.length , 0);
 
-    let basePoints = totalFu * 2 ** (fan + 2);
+    const rawPoints = totalFu * 2 ** (fan + 2);
 
     let limitName = '';
-    for (const limit of limits.slice().reverse()) {
-        const newPoints = limit.check(fan, basePoints, yaku);
-        if (newPoints) {
-            basePoints = newPoints;
-            limitName = limit.name;
-            break;
-        }
+    const limit = limits.find(l => l.check(fan, rawPoints));
+    limitName = limit && limit.name;
+    const basePoints = limit ? limit.points : rawPoints;
+    let payments: { from: Wind; ammount: number; }[] = [];
+
+    if (!hand.selfDrawn) {
+        payments = [{ from: hand.winningTileFromWind, ammount: basePoints * hand.seatedWind === Wind.East ? 6 : 4 }];
+    } else {
+        payments = [Wind.East, Wind.North, Wind.South, Wind.West].filter(w => w !== hand.seatedWind).map(w => ({
+            from: w,
+            ammount: hand.seatedWind === Wind.East || w === Wind.East ? basePoints * 2 : basePoints
+        }));
     }
 
-    if (hand.seatedWind === Wind.East) {
-        return roundPoints(limitName, basePoints * (hand.selfDrawn ? 2 : 6));
+    // finally round the payments up
+    for (const payment of payments) {
+        payment.ammount = Math.ceil(payment.ammount / 100) * 100;
     }
 
-    if (hand.selfDrawn) {
-        return roundPoints(limitName, basePoints * 2, basePoints);
-    }
-
-    return roundPoints(limitName, basePoints * 4);
+    return {
+        limit: limitName,
+        basePoints,
+        payments
+    };
 }

@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy, ViewEncapsulation, OnChanges } from '@angular/core';
-import { CountedYaku, CountedFu, WinningHand, calculatePoints } from '@riichi/common';
+import { CountedYaku, CountedFu, WinningHand, calculatePoints, PaymentInfo, Wind } from '@riichi/common';
 import { State } from '../../state';
 
 @Component({
@@ -20,12 +20,14 @@ export class ComputedHandComponent implements OnChanges {
 
     totalFan: number;
     totalFu: number;
-    points: (number | string)[];
+    payment: PaymentInfo;
+
+    Wind = Wind;
 
     ngOnChanges() {
         this.totalFan = this.yaku.reduce((total, yaku) => total + yaku.fan + yaku.extras.length, 0);
         this.totalFu = this.fu.reduce((total, fu) => total + fu.definition.fu, 0);
-        this.points = calculatePoints(this.winningHand, this.yaku, this.fu);
+        this.payment = calculatePoints(this.winningHand, this.yaku, this.fu);
     }
 
 }

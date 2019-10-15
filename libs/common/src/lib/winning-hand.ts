@@ -25,7 +25,6 @@ export class WinningHand {
     readonly isThirteenOrphans: boolean;
 
     firstRound: boolean;
-    selfDrawn: boolean;
     selfDrawnAfterKan: boolean;
     robbedFromKan: boolean;
     lastTile: boolean;
@@ -35,9 +34,11 @@ export class WinningHand {
     oneShot: boolean;
     prevailingWind: Wind = -1;
     seatedWind: Wind = -1;
+    winningTileFromWind: Wind = -1;
 
     doraIndicator: Tile[];
 
+    get selfDrawn() { return this.winningTileFromWind === this.seatedWind; }
     get prevailingWindTile() { return makeTile(TileSuit.Wind, this.prevailingWind); }
     get seatedWindTile()     { return makeTile(TileSuit.Wind, this.seatedWind); }
 }

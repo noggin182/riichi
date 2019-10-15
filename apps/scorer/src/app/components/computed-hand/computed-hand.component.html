@@ -43,13 +43,11 @@
 <hr />
 
 <div class="scorer-computed-hand__limit">
-    {{points[0]}}
-    <ng-container *ngIf="totalFan < -1">x {{-totalFan}}</ng-container>
+    {{payment.limit}}
 </div>
 
 <div class="scorer-computed-hand__points">
-    {{points[1]}}
-    <ng-container *ngIf="points[2]">
-        / {{points[2]}}
-    </ng-container>
+    <div *ngFor="let p of payment.payments">
+        {{p.ammount}} from {{Wind[p.from]}}
+    </div>
 </div>

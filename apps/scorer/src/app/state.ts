@@ -65,7 +65,7 @@ export class State {
         const winningHand = new WinningHand(mahjong, winningTile);
 
         winningHand.firstRound = this.roundInfo.firstRound;
-        winningHand.selfDrawn = this.roundInfo.selfDrawn;
+        winningHand.winningTileFromWind = Wind.East;
         winningHand.selfDrawnAfterKan = this.roundInfo.selfDrawnAfterKan;
         winningHand.robbedFromKan = this.roundInfo.robbedFromKan;
         winningHand.lastTile = this.roundInfo.lastTile;
