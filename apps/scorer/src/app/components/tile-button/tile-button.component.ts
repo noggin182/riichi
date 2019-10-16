@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { Tile } from '@riichi/common';
 
 @Component({
@@ -9,13 +9,6 @@ import { Tile } from '@riichi/common';
   styleUrls: ['./tile-button.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class TileButtonComponent implements OnInit {
-
-  constructor() { }
-
+export class TileButtonComponent {
   @Input() tile: Tile;
-
-  ngOnInit() {
-  }
-
 }

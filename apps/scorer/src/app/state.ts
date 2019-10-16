@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Tile, Meld, Mahjong, Wind } from '@riichi/common';
+import { Mahjong, Hand, Tile, Wind } from '@riichi/common';
 import { countYaku, WinningHand, checkForMahjong, calculateFu, CountedYaku, CountedFu } from '@riichi/common';
 
 export enum AppendStyle {
@@ -15,12 +15,13 @@ export class State {
     currentLanguage: 0 | 1 = 0;
     blackTiles = false;
     appendStyle = AppendStyle.Concealed;
-
+    winningTile: Tile;
     winningResults: {
         winningHand: WinningHand,
         yaku: CountedYaku[],
         fu: CountedFu[]
     }[];
+    tileId = 1;
 
     roundInfo = {
         firstRound: false,
@@ -29,35 +30,38 @@ export class State {
         robbedFromKan: false,
         lastTile: false,
 
-        riichi: false,
+        riichi: true,
         doubleRiichi: false,
-        oneShot: false,
-        prevailingWind: Wind.East,
-        seatedWind: Wind.East,
+        oneShot: true,
+        prevailantWind: Wind.East,
+        seatWind: Wind.East,
 
-        doraIndicator: [] as Tile[]
+        doraIndicator: [] as readonly Tile[],
+        uraDoraIndicator: [] as readonly Tile[]
     };
 
-    hand: {
-        concealed: Tile[];
-        melds: Meld[]
-    } = {concealed: [], melds: []};
+    hand: Hand = {concealedTiles: [], melds: []};
 
     appendTile(tile: Tile) {
-        if (this.appendStyle === AppendStyle.Concealed) {
-            this.hand.concealed.push(tile);
-        }
-
-        const effectiveTiles = this.hand.concealed.length + this.hand.melds.length * 3;
-        if (effectiveTiles === 14) {
-            this.winningResults = checkForMahjong(this.hand.concealed, this.hand.melds).map(m => {
-                const winningHand = this.buildWinningHand(m, this.hand.concealed[this.hand.concealed.length - 1]);
+        const effectiveTiles = this.hand.concealedTiles.length + this.hand.melds.length * 3;
+        if (effectiveTiles === 13) {
+            this.winningTile = tile;
+            this.winningResults = checkForMahjong(this.hand, tile, Wind.East, Wind.East).map(m => {
+                const winningHand = this.buildWinningHand(m, this.winningTile);
                 return {
                     winningHand: winningHand,
                     yaku: countYaku(winningHand),
                     fu: calculateFu(winningHand)
                 };
             });
+        } else {
+            if (this.appendStyle === AppendStyle.Concealed) {
+                this.hand.concealedTiles.push({
+                    id: this.tileId++,
+                    kind: tile.kind,
+                    rank: tile.rank
+                });
+            }
         }
     }
 
@@ -73,10 +77,11 @@ export class State {
         winningHand.riichi = this.roundInfo.riichi;
         winningHand.doubleRiichi = this.roundInfo.doubleRiichi;
         winningHand.oneShot = this.roundInfo.oneShot;
-        winningHand.prevailingWind = this.roundInfo.prevailingWind;
-        winningHand.seatedWind = this.roundInfo.seatedWind;
+        winningHand.prevalentWind = this.roundInfo.prevailantWind;
+        winningHand.seatWind = this.roundInfo.seatWind;
 
         winningHand.doraIndicator = this.roundInfo.doraIndicator;
+        winningHand.uraDoraIndicator = this.roundInfo.uraDoraIndicator;
 
         return winningHand;
     }

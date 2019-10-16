@@ -1,6 +1,7 @@
 import { ConcealedType, YakuDefinition, ExtraFan } from './yaku.def';
-import { isHonor, getSuitFromTile, getValueFromTile, isSimple, isTerminalOrHonor, isSuited, isTerminal, getDoraFromIndicator } from './tile-utils';
-import { TileSuit, Wind, Tile } from './definitions/tiles';
+import { isHonor, isTerminalOrHonor, isSuited, getDoraNameFromIndicator, getTileName, areSimilarTiles, isSimple, allSuitsPresent, isDragon, isTerminal, isPonOrKan, isKan, isWind } from './tile-utils';
+import { distinct } from './utils';
+import { Wind, TileName, TileKind } from './definitions/tile';
 
 export const YAKUMAN_FAN = -1;
 
@@ -10,21 +11,29 @@ export const doraYaku: YakuDefinition[] = [
         name: ['Dora', 'Dora'],
         description: 'Extra fan for dora',
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.doraIndicator.map(getDoraFromIndicator).reduce((total, tile) => total + hand.allTiles.filter(t => t === tile).length, 0)
+        check: hand => hand.doraIndicator.map(getDoraNameFromIndicator).reduce((total, doraName) => total + hand.allTiles.filter(t => getTileName(t) === doraName).length, 0)
+    },
+    {
+        fan: 1,
+        name: ['Ura dora', 'Ura dora'],
+        description: 'Extra fan for ura dora',
+        style: ConcealedType.CanBeOpen,
+        check: hand => hand.uraDoraIndicator.map(getDoraNameFromIndicator).reduce((total, doraName) => total + hand.allTiles.filter(t => getTileName(t) === doraName).length, 0)
     }
 ];
 
 const extraIfConcealed: ExtraFan = {
     name: ['Concealed hand', 'Concealed hand'],
     description: 'Extra fan for concealed',
-    check: hand => hand.mahjong.melds.length === 0
+    check: hand => !hand.isOpen
 };
 
 /*
   IMPORTANT!
   Things to consider when writing conditions.
-  The conditions must handle 7 pairs and 13 orphans as well.
-  hand.pairTile may be blank, and hand.mahjong.pair null
+  The conditions must handle 7 pairs and 13 orphans as well
+    This is helped by the isSevenPairs and isThirteenOrphans flags, in both cases all sets are empty
+  hand.pairTile, hand.pair[0] and hand.pair[1] may all be  blank
   Calling every on an empty array returns true!
 
 */
@@ -69,7 +78,7 @@ export const yakuDefinitions: YakuDefinition[] = [
         name: ['Pure Double Chow', 'Iipeikou'],
         description: 'Two identical chow of the same suit',
         style: ConcealedType.MustBeConcealed,
-        check: hand => hand.chis.filter(s1 => hand.chis.filter(s2 => s1[0] === s2[0]).length > 1).length % 4 > 1 // length = 2 or 3. 4 would be Ryanpeikou
+        check: hand => hand.flatChis.filter(t1 => hand.flatChis.filter(t2 => areSimilarTiles(t1, t2)).length > 1).length % 4 > 1 // length = 2 or 3. 4 would be Ryanpeikou
     },
     {
         fan: 1,
@@ -83,7 +92,7 @@ export const yakuDefinitions: YakuDefinition[] = [
         name: ['Mixed Triple Chow', 'San shoku doujun'],
         description: 'Same chow in each suit',
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.chis.some(s => allSuits(hand.chis.filter(s2 => sameValue(s, s2)))),
+        check: hand => hand.flatChis.some(t1 => allSuitsPresent(hand.flatChis.filter(t2 => t1.rank === t2.rank))),
         extras: [extraIfConcealed]
     },
     {
@@ -92,30 +101,30 @@ export const yakuDefinitions: YakuDefinition[] = [
         description: 'The three chow 1-2-3, 4-5-6 and 7-8-9, of the same suit',
         style: ConcealedType.CanBeOpen,
         extras: [extraIfConcealed],
-        check: hand => hand.chis.some(s => getValueFromTile(s[0]) === 1
-                                        && hand.chis.some(s2 => sameSuit(s, s2) && getValueFromTile(s2[0]) === 4)
-                                        && hand.chis.some(s3 => sameSuit(s, s3) && getValueFromTile(s3[0]) === 7))
+        check: hand => hand.flatChis.some(t1 => t1.rank === 1
+                    && hand.flatChis.some(t2 => t2.rank === 4 && t2.kind === t1.kind)
+                    && hand.flatChis.some(t3 => t3.rank === 7 && t3.kind === t1.kind))
     },
     {
         fan: 1,
         name: ['Dragon Pung', 'Fanpai'],
         description: 'Pung/kong of dragons',
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.pons.filter(s => getSuitFromTile(s[0]) === TileSuit.Dragon).length
+        check: hand => hand.flatPons.filter(isDragon).length
     },
     {
         fan: 1,
         name: ['Seat Wind', 'Fanpai'],
         description: 'Pung/kong of seat wind',
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.pons.filter(s => s[0] === hand.seatedWindTile).length
+        check: hand => hand.flatPons.filter(hand.isSeatWind).length
     },
     {
         fan: 1,
         name: ['Prevalent Wind', 'Fanpai'],
         description: 'Pung/kong of prevalent wind',
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.pons.filter(s => s[0] === hand.prevailingWindTile).length
+        check: hand => hand.flatPons.filter(hand.isPrevalentWind).length
     },
     {
         fan: 1,
@@ -123,9 +132,9 @@ export const yakuDefinitions: YakuDefinition[] = [
         description: 'All sets contain terminals/honours. At least one chow.',
         style: ConcealedType.CanBeOpen,
         check: hand => hand.chis.length
-                    && hand.allTiles.some(isHonor) // no honors is Junchan
+                    && hand.allTiles.some(isHonor) // sets containing terminals but no honors is Junchan
                     && hand.sets.every(s => isTerminalOrHonor(s[0]) || isTerminal(s[s.length - 1]))
-                    && isTerminalOrHonor(hand.pairTile),
+                    && isTerminalOrHonor(hand.pair[0]),
         extras: [extraIfConcealed]
     },
     {
@@ -172,16 +181,14 @@ export const yakuDefinitions: YakuDefinition[] = [
         name: ['Triple Pung', 'San shoku dokou'],
         description: 'Same pung/kong in each suit',
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.pons.some(s => allSuits(hand.pons.filter(s2 => sameValue(s, s2))))
+        check: hand => hand.flatPons.some(t1 => allSuitsPresent(hand.flatPons.filter(t2 => t2.rank === t1.rank)))
     },
     {
         fan: 2,
         name: ['Three Concealed Pungs', 'San ankou'],
         description: 'Three concealed pungs/kongs and a pair',
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.mahjong.concealed.filter(isPonOrKan).length === 3
-        // TODO: set isn't concealed if it's completed by ron!
-        // http://arcturus.su/wiki/Sanankou
+        check: hand => hand.concealed.filter(isPonOrKan).length === 3
     },
     {
         fan: 2,
@@ -204,7 +211,7 @@ export const yakuDefinitions: YakuDefinition[] = [
         style: ConcealedType.CanBeOpen,
         check: hand => hand.allTiles.some(isHonor)
                     && hand.allTiles.some(isSuited)
-                    && hand.allTiles.filter(t => !isHonor(t)).map(getSuitFromTile).filter(distinct).length === 1,
+                    && hand.allTiles.filter(isSuited).map(t => t.kind).filter(distinct).length === 1,
         extras: [extraIfConcealed]
     },
     {
@@ -212,8 +219,8 @@ export const yakuDefinitions: YakuDefinition[] = [
         name: ['Little Three Dragons', 'Shou sangen'],
         description: 'Two pungs/kongs of dragons and a pair of dragons',
         style: ConcealedType.CanBeOpen,
-        check: hand => getSuitFromTile(hand.pairTile) === TileSuit.Dragon
-                    && hand.pons.filter(s => getSuitFromTile(s[0]) === TileSuit.Dragon).length === 2
+        check: hand => isDragon(hand.pair[0])
+                    && hand.flatPons.filter(isDragon).length === 2
     },
     {
         fan: 2,
@@ -229,7 +236,7 @@ export const yakuDefinitions: YakuDefinition[] = [
         style: ConcealedType.CanBeOpen,
         check: hand => hand.chis.length
                     && hand.allTiles.every(isSuited) // anything with an honour is Chanta
-                    && isTerminal(hand.pairTile)
+                    && isTerminal(hand.pair[0])
                     && hand.sets.every(s => isTerminal(s[0]) || isTerminal(s[2])),
         extras: [extraIfConcealed]
     },
@@ -240,7 +247,7 @@ export const yakuDefinitions: YakuDefinition[] = [
         name: ['Twice Pure Double Chow', 'Ryan peikou'],
         description: 'Two times two identical chow and a pair',
         style: ConcealedType.MustBeConcealed,
-        check: hand => hand.chis.filter(s1 => hand.chis.filter(s2 => s1[0] === s2[0]).length > 1).length === 4
+        check: hand => hand.flatChis.filter(t1 => hand.flatChis.filter(t2 => areSimilarTiles(t1, t2)).length > 1).length === 4
     },
 
     // ================== 5 fan ==================
@@ -250,7 +257,7 @@ export const yakuDefinitions: YakuDefinition[] = [
         description: 'One suit, no honours',
         style: ConcealedType.CanBeOpen,
         check: hand => hand.allTiles.every(isSuited)
-                    && hand.allTiles.map(getSuitFromTile).filter(distinct).length === 1,
+                    && hand.allTiles.map(t => t.kind).filter(distinct).length === 1,
         extras: [extraIfConcealed]
     },
     {
@@ -275,8 +282,8 @@ export const yakuDefinitions: YakuDefinition[] = [
         description: '1112345678999 + one duplicate of the same suit',
         style: ConcealedType.MustBeConcealed,
         check: hand => hand.allTiles.every(isSuited)
-                    && hand.allTiles.map(getSuitFromTile).filter(distinct).length === 1
-                    && [1, 2, 3, 4, 5, 6, 7, 8, 9].every(v => hand.allTiles.some(t => getValueFromTile(t) === v))
+                    && hand.allTiles.map(t => t.kind).filter(distinct).length === 1
+                    && [1, 2, 3, 4, 5, 6, 7, 8, 9].every(v => hand.allTiles.some(t => t.rank === v))
     },
     {
         fan: YAKUMAN_FAN,
@@ -285,7 +292,7 @@ export const yakuDefinitions: YakuDefinition[] = [
         style: ConcealedType.MustBeConcealed,
         check: hand => hand.firstRound
                     && hand.selfDrawn
-                    && hand.seatedWind === Wind.East
+                    && hand.seatWind === Wind.East
     },
     {
         fan: YAKUMAN_FAN,
@@ -294,14 +301,14 @@ export const yakuDefinitions: YakuDefinition[] = [
         style: ConcealedType.MustBeConcealed,
         check: hand => hand.firstRound
                     && hand.selfDrawn
-                    && hand.seatedWind !== Wind.East
+                    && hand.seatWind !== Wind.East
     },
     {
         fan: YAKUMAN_FAN,
         name: ['Four Concealed Pungs', 'Suu ankou'],
         description: 'Four concealed pungs/kongs and a pair',
         style: ConcealedType.MustBeConcealed,
-        check: hand => hand.mahjong.concealed.filter(isPonOrKan).length === 4
+        check: hand => hand.concealed.filter(isPonOrKan).length === 4
     },
     {
         fan: YAKUMAN_FAN,
@@ -315,7 +322,7 @@ export const yakuDefinitions: YakuDefinition[] = [
         name: ['All Green', 'Ryuu iisou'],
         description: 'Hand of green tiles: bamboo 2, 3, 4, 6, 8 and green dragon',
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.allTiles.every(t => t === Tile.Hatsu || (getSuitFromTile(t) === TileSuit.Sou && [2, 3, 4, 6, 8].includes(getValueFromTile(t))))
+        check: hand => hand.allTiles.every(t => getTileName(t) === TileName.Hatsu || (t.kind === TileKind.Sou && [2, 3, 4, 6, 8].includes(t.rank)))
     },
     {
         fan: YAKUMAN_FAN,
@@ -336,56 +343,21 @@ export const yakuDefinitions: YakuDefinition[] = [
         name: ['Big Three Dragons', 'Dai sangen'],
         description: 'Three pungs/kongs of dragons',
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.pons.filter(s => getSuitFromTile(s[0]) === TileSuit.Dragon).length === 3
+        check: hand => hand.flatPons.filter(isDragon).length === 3
     },
     {
         fan: YAKUMAN_FAN,
         name: ['Little Four Winds', 'Shou suushii'],
         description: 'Three pungs/kongs of winds and a pair of winds',
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.pons.filter(s => getSuitFromTile(s[0]) === TileSuit.Wind).length === 3
-                    && getSuitFromTile(hand.pairTile) === TileSuit.Wind
+        check: hand => hand.flatPons.filter(isWind).length === 3
+                    && isWind(hand.pair[0])
     },
     {
         fan: YAKUMAN_FAN,
         name: ['Big Four Winds', 'Dai suushii'],
         description: 'Four pungs/kongs of winds',
         style: ConcealedType.CanBeOpen,
-        check: hand => hand.pons.filter(s => getSuitFromTile(s[0]) === TileSuit.Wind).length === 4
+        check: hand => hand.flatPons.filter(isWind).length === 4
     }
 ];
-
-export function isPon(set: Tile[]) {
-    return set.length === 3 && set[0] === set[1];
-}
-
-export function isKan(set: Tile[]) {
-    return set.length === 4;
-}
-
-export function isPonOrKan(set: Tile[]) {
-    return isPon(set) || isKan(set);
-}
-
-export function isChi(set: Tile[]) {
-    return set[0] !== set[1];
-}
-
-export function distinct<T>(item: T, index: number, array: T[]) {
-    return array.indexOf(item) === index;
-}
-
-export function allSuits(sets: Tile[][]) {
-    const suits = sets.map(s => getSuitFromTile(s[0]));
-    return suits.includes(TileSuit.Man)
-        && suits.includes(TileSuit.Sou)
-        && suits.includes(TileSuit.Pin);
-}
-
-export function sameValue(set1: Tile[], set2: Tile[]) {
-    return getValueFromTile(set1[0]) === getValueFromTile(set2[0]);
-}
-
-export function sameSuit(set1: Tile[], set2: Tile[]) {
-    return getSuitFromTile(set1[0]) === getSuitFromTile(set2[0]);
-}

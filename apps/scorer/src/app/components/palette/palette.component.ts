@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { allTiles } from '@riichi/common';
+import { createDummySetOfTiles } from '@riichi/common';
 import { State, AppendStyle } from '../../state';
 
 @Component({
@@ -12,7 +12,7 @@ export class PaletteComponent implements OnInit {
     constructor(readonly state: State) { }
 
     AppendStyle = AppendStyle;
-    allTiles = allTiles;
+    allTiles = createDummySetOfTiles();
 
     ngOnInit() {
     }

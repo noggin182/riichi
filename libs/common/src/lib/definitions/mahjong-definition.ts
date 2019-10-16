@@ -1,13 +1,37 @@
-import { Wind, Tile } from './tiles';
+import { Wind, Tile } from './tile';
+
+export const enum MeldKind {
+    Chi,
+    Pon,
+    Kan,
+    AddedKan,
+    ClosedKan
+}
 
 export interface Meld {
-    from: Wind | null;
-    tiles: Tile[];
+    readonly kind: MeldKind;
+    readonly from: Wind;
+    readonly tiles: readonly Tile[];
+    readonly claimedTile: Tile; // this tile should always be in the tiles array
+}
+
+export const enum FinalMeldKind {
+    Chi = MeldKind.Chi,
+    Pon = MeldKind.Pon,
+    Kan = MeldKind.Kan,
+    AddedKan  = MeldKind.AddedKan,
+    ClosedKan = MeldKind.ClosedKan,
+    Ron,
+    Closed
+}
+
+export interface FinalMeld {
+    readonly kind: FinalMeldKind;
+    readonly from: Wind;
+    readonly tiles: readonly Tile[];
+    readonly claimedTile: Tile | null;
 }
 
 export interface Mahjong {
-    melds: Meld[];
-    concealed: Tile[][];
-    pair: Tile[] | null; // null for 7 pairs and 13 orphans
+    readonly melds: readonly FinalMeld[];
 }
-

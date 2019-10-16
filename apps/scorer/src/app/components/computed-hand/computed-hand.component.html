@@ -3,14 +3,8 @@
 
 <div class="scorer-computed-hand__tiles">
 
-    <div *ngFor="let set of winningHand.mahjong.concealed">
-        <scorer-tile *ngFor="let tile of set" [tile]="tile" size="small"></scorer-tile>
-    </div>
-    <div *ngIf="winningHand.mahjong.pair">
-        <scorer-tile *ngFor="let tile of winningHand.mahjong.pair" [tile]="tile" size="small"></scorer-tile>
-    </div>
-    <div *ngFor="let meld of winningHand.mahjong.melds; let index=index">
-        <scorer-tile *ngFor="let tile of meld.tiles" [tile]="tile" size="small" [attr.data-rotated]="index === 1 || null"></scorer-tile>
+    <div *ngFor="let meld of winningHand.melds">
+        <scorer-tile *ngFor="let tile of meld.tiles" [tile]="tile" size="small"></scorer-tile>
     </div>
 </div>
 
@@ -48,6 +42,6 @@
 
 <div class="scorer-computed-hand__points">
     <div *ngFor="let p of payment.payments">
-        {{p.ammount}} from {{Wind[p.from]}}
+        {{p.ammount}} from {{p.from}}
     </div>
 </div>

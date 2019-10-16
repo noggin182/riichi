@@ -1,96 +1,109 @@
-import { isTerminalOrHonor, getValueFromTile, isHonor } from './tile-utils';
-import { Tile, allTiles } from './definitions/tiles';
-import { Meld, Mahjong } from './definitions/mahjong-definition';
+import { createDummySetOfTiles, sortTiles, getTileName, isTerminalOrHonor, isSuited } from './tile-utils';
+import { Meld, Mahjong, FinalMeld, MeldKind, FinalMeldKind } from './definitions/mahjong-definition';
+import { distinct, groupBy, exclude } from './utils';
+import { Tile, Wind } from './definitions/tile';
 
-type ConcealedSet = Tile[];
-type ConcealedHand = ConcealedSet[];
-
-function count(hand: Tile[], tile: Tile) {
-    return hand.filter(t => t === tile).length;
+export interface Hand {
+    readonly concealedTiles: Tile[];
+    readonly melds: Meld[];
 }
 
-function removeTiles(hand: Tile[], tile1: Tile, tile2: Tile) {
-    const index1 = hand.indexOf(tile1);
-    const index2 = tile1 === tile2 ? hand.indexOf(tile2, index1 + 1) : hand.indexOf(tile2);
-    return hand.filter((_ , i) => i !== index1 && i !== index2);
+export interface ReadonlyHand {
+    readonly concealedTiles: readonly Tile[];
+    readonly melds: readonly Meld[];
 }
 
-export function calculateWaits(hand: Tile[], melds: Meld[]) {
-    return allTiles.filter(tile => checkForMahjong(hand.concat(tile), melds).length);
+export function calculateWaits(hand: ReadonlyHand) {
+    const possibleTiles = createDummySetOfTiles();
+    // TODO: reject tiles we already hold 4 of
+    // TODO: could also ignore suits that we don't have in our hand
+    return possibleTiles.filter(tile => checkForMahjong(hand, tile, Wind.None, Wind.None).length);
 }
 
-export function checkForMahjong(hand: Tile[], melds: Meld[]): Mahjong[] {
-    hand = hand.slice().sort();
-    const mahjong: Mahjong[] = [];
-
-    if (hand.length + (melds.length * 3) !== 14) {
+// TODO: if win by ron, move the set that contains the winning tile into melds
+export function checkForMahjong(hand: ReadonlyHand, winningTile: Tile, seatWind: Wind, discardWind: Wind): Mahjong[] {
+    if (hand.concealedTiles.length + (hand.melds.length * 3) !== 13) {
         throw new Error('unexpected number of tiles in hand');
     }
 
-    const distinctTiles = hand.filter((t, i) => hand.indexOf(t) === i);
+    const selfDraw = seatWind === discardWind;
+
+    const tiles = hand.concealedTiles.concat(winningTile).sort(sortTiles);
+    const melds = hand.melds.slice() as unknown as FinalMeld[];
+
+    const mahjong: Mahjong[] = [];
+
+    const distinctNames = tiles.map(getTileName).filter(distinct);
+    const tilesGroupedByName = Array.from(groupBy(tiles, getTileName).values());
 
     if (!melds.length) {
         // manual check for 13 orphans
-        if (distinctTiles.length === 13 && distinctTiles.every(isTerminalOrHonor)) {
-            return [{
-                melds: [],
-                concealed: [hand],
-                pair: null
-            }];
+        if (distinctNames.length === 13 && tiles.every(isTerminalOrHonor)) {
+            return [{melds: [formMeld(tiles)]}];
         }
         // manual check for 7 pairs
-        if (distinctTiles.length === 7 && distinctTiles.every(t => count(hand, t) === 2)) {
-            mahjong.push({
-                melds: [],
-                concealed: distinctTiles.map(t => [t, t]),
-                pair: null});
+        if (tilesGroupedByName.length === 7 && tilesGroupedByName.every(s => s.length === 2)) {
+            mahjong.push({melds: [
+                ...tilesGroupedByName.map(formMeld)
+            ]});
             // don't return, other hands may be valid (Ryan peikou)
         }
     }
 
     // first take out the pairs
-    const pairs = distinctTiles.filter(t => count(hand, t) >= 2);
-    for (const pairedTile of pairs) {
-        const pair = [pairedTile, pairedTile];
-        const current = removeTiles(hand, pairedTile, pairedTile);
+    const pairs = tilesGroupedByName.filter(s => s.length >= 2);
+    for (const pairableTiles of pairs) {
+        const pair = pairableTiles.slice(0, 2);
+        const current = exclude(tiles, ...pair);
 
-        const hands: ConcealedHand[] = [];
-        walk(current, [], hands);
+        const hands: FinalMeld[][] = [];
+        walk(current, [formMeld(pair)], hands);
         mahjong.push(...hands.map(sets => ({
-            melds,
-            concealed: sets.concat(),
-            pair
+            melds: melds.concat(sets)
         })));
     }
+
+    // todo, if there are other tiles with the same tile name as the winning tile in other sets, swap them around and report this as mahjong too
     return mahjong;
-}
 
-function walk(remainingTiles: Tile[], currentSets: ConcealedSet[], hands: ConcealedHand[]) {
-    if (!remainingTiles.length) {
-        hands.push(currentSets);
-        return;
+    function formMeld(tileSet: readonly Tile[]): FinalMeld {
+        const isRon = !selfDraw && tileSet.includes(winningTile);
+        return {
+            kind: isRon ? FinalMeldKind.Ron : FinalMeldKind.Closed,
+            from: isRon ? discardWind : seatWind,
+            tiles: tileSet,
+            claimedTile: isRon ? winningTile : null
+        };
     }
 
-    if (remainingTiles.length % 3) {
-        throw new Error('unexpected number of tiles left in hand');
-    }
+    function walk(remainingTiles: Tile[], currentHand: FinalMeld[], hands: FinalMeld[][]) {
+        if (!remainingTiles.length) {
+            hands.push(currentHand);
+            return;
+        }
 
-    const tile = remainingTiles.shift();
-    if (!isHonor(tile) && getValueFromTile(tile) <= 7) {
-        const tile1 = tile + 1;
-        const tile2 = tile + 2;
-        if (remainingTiles.includes(tile1) && remainingTiles.includes(tile2)) {
-            // make a run
-            walk(removeTiles(remainingTiles, tile1, tile2),
-                 currentSets.concat([[tile, tile1, tile2]]),
-                 hands);
+        if (remainingTiles.length % 3) {
+            throw new Error('unexpected number of tiles left in hand');
+        }
+
+        const tile = remainingTiles.shift();
+        const tileName = getTileName(tile);
+        if (isSuited(tile) && tile.rank <= 7) {
+            const tile1 = remainingTiles.find(t => getTileName(t) === tileName + 1);
+            const tile2 = remainingTiles.find(t => getTileName(t) === tileName + 2);
+            if (tile1 && tile2) {
+                // make a run
+                walk(exclude(remainingTiles, tile1, tile2),
+                    currentHand.concat(formMeld([tile, tile1, tile2])),
+                    hands);
+            }
+        }
+
+        if (tileName === getTileName(remainingTiles[0]) && tileName === getTileName(remainingTiles[1])
+            && tileName !== getTileName(remainingTiles[2]) /* don't take a pon if there are 4, we already took the chi */) {
+            walk(remainingTiles.slice(2),
+                currentHand.concat(formMeld([tile, remainingTiles[0], remainingTiles[1]])),
+                hands);
         }
     }
-    if (tile === remainingTiles[0] && tile === remainingTiles[1]
-        && tile !== remainingTiles[2] /* don't take a pon if there are 4, we already took the chi */) {
-        walk(removeTiles(remainingTiles, tile, tile),
-             currentSets.concat([[tile, tile, tile]]),
-             hands);
-    }
-
 }

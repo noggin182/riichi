@@ -1,30 +1,24 @@
 import { WinningHand } from './winning-hand';
-import { isSimple, isTerminalOrHonor, getSuitFromTile, getValueFromTile } from './tile-utils';
-import { isPon, isKan, isChi, yakuDefinitions, YAKUMAN_FAN } from './yaku-definitions';
+import { isSimple, isPon, isHonor, isTerminal, isDragon, isChi } from './tile-utils';
 import { CountedYaku } from './yaku';
-import { Tile, TileSuit, Wind } from './definitions/tiles';
+import { FinalMeld, FinalMeldKind } from './definitions/mahjong-definition';
+import { Wind } from './definitions/tile';
 
 export interface FuDefinition {
     fu: number;
     name: [string, string];
-    check: (hand: WinningHand) => boolean | Tile[][];
+    check: (hand: WinningHand) => boolean | readonly FinalMeld[];
 }
 
 export interface CountedFu {
     definition: FuDefinition;
-    tiles: Tile[] | null; // for melded sets, this will reference the tile array from the meld
+    meld: FinalMeld | null;
 }
 
 const SevenPairsFu: FuDefinition = {
     fu: 25,
     name: ['Seven Pairs', 'Chii Toitsu'],
     check: hand => hand.isSevenPairs
-};
-
-const OpenPinfu: FuDefinition = {
-    fu: 2,
-    name: ['Open pinfu', 'Open pinfu'],
-    check: hand => hand.mahjong.melds.length && hand.chis.length === 4
 };
 
 const Fus: FuDefinition[] = [
@@ -36,90 +30,106 @@ const Fus: FuDefinition[] = [
     {
         fu: 10,
         name: ['Concealed on a discard', 'menzen-kafu'],
-        check: hand => !hand.selfDrawn && hand.mahjong.melds.length === 0
+        check: hand => !hand.selfDrawn && !hand.isOpen
     },
     // ============ Simple melds =============
     {
         fu: 2,
         name: ['Open pon of simples', 'Min-kōtsu'],
-        check: hand => hand.mahjong.melds.map(m => m.tiles).filter(s => isPon(s) && isSimple(s[0]))
+        check: hand => hand.melds.filter(m => isSimple(m.tiles[0]) && m.kind === FinalMeldKind.Pon)
     },
     {
         fu: 4,
         name: ['Closed pon of simples', 'An-kōtsu'],
-        check: hand => hand.mahjong.concealed.filter(s => isPon(s) && isSimple(s[0]))
+        check: hand => hand.melds.filter(m => isSimple(m.tiles[0]) && m.kind === FinalMeldKind.Closed && isPon(m.tiles))
     },
     {
         fu: 8,
         name: ['Open kan of simples', 'Min-katsu'],
-        check: hand => hand.mahjong.melds.map(m => m.tiles).filter(s => isKan(s) && isSimple(s[0]))
+        check: hand => hand.melds.filter(m => isSimple(m.tiles[0]) && (m.kind === FinalMeldKind.Kan || m.kind === FinalMeldKind.AddedKan))
     },
     {
         fu: 16,
         name: ['Closed kan of simples', 'An-katsu'],
-        check: hand => hand.mahjong.concealed.filter(s => isKan(s) && isSimple(s[0]))
+        check: hand => hand.melds.filter(m => isSimple(m.tiles[0]) && m.kind === FinalMeldKind.ClosedKan)
     },
 
-    // ============ Terminal/honor melds =============
+    // ============ Honor melds =============
     {
         fu: 4,
-        name: ['Open pon of terminal/honors', 'Min-kōtsu'],
-        check: hand => hand.mahjong.melds.map(m => m.tiles).filter(s => isPon(s) && isTerminalOrHonor(s[0]))
+        name: ['Open pon of honors', 'Min-kōtsu'],
+        check: hand => hand.melds.filter(m => isHonor(m.tiles[0]) && m.kind === FinalMeldKind.Pon)
     },
     {
         fu: 8,
-        name: ['Closed pon of terminal/honors', 'An-kōtsu'],
-        check: hand => hand.mahjong.concealed.filter(s => isPon(s) && isTerminalOrHonor(s[0]))
+        name: ['Closed pon of honors', 'An-kōtsu'],
+        check: hand => hand.melds.filter(m => isHonor(m.tiles[0]) && m.kind === FinalMeldKind.Closed && isPon(m.tiles))
     },
     {
         fu: 16,
-        name: ['Open kan of terminal/honors', 'Min-katsu'],
-        check: hand => hand.mahjong.melds.map(m => m.tiles).filter(s => isKan(s) && isTerminalOrHonor(s[0]))
+        name: ['Open kan of honors', 'Min-katsu'],
+        check: hand => hand.melds.filter(m => isHonor(m.tiles[0]) && (m.kind === FinalMeldKind.Kan || m.kind === FinalMeldKind.AddedKan))
     },
     {
         fu: 32,
-        name: ['Closed kan of terminal/honors', 'An-katsu'],
-        check: hand => hand.mahjong.concealed.filter(s => isKan(s) && isTerminalOrHonor(s[0]))
+        name: ['Closed kan of honors', 'An-katsu'],
+        check: hand => hand.melds.filter(m => isHonor(m.tiles[0]) && m.kind === FinalMeldKind.ClosedKan)
     },
 
-    // ============ Terminal/honor melds =============
+    // ============ Terminal melds =============
+    {
+        fu: 4,
+        name: ['Open pon of terminals', 'Min-kōtsu'],
+        check: hand => hand.melds.filter(m => isTerminal(m.tiles[0]) && m.kind === FinalMeldKind.Pon)
+    },
+    {
+        fu: 8,
+        name: ['Closed pon of terminals', 'An-kōtsu'],
+        check: hand => hand.melds.filter(m => isTerminal(m.tiles[0]) && m.kind === FinalMeldKind.Closed && isPon(m.tiles))
+    },
+    {
+        fu: 16,
+        name: ['Open kan of terminals', 'Min-katsu'],
+        check: hand => hand.melds.filter(m => isTerminal(m.tiles[0]) && (m.kind === FinalMeldKind.Kan || m.kind === FinalMeldKind.AddedKan))
+    },
+    {
+        fu: 32,
+        name: ['Closed kan of terminals', 'An-katsu'],
+        check: hand => hand.melds.filter(m => isTerminal(m.tiles[0]) && m.kind === FinalMeldKind.ClosedKan)
+    },
+
+    // ============ Pair melds =============
     {
         fu: 2,
-        name: ['Pair of seated winds', 'toitsu'],
-        check: hand => hand.pairTile === hand.seatedWindTile
+        name: ['Pair of seated winds', 'Toitsu'],
+        check: hand => hand.melds.filter(m => m.tiles.length === 2 && hand.isSeatWind(m.tiles[0]))
     },
     {
         fu: 2,
-        name: ['Pair of prevailing winds', 'toitsu'],
-        check: hand => hand.pairTile === hand.prevailingWindTile
+        name: ['Pair of prevailing winds', 'Toitsu'],
+        check: hand => hand.melds.filter(m => m.tiles.length === 2 && hand.isPrevalentWind(m.tiles[0]))
     },
     {
         fu: 2,
-        name: ['Pair of dragons', 'toitsu'],
-        check: hand => getSuitFromTile(hand.pairTile) === TileSuit.Dragon
+        name: ['Pair of dragons', 'Toitsu'],
+        check: hand => hand.melds.filter(m => m.tiles.length === 2 && isDragon(m.tiles[0]))
     },
 
     // ============ Waits =============
     {
         fu: 2,
         name: ['Pair wait', 'tanki-machi'],
-        check: hand => hand.winningTile === hand.pairTile ? [[hand.pairTile, hand.pairTile]] : false
+        check: hand => hand.melds.filter(m => m.tiles.length === 2 && m.tiles.includes(hand.winningTile))
     },
     {
         fu: 2,
         name: ['Middle wait', 'kanchan-machi'],
-        check: hand => hand.winningTile !== hand.pairTile
-                    && hand.mahjong.concealed.filter(isChi).map(s => [s]).find(ss => ss[0][1] === hand.winningTile) || false //  hand.winningTile === hand.pairTile
+        check: hand => hand.melds.filter(m => isChi(m.tiles) && m.tiles[1] === hand.winningTile)
     },
     {
         fu: 2,
         name: ['Edge wait', 'penchan-machi'],
-        check: hand => hand.winningTile !== hand.pairTile
-                    && (getValueFromTile(hand.winningTile))
-                    && !hand.mahjong.concealed.filter(isChi).some(s => s[1] === hand.winningTile)
-                    && hand.isPinfu
-                    && (hand.chis.map(s => [s]).find(ss => ss[0][0] === hand.winningTile && getValueFromTile(ss[0][2]) === 9
-                                                        || ss[0][2] === hand.winningTile && getValueFromTile(ss[0][2]) === 1)) || false
+        check: hand => !hand.isPinfu && hand.melds.filter(m => isChi(m.tiles) && (m.tiles[0] === hand.winningTile || m.tiles[1] === hand.winningTile))
     },
 
     // ============ Hand Style =============
@@ -127,6 +137,11 @@ const Fus: FuDefinition[] = [
         fu: 2,
         name: ['Self draw', 'Tsumo'],
         check: hand => hand.selfDrawn && !hand.isPinfu
+    },
+    {
+        fu: 2,
+        name: ['Open pinfu', 'Open pinfu'],
+        check: hand => hand.isOpen && hand.chis.length === 4 && hand.valuelessPair
     }
 ];
 
@@ -134,7 +149,7 @@ export function calculateFu(hand: WinningHand): CountedFu[] {
     if (hand.isSevenPairs) {
         return [{
             definition: SevenPairsFu,
-            tiles: null
+            meld: null
         }];
     }
 
@@ -145,22 +160,15 @@ export function calculateFu(hand: WinningHand): CountedFu[] {
             if (result === true) {
                 counted.push({
                     definition: fuDef,
-                    tiles: null
+                    meld: null
                 });
             } else {
-                counted.push(...result.map(set => ({
+                counted.push(...result.map(meld => ({
                     definition: fuDef,
-                    tiles: set
+                    meld
                 })));
             }
         }
-    }
-
-    if (counted.length === 1 && OpenPinfu.check(hand)) {
-        counted.push({
-            definition: OpenPinfu,
-            tiles: null
-        });
     }
 
     const digit = counted.reduce((total, c) => total + c.definition.fu, 0) % 10;
@@ -171,7 +179,7 @@ export function calculateFu(hand: WinningHand): CountedFu[] {
                 name: ['Round up', 'Round up'],
                 check: () => true
             },
-            tiles: null
+            meld: null
         });
     }
 
@@ -221,6 +229,8 @@ export function calculatePoints(hand: WinningHand, yaku: CountedYaku[], fu: Coun
     const totalFu = fu.reduce((total, f) => total + f.definition.fu, 0);
     const fan = yaku.reduce((total, y) => total + y.fan + y.extras.length , 0);
 
+    // TODO: special payment for feeding last pon for big dragons/winds
+
     const rawPoints = totalFu * 2 ** (fan + 2);
 
     let limitName = '';
@@ -230,11 +240,11 @@ export function calculatePoints(hand: WinningHand, yaku: CountedYaku[], fu: Coun
     let payments: { from: Wind; ammount: number; }[] = [];
 
     if (!hand.selfDrawn) {
-        payments = [{ from: hand.winningTileFromWind, ammount: basePoints * hand.seatedWind === Wind.East ? 6 : 4 }];
+        payments = [{ from: hand.winningTileFromWind, ammount: basePoints * hand.seatWind === Wind.East ? 6 : 4 }];
     } else {
-        payments = [Wind.East, Wind.North, Wind.South, Wind.West].filter(w => w !== hand.seatedWind).map(w => ({
+        payments = [Wind.East, Wind.North, Wind.South, Wind.West].filter(w => w !== hand.seatWind).map(w => ({
             from: w,
-            ammount: hand.seatedWind === Wind.East || w === Wind.East ? basePoints * 2 : basePoints
+            ammount: hand.seatWind === Wind.East || w === Wind.East ? basePoints * 2 : basePoints
         }));
     }
 
