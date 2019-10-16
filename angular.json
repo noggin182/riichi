@@ -82,8 +82,7 @@
                         "aot": false,
                         "assets": [
                             "apps/scorer/src/favicon.ico",
-                            "apps/scorer/src/assets",
-                            "apps/scorer/src/riichi-mahjong-tiles"
+                            "apps/scorer/src/assets"
                         ],
                         "stylePreprocessorOptions": {
                             "includePaths": [

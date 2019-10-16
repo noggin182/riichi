@@ -42,9 +42,6 @@ export class TileComponent implements OnChanges {
     }
 
     ngOnChanges() {
-        const base = this.state.blackTiles
-                  ? 'riichi-mahjong-tiles/Black/'
-                  : 'riichi-mahjong-tiles/Regular/';
         // this.back = base + 'Front.svg';
         // this.front = base + this.getTileName(this.tile) + '.svg';
     }

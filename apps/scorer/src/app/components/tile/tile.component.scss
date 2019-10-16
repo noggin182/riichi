@@ -52,6 +52,6 @@ $tiles:
 
 @each $tile in $tiles {
     :host[data-tile=#{$tile}]:before {
-        background-image: url('/riichi-mahjong-tiles/Regular/#{$tile}.svg');
+        background-image: url('/assets/riichi-mahjong-tiles/Regular/#{$tile}.svg');
     }
 }
