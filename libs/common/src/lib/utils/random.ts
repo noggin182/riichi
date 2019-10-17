@@ -1,24 +1,17 @@
-const mask = 0xffffffff;
-
 // tslint:disable: no-bitwise
-export class Random {
-    constructor (seed?: number) {
-        this.m_w = seed === undefined ? new Date().getTime() : seed;
-        this.m_z = 987654321;
+export function *randomNumberGenerator(seed?: number): Iterator<number> {
+    let w = seed === undefined ? new Date().getTime() : seed;
+    let x = 987654321;
+    const mask = 0xffffffff;
+    while (true) {
+        x = (36969 * (x & 65535) + (x >> 16)) & mask;
+        w = (18000 * (w & 65535) + (w >> 16)) & mask;
+        yield ((x << 16) + w) & mask;
     }
+}
 
-    private m_w = 123456789;
-    private m_z = 987654321;
-
-    next()
-    {
-        this.m_z = (36969 * (this.m_z & 65535) + (this.m_z >> 16)) & mask;
-        this.m_w = (18000 * (this.m_w & 65535) + (this.m_w >> 16)) & mask;
-        return ((this.m_z << 16) + this.m_w) & mask;
-    }
-
-    /** Returns a new array with the items shuffled */
-    shuffle<T>(items: T[]) {
-        return items.map(v => ({v, r: this.next()})).sort((a,b) => (a.r - b.r)).map(i => i.v);
+export function *sequentialNumberGenerator(seed: number = 0): Iterator<number> {
+    while (true) {
+        yield seed++;
     }
 }

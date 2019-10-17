@@ -1,18 +1,24 @@
-import { Mahjong, FinalMeldKind, FinalMeld } from './definitions/mahjong-definition';
+import { Mahjong, FinalMeldKind, FinalMeld } from './definitions/hand';
 import { Tile, TileKind, Wind, TileName } from './definitions/tile';
-import { getTileName, isDragon, areSimilarTiles, dummyBlankTile } from './tile-utils';
+import { getTileName, dummyBlankTile, sortTiles } from './tile-utils';
+import { areSimilarTiles, isDragon } from './tile-checks';
 
 function isClosedMeld(meld: FinalMeld) {
-    return meld.kind === FinalMeldKind.Closed || meld.kind === FinalMeldKind.ClosedKan;
+    return meld.kind === FinalMeldKind.ClosedSet || meld.kind === FinalMeldKind.ClosedKan;
 }
 
 export class WinningHand {
     constructor(mahjong: Readonly<Mahjong>, readonly winningTile: Tile) {
         this.isSevenPairs = mahjong.melds.length === 7;
         this.isThirteenOrphans = mahjong.melds.length === 1 && mahjong.melds[0].tiles.length === 14;
-        this.isOpen = mahjong.melds.some(m => m.kind !== FinalMeldKind.Ron && !isClosedMeld(m));
+        this.isOpen = mahjong.melds.some(m => !m.tiles.includes(winningTile) && !isClosedMeld(m));
 
-        this.melds = mahjong.melds;
+        this.melds = mahjong.melds.map(m => ({
+            kind: m.kind,
+            from: m.from,
+            claimedTile: m.claimedTile,
+            tiles: m.tiles.slice().sort(sortTiles)
+        }));
 
         if (this.isSevenPairs || this.isThirteenOrphans) {
             this.sets = [];
@@ -20,7 +26,7 @@ export class WinningHand {
             this.pons = [];
             this.concealed = [];
         } else {
-            this.sets = mahjong.melds.map(m => m.tiles).filter(s => s.length !== 2);
+            this.sets = this.melds.map(m => m.tiles).filter(s => s.length !== 2);
             this.chis = this.sets.filter(s => !areSimilarTiles(s[0], s[1]));
             this.pons = this.sets.filter(s =>  areSimilarTiles(s[0], s[1]));
             this.concealed = mahjong.melds.filter(m => isClosedMeld(m) && m.tiles.length > 2).map(m => m.tiles);
@@ -32,7 +38,7 @@ export class WinningHand {
         this.flatPons = this.pons.map(s => s[0]);
 
         this.pairName = getTileName(this.pair[0]);
-        this.allTiles = [].concat(...mahjong.melds.map(m => m.tiles));
+        this.allTiles = [].concat(...mahjong.melds.map(m => m.tiles)).sort(sortTiles);
         this.valuelessPair = rawPair && !isDragon(rawPair[0]) && !this.isSeatWind(rawPair[0]) && !this.isPrevalentWind(rawPair[0]);
         this.isPinfu = !this.isOpen
                     && !this.pons.length
@@ -80,11 +86,11 @@ export class WinningHand {
     get selfDrawn() { return this.winningTileFromWind === this.seatWind; }
 
     // ======== helper functions ========
-    isPrevalentWind(tile: Tile) {
+    isPrevalentWind = (tile: Tile) => {
         return tile.kind === TileKind.Honor && tile.rank === this.prevalentWind;
     }
 
-    isSeatWind(tile: Tile) {
+    isSeatWind = (tile: Tile) => {
         return tile.kind === TileKind.Honor && tile.rank === this.seatWind;
     }
 }

@@ -1,8 +1,9 @@
 import { WinningHand } from './winning-hand';
-import { isSimple, isPon, isHonor, isTerminal, isDragon, isChi } from './tile-utils';
 import { CountedYaku } from './yaku';
-import { FinalMeld, FinalMeldKind } from './definitions/mahjong-definition';
+import { FinalMeld, FinalMeldKind } from './definitions/hand';
 import { Wind } from './definitions/tile';
+import { isSimple, isHonor, isTerminal, isDragon } from './tile-checks';
+import { isPon, isChi } from './set-checks';
 
 export interface FuDefinition {
     fu: number;
@@ -36,17 +37,17 @@ const Fus: FuDefinition[] = [
     {
         fu: 2,
         name: ['Open pon of simples', 'Min-kōtsu'],
-        check: hand => hand.melds.filter(m => isSimple(m.tiles[0]) && m.kind === FinalMeldKind.Pon)
+        check: hand => hand.melds.filter(m => isSimple(m.tiles[0]) && m.kind === FinalMeldKind.OpenPon)
     },
     {
         fu: 4,
         name: ['Closed pon of simples', 'An-kōtsu'],
-        check: hand => hand.melds.filter(m => isSimple(m.tiles[0]) && m.kind === FinalMeldKind.Closed && isPon(m.tiles))
+        check: hand => hand.melds.filter(m => isSimple(m.tiles[0]) && m.kind === FinalMeldKind.ClosedSet && isPon(m.tiles))
     },
     {
         fu: 8,
         name: ['Open kan of simples', 'Min-katsu'],
-        check: hand => hand.melds.filter(m => isSimple(m.tiles[0]) && (m.kind === FinalMeldKind.Kan || m.kind === FinalMeldKind.AddedKan))
+        check: hand => hand.melds.filter(m => isSimple(m.tiles[0]) && (m.kind === FinalMeldKind.OpenKan || m.kind === FinalMeldKind.OpenAddedKan))
     },
     {
         fu: 16,
@@ -58,17 +59,17 @@ const Fus: FuDefinition[] = [
     {
         fu: 4,
         name: ['Open pon of honors', 'Min-kōtsu'],
-        check: hand => hand.melds.filter(m => isHonor(m.tiles[0]) && m.kind === FinalMeldKind.Pon)
+        check: hand => hand.melds.filter(m => isHonor(m.tiles[0]) && m.kind === FinalMeldKind.OpenPon)
     },
     {
         fu: 8,
         name: ['Closed pon of honors', 'An-kōtsu'],
-        check: hand => hand.melds.filter(m => isHonor(m.tiles[0]) && m.kind === FinalMeldKind.Closed && isPon(m.tiles))
+        check: hand => hand.melds.filter(m => isHonor(m.tiles[0]) && m.kind === FinalMeldKind.ClosedSet && isPon(m.tiles))
     },
     {
         fu: 16,
         name: ['Open kan of honors', 'Min-katsu'],
-        check: hand => hand.melds.filter(m => isHonor(m.tiles[0]) && (m.kind === FinalMeldKind.Kan || m.kind === FinalMeldKind.AddedKan))
+        check: hand => hand.melds.filter(m => isHonor(m.tiles[0]) && (m.kind === FinalMeldKind.OpenKan || m.kind === FinalMeldKind.OpenAddedKan))
     },
     {
         fu: 32,
@@ -80,17 +81,17 @@ const Fus: FuDefinition[] = [
     {
         fu: 4,
         name: ['Open pon of terminals', 'Min-kōtsu'],
-        check: hand => hand.melds.filter(m => isTerminal(m.tiles[0]) && m.kind === FinalMeldKind.Pon)
+        check: hand => hand.melds.filter(m => isTerminal(m.tiles[0]) && m.kind === FinalMeldKind.OpenPon)
     },
     {
         fu: 8,
         name: ['Closed pon of terminals', 'An-kōtsu'],
-        check: hand => hand.melds.filter(m => isTerminal(m.tiles[0]) && m.kind === FinalMeldKind.Closed && isPon(m.tiles))
+        check: hand => hand.melds.filter(m => isTerminal(m.tiles[0]) && m.kind === FinalMeldKind.ClosedSet && isPon(m.tiles))
     },
     {
         fu: 16,
         name: ['Open kan of terminals', 'Min-katsu'],
-        check: hand => hand.melds.filter(m => isTerminal(m.tiles[0]) && (m.kind === FinalMeldKind.Kan || m.kind === FinalMeldKind.AddedKan))
+        check: hand => hand.melds.filter(m => isTerminal(m.tiles[0]) && (m.kind === FinalMeldKind.OpenKan || m.kind === FinalMeldKind.OpenAddedKan))
     },
     {
         fu: 32,

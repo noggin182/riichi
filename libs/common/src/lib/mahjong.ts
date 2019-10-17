@@ -1,17 +1,8 @@
-import { createDummySetOfTiles, sortTiles, getTileName, isTerminalOrHonor, isSuited } from './tile-utils';
-import { Meld, Mahjong, FinalMeld, MeldKind, FinalMeldKind } from './definitions/mahjong-definition';
+import { createDummySetOfTiles, sortTiles, getTileName } from './tile-utils';
+import { Mahjong, FinalMeld, FinalMeldKind, ReadonlyHand } from './definitions/hand';
 import { distinct, groupBy, exclude } from './utils';
 import { Tile, Wind } from './definitions/tile';
-
-export interface Hand {
-    readonly concealedTiles: Tile[];
-    readonly melds: Meld[];
-}
-
-export interface ReadonlyHand {
-    readonly concealedTiles: readonly Tile[];
-    readonly melds: readonly Meld[];
-}
+import { isTerminalOrHonor, isSuited } from './tile-checks';
 
 export function calculateWaits(hand: ReadonlyHand) {
     const possibleTiles = createDummySetOfTiles();
@@ -39,12 +30,12 @@ export function checkForMahjong(hand: ReadonlyHand, winningTile: Tile, seatWind:
     if (!melds.length) {
         // manual check for 13 orphans
         if (distinctNames.length === 13 && tiles.every(isTerminalOrHonor)) {
-            return [{melds: [formMeld(tiles)]}];
+            return [{melds: [formMeld(tiles, FinalMeldKind.Orphans)]}];
         }
         // manual check for 7 pairs
         if (tilesGroupedByName.length === 7 && tilesGroupedByName.every(s => s.length === 2)) {
             mahjong.push({melds: [
-                ...tilesGroupedByName.map(formMeld)
+                ...tilesGroupedByName.map(set => formMeld(set, FinalMeldKind.OpenPair, FinalMeldKind.ClosedPair))
             ]});
             // don't return, other hands may be valid (Ryan peikou)
         }
@@ -57,7 +48,7 @@ export function checkForMahjong(hand: ReadonlyHand, winningTile: Tile, seatWind:
         const current = exclude(tiles, ...pair);
 
         const hands: FinalMeld[][] = [];
-        walk(current, [formMeld(pair)], hands);
+        walk(current, [formMeld(pair, FinalMeldKind.OpenPair, FinalMeldKind.ClosedPair)], hands);
         mahjong.push(...hands.map(sets => ({
             melds: melds.concat(sets)
         })));
@@ -66,13 +57,13 @@ export function checkForMahjong(hand: ReadonlyHand, winningTile: Tile, seatWind:
     // todo, if there are other tiles with the same tile name as the winning tile in other sets, swap them around and report this as mahjong too
     return mahjong;
 
-    function formMeld(tileSet: readonly Tile[]): FinalMeld {
-        const isRon = !selfDraw && tileSet.includes(winningTile);
+    function formMeld(tileSet: readonly Tile[], kindIfRon: FinalMeldKind, closedKind = FinalMeldKind.ClosedSet): FinalMeld {
+        const isClaimed = !selfDraw && tileSet.includes(winningTile);
         return {
-            kind: isRon ? FinalMeldKind.Ron : FinalMeldKind.Closed,
-            from: isRon ? discardWind : seatWind,
+            kind: isClaimed ? kindIfRon : closedKind,
+            from: isClaimed ? discardWind : seatWind,
             tiles: tileSet,
-            claimedTile: isRon ? winningTile : null
+            claimedTile: isClaimed ? winningTile : null
         };
     }
 
@@ -92,17 +83,17 @@ export function checkForMahjong(hand: ReadonlyHand, winningTile: Tile, seatWind:
             const tile1 = remainingTiles.find(t => getTileName(t) === tileName + 1);
             const tile2 = remainingTiles.find(t => getTileName(t) === tileName + 2);
             if (tile1 && tile2) {
-                // make a run
+                // make a chi
                 walk(exclude(remainingTiles, tile1, tile2),
-                    currentHand.concat(formMeld([tile, tile1, tile2])),
+                    currentHand.concat(formMeld([tile, tile1, tile2], FinalMeldKind.OpenChi)),
                     hands);
             }
         }
 
         if (tileName === getTileName(remainingTiles[0]) && tileName === getTileName(remainingTiles[1])
-            && tileName !== getTileName(remainingTiles[2]) /* don't take a pon if there are 4, we already took the chi */) {
+            && (!remainingTiles[2] || tileName !== getTileName(remainingTiles[2])) /* don't take a pon if there are 4, we already took the chi */) {
             walk(remainingTiles.slice(2),
-                currentHand.concat(formMeld([tile, remainingTiles[0], remainingTiles[1]])),
+                currentHand.concat(formMeld([tile, remainingTiles[0], remainingTiles[1]], FinalMeldKind.OpenPon)),
                 hands);
         }
     }

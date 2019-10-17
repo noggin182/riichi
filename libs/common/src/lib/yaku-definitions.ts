@@ -1,7 +1,9 @@
 import { ConcealedType, YakuDefinition, ExtraFan } from './yaku.def';
-import { isHonor, isTerminalOrHonor, isSuited, getDoraNameFromIndicator, getTileName, areSimilarTiles, isSimple, allSuitsPresent, isDragon, isTerminal, isPonOrKan, isKan, isWind } from './tile-utils';
+import { getDoraNameFromIndicator, getTileName } from './tile-utils';
 import { distinct } from './utils';
 import { Wind, TileName, TileKind } from './definitions/tile';
+import { areSimilarTiles, isSimple, isDragon, isHonor, isTerminalOrHonor, isTerminal, isSuited, isWind } from './tile-checks';
+import { allSuitsPresent, isPonOrKan, isKan } from './set-checks';
 
 export const YAKUMAN_FAN = -1;
 

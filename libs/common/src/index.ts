@@ -1,4 +1,4 @@
-export * from './lib/definitions/mahjong-definition';
+export * from './lib/definitions/hand';
 export * from './lib/definitions/tile';
 
 export * from './lib/utils/random';
@@ -10,3 +10,4 @@ export * from './lib/winning-hand';
 export * from './lib/yaku';
 export * from './lib/yaku-definitions';
 export * from './lib/yaku.def';
+export * from './lib/notation';

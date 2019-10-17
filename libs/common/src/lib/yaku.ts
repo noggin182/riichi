@@ -1,5 +1,5 @@
 import { WinningHand } from './winning-hand';
-import { YakuDefinition, ExtraFan } from './yaku.def';
+import { YakuDefinition, ExtraFan, ConcealedType } from './yaku.def';
 import { yakuDefinitions, YAKUMAN_FAN, doraYaku } from './yaku-definitions';
 
 export interface CountedYaku {
@@ -13,6 +13,12 @@ export function countYaku(hand: WinningHand) {
     let yakuman = false;
     function collectYaku(yakuDefs: YakuDefinition[]) {
         for (const yaku of yakuDefs) {
+            if (yaku.style === ConcealedType.MustBeConcealed && hand.isOpen) {
+                continue;
+            }
+            if (yaku.style === ConcealedType.MustBeOpen && !hand.isOpen) {
+                continue;
+            }
             const result = yaku.check(hand);
             if (result) {
                 const fan = result === true ? yaku.fan : result * yaku.fan;

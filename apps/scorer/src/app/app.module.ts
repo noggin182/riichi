@@ -8,9 +8,10 @@ import { TileButtonComponent } from './components/tile-button/tile-button.compon
 import { HandComponent } from './components/hand/hand.component';
 import { ComputedHandComponent } from './components/computed-hand/computed-hand.component';
 import { NamePipe } from './pipes/name.pipe';
+import { MeldComponent } from './components/meld/meld.component';
 
 @NgModule({
-  declarations: [AppComponent, TileComponent, PaletteComponent, TileButtonComponent, HandComponent, ComputedHandComponent, NamePipe ],
+  declarations: [AppComponent, TileComponent, PaletteComponent, TileButtonComponent, HandComponent, ComputedHandComponent, NamePipe, MeldComponent ],
   imports: [BrowserModule],
   providers: [],
   bootstrap: [AppComponent]

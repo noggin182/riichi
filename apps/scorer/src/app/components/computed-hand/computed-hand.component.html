@@ -4,7 +4,7 @@
 <div class="scorer-computed-hand__tiles">
 
     <div *ngFor="let meld of winningHand.melds">
-        <scorer-tile *ngFor="let tile of meld.tiles" [tile]="tile" size="small"></scorer-tile>
+        <scorer-tile *ngFor="let tile of meld.tiles" [tile]="tile" size="small" [attr.data-rotated]="meld.claimedTile === tile || null"></scorer-tile>
     </div>
 </div>
 

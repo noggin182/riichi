@@ -1,8 +1,14 @@
 <section>
     <h2>Hand</h2>
 
+    <input (input)="state.setHand($event.target.value)" placeholder="Hand notation" autofocus />
+
     <output>
         <scorer-tile *ngFor="let tile of state.hand.concealedTiles" [tile]="tile"></scorer-tile>
+    </output>
+
+    <output>
+        <scorer-meld *ngFor="let meld of state.hand.melds" [meld]="meld"></scorer-meld>
     </output>
 
 </section>

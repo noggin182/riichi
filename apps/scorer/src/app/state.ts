@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Mahjong, Hand, Tile, Wind } from '@riichi/common';
+import { Mahjong, Hand, Tile, Wind, handFromNotation } from '@riichi/common';
 import { countYaku, WinningHand, checkForMahjong, calculateFu, CountedYaku, CountedFu } from '@riichi/common';
 
 export enum AppendStyle {
@@ -84,5 +84,14 @@ export class State {
         winningHand.uraDoraIndicator = this.roundInfo.uraDoraIndicator;
 
         return winningHand;
+    }
+
+    setHand(notation: string) {
+        try {
+            this.hand = handFromNotation(notation);
+        } catch (e) {
+            console.error(e);
+        }
+
     }
 }

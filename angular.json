@@ -197,7 +197,7 @@
         }
     },
     "cli": {
-        "defaultCollection": "@nrwl/web"
+        "defaultCollection": "@nrwl/angular"
     },
     "schematics": {
         "@nrwl/angular:application": {
