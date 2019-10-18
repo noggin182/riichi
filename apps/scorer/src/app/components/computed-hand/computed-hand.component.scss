@@ -22,20 +22,12 @@ scorer-computed-hand {
         bottom: 100%;
     }
 
-    .scorer-computed-hand__tiles      { grid-area: tiles;  }
+    scorer-mahjong                    { grid-area: tiles;  }
     .scorer-computed-hand__yaku       { grid-area: yaku;   }
     .scorer-computed-hand__fu         { grid-area: fu;     }
     hr                                { grid-area: rule;   }
     .scorer-computed-hand__limit      { grid-area: limit;  }
     .scorer-computed-hand__points     { grid-area: points; }
-
-    .scorer-computed-hand__tiles {
-        display: flex;
-        > div:not(:first-child) {
-            margin-left: 16px;
-        }
-    }
-
     
     .scorer-computed-hand__yaku, .scorer-computed-hand__fu {
         h4 {

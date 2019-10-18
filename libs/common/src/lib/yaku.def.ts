@@ -17,6 +17,6 @@ export interface YakuDefinition {
     name: [string, string];
     description: string;
     style: ConcealedType;
-    check: (hand: WinningHand) => boolean | number;
+    check: (hand: Omit<WinningHand, 'mahjong'>) => boolean | number;
     extras?: ExtraFan[];
 }

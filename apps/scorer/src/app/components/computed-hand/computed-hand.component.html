@@ -1,12 +1,7 @@
 
 <h3>hand {{index + 1}}</h3>
 
-<div class="scorer-computed-hand__tiles">
-
-    <div *ngFor="let meld of winningHand.melds">
-        <scorer-tile *ngFor="let tile of meld.tiles" [tile]="tile" size="small" [attr.data-rotated]="meld.claimedTile === tile || null"></scorer-tile>
-    </div>
-</div>
+<scorer-mahjong [hand]="winningHand"></scorer-mahjong>
 
 <div class="scorer-computed-hand__yaku">
     <h4>Yaku <span *ngIf="totalFan > 0">{{totalFan}} Fan</span></h4>

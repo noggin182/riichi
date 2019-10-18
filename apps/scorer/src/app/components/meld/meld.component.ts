@@ -10,4 +10,6 @@ import { FinalMeld } from '@riichi/common';
 })
 export class MeldComponent {
     @Input() meld: FinalMeld;
+
+    @Input() size: 'normal' | 'small' | 'tiny' = 'normal';
 }

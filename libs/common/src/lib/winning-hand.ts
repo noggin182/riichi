@@ -8,7 +8,7 @@ function isClosedMeld(meld: FinalMeld) {
 }
 
 export class WinningHand {
-    constructor(mahjong: Readonly<Mahjong>, readonly winningTile: Tile) {
+    constructor(readonly mahjong: Readonly<Mahjong>, readonly winningTile: Tile) {
         this.isSevenPairs = mahjong.melds.length === 7;
         this.isThirteenOrphans = mahjong.melds.length === 1 && mahjong.melds[0].tiles.length === 14;
         this.isOpen = mahjong.melds.some(m => !m.tiles.includes(winningTile) && !isClosedMeld(m));

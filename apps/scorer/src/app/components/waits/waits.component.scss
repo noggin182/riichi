@@ -1,0 +1,23 @@
+@import "theming";
+
+scorer-waits {
+    output {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-areas: 
+            "tile mahjong"
+            "tile points";
+        column-gap: 16px;
+        > scorer-tile    { grid-area: tile;    }
+        > scorer-mahjong { grid-area: mahjong; }
+        > div            { grid-area: points;   }
+
+        > div {
+            color: $accent-color;
+            font-weight: 800;
+            &.scorer-waits__no-yaku {
+                color: red;
+            }
+        }
+    }
+}

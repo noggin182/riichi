@@ -1,7 +1,5 @@
-import { Component, Input, ChangeDetectionStrategy, OnChanges, HostBinding } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 import { Tile, TileKind, Wind, Dragon } from '@riichi/common';
-
-import { State } from '../../state';
 
 @Component({
     selector: 'scorer-tile',
@@ -9,13 +7,15 @@ import { State } from '../../state';
     styleUrls: ['./tile.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TileComponent implements OnChanges {
-    constructor(private state: State) {
-    }
-
+export class TileComponent {
     @HostBinding('attr.data-size')
     @Input() size: 'normal' | 'small' | 'tiny' = 'normal';
     @Input() tile: Tile;
+
+    @Input() claimed: boolean;
+
+    @HostBinding('attr.data-rotated')
+    get claimedAttribute() { return this.claimed || null; }
 
     back: string;
     front: string;
@@ -40,12 +40,4 @@ export class TileComponent implements OnChanges {
         }
         return 'Blank';
     }
-
-    ngOnChanges() {
-        // this.back = base + 'Front.svg';
-        // this.front = base + this.getTileName(this.tile) + '.svg';
-    }
-
-
-
 }

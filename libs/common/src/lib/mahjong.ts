@@ -5,21 +5,31 @@ import { Tile, Wind } from './definitions/tile';
 import { isTerminalOrHonor, isSuited } from './tile-checks';
 
 export function calculateWaits(hand: ReadonlyHand) {
+    return getPossibleMahjongs(hand).map(result => result.tile);
+}
+
+export function getPossibleMahjongs(hand: ReadonlyHand) {
     const possibleTiles = createDummySetOfTiles();
     // TODO: reject tiles we already hold 4 of
     // TODO: could also ignore suits that we don't have in our hand
-    return possibleTiles.filter(tile => checkForMahjong(hand, tile, Wind.None, Wind.None).length);
+    return possibleTiles.map(tile => ({
+        tile: tile,
+        mahjongs: checkForMahjong({
+             concealedTiles: hand.concealedTiles.concat(tile),
+            melds: hand.melds
+        }, Wind.None, Wind.None),
+    })).filter(result => result.mahjongs.length);
 }
 
 // TODO: if win by ron, move the set that contains the winning tile into melds
-export function checkForMahjong(hand: ReadonlyHand, winningTile: Tile, seatWind: Wind, discardWind: Wind): Mahjong[] {
-    if (hand.concealedTiles.length + (hand.melds.length * 3) !== 13) {
+export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind: Wind): Mahjong[] {
+    if (hand.concealedTiles.length + (hand.melds.length * 3) !== 14) {
         throw new Error('unexpected number of tiles in hand');
     }
 
     const selfDraw = seatWind === discardWind;
-
-    const tiles = hand.concealedTiles.concat(winningTile).sort(sortTiles);
+    const winningTile = hand.concealedTiles[hand.concealedTiles.length - 1];
+    const tiles = hand.concealedTiles.slice().sort(sortTiles);
     const melds = hand.melds.slice() as unknown as FinalMeld[];
 
     const mahjong: Mahjong[] = [];

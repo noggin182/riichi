@@ -1,0 +1,6 @@
+scorer-mahjong {
+    display: flex;
+    scorer-meld:not(:first-child) {
+        margin-left: 16px;
+    }
+}
