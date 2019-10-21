@@ -156,14 +156,6 @@
                             "!apps/scorer/**"
                         ]
                     }
-                },
-                "test": {
-                    "builder": "@nrwl/jest:jest",
-                    "options": {
-                        "jestConfig": "apps/scorer/jest.config.js",
-                        "tsConfig": "apps/scorer/tsconfig.spec.json",
-                        "setupFile": "apps/scorer/src/test-setup.ts"
-                    }
                 }
             }
         },
