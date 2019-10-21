@@ -1,41 +1,32 @@
-// import * as utils from './tile-utils';
-// import { checkForMahjong, calculateWaits } from './mahjong';
-// import { OpenMeld, Wind } from '@riichi/common';
+import { handFromNotation } from './notation';
+import { checkForMahjong, calculateWaits } from './mahjong';
+import { Wind, TileName } from './definitions/tile';
+import { getTileName } from './tile-utils';
 
- describe('Mahjong detector', () => {
-    it('should have at least one test', () => {
+describe('Mahjong detector', () => {
 
-    });
-//     // beforeEach(() => cy.visit('/'));
+     it('should detect 7 pairs', () => {
+         expect(checkForMahjong(handFromNotation('112244557788p11z'), Wind.East, Wind.East).length).toBe(1);
+     });
 
-//     it('should detect 7 pairs', () => {
-//         expect(checkForMahjong(utils.handFromNotation('M1 M1 M2 M2 M3 M3 M4 M4 M5 M5 M6 M6 M7 M7'), []).length).toBeGreaterThan(0);
-//     });
+     it('should calculate pair wait with open hand', () => {
+         const hand = handFromNotation(`2p 123'p 123'm 123's 111z `);
+         expect(calculateWaits(hand).map(getTileName)).toEqual([TileName.Pin2]);
+     });
 
-//     it('should calculate pair wait with open hand', () => {
-//         const hand = utils.handFromNotation('P2');
-//         const melds: OpenMeld[] = [
-//             {from: Wind.East, tiles: utils.handFromNotation('P1 P2 P3')},
-//             {from: Wind.East, tiles: utils.handFromNotation('M1 M2 M3')},
-//             {from: Wind.East, tiles: utils.handFromNotation('S1 S2 S3')},
-//             {from: Wind.East, tiles: utils.handFromNotation('S S S')},
-//         ];
-//         expect(calculateWaits(hand, melds)).toEqual(utils.handFromNotation('P2'));
-//     });
+     it('should calculate 8 tile waits', () => {
+         const hand = handFromNotation('222p 3456p 777p 111z');
+         expect(calculateWaits(hand).map(getTileName)).toEqual(handFromNotation('12345678p').concealedTiles.map(getTileName));
+     });
 
-//     it('should calculate 8 tile waits', () => {
-//         const hand = utils.handFromNotation('P2 P2 P2 P3 P4 P5 P6 P7 P7 P7 E E E');
-//         expect(calculateWaits(hand, [])).toEqual(utils.handFromNotation('P1 P2 P3 P4 P5 P6 P7 P8'));
-//     });
+     it('should calculate waits for 9 gates', () => {
+         const hand = handFromNotation('1112345678999p');
+         expect(calculateWaits(hand).map(getTileName)).toEqual(handFromNotation('123456789p').concealedTiles.map(getTileName));
+     });
 
-//     it('should calculate waits for 9 gates', () => {
-//         const hand = utils.handFromNotation('P1 P1 P1 P2 P3 P4 P5 P6 P7 P8 P9 P9 P9');
-//         expect(calculateWaits(hand, [])).toEqual(utils.handFromNotation('P1 P2 P3 P4 P5 P6 P7 P8 P9'));
-//     });
-
-//     it('should calculate 13 tile wait (13 orphans)', () => {
-//         const hand = utils.handFromNotation('M1 S1 P1 M9 S9 P9 N E S W C H B');
-//         expect(calculateWaits(hand, [])).toEqual(hand.slice().sort());
-//     });
+     it('should calculate 13 tile wait (13 orphans)', () => {
+         const hand = handFromNotation('19m 19s 19p 1234567z');
+         expect(calculateWaits(hand).map(getTileName)).toEqual(hand.concealedTiles.map(getTileName));
+     });
 
 });
