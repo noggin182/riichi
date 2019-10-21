@@ -17,4 +17,4 @@
     [fu]="result.fu"
 ></scorer-computed-hand>
 
-<scorer-waits [waits]="state.possibleWaits"></scorer-waits>
+<scorer-waits *ngIf="state.possibleWaits && state.possibleWaits.length" [waits]="state.possibleWaits"></scorer-waits>

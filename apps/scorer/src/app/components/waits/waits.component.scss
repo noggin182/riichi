@@ -8,6 +8,8 @@ scorer-waits {
             "tile mahjong"
             "tile points";
         column-gap: 16px;
+        margin-bottom: 16px;
+        
         > scorer-tile    { grid-area: tile;    }
         > scorer-mahjong { grid-area: mahjong; }
         > div            { grid-area: points;   }
@@ -20,4 +22,5 @@ scorer-waits {
             }
         }
     }
+    
 }
