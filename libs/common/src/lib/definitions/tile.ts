@@ -69,5 +69,3 @@ export const enum TileName {
     Hatsu = TileKind.Honor * 10 + 6,
     Haku  = TileKind.Honor * 10 + 7
 }
-
-export const DUMMY_TILE_ID = 0xFF;

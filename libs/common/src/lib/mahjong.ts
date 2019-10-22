@@ -21,7 +21,6 @@ export function getPossibleMahjongs(hand: ReadonlyHand) {
     })).filter(result => result.mahjongs.length);
 }
 
-// TODO: if win by ron, move the set that contains the winning tile into melds
 export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind: Wind): Mahjong[] {
     if (hand.concealedTiles.length + (hand.melds.length * 3) !== 14) {
         throw new Error('unexpected number of tiles in hand');

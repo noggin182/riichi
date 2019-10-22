@@ -1,8 +1,10 @@
-import { TileKind, DUMMY_TILE_ID, TileName, Dragon, Wind, Tile } from './definitions/tile';
+import { TileKind, TileName, Dragon, Wind, Tile } from './definitions/tile';
 import { randomNumberGenerator } from './utils/random';
 
+const DUMMY_TILE_ID = 0xFF;
+
 export const dummyBlankTile: Tile = {
-    id: 0xFF,
+    id: DUMMY_TILE_ID,
     kind: TileKind.Unknown,
     rank: 0
 };

@@ -9,7 +9,7 @@ export enum ConcealedType {
 export interface ExtraFan {
     name: [string, string];
     description: string;
-    check: (hand: WinningHand) => boolean;
+    check: (hand: Omit<WinningHand, 'mahjong'>) => boolean;
 }
 
 export interface YakuDefinition {

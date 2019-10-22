@@ -36,7 +36,9 @@ export class HandNotationError {
 
 export function handFromNotation(str: string, forWind: Wind = Wind.East, deck?: Tile[]): Hand {
     const tempDeck = deck ? deck.slice() : createNewDeck(sequentialNumberGenerator());
-    str = str.toLowerCase().replace(/\s/g, ''); // remove all whitespace
+    str = str.toLowerCase()
+             .replace(/\s/g, '')   // remove all whitespace
+             .replace(/['"]/g, '`'); // convert all chi markers to backtick
 
     if (!validHandExpression.test(str)) {
         throw new HandNotationError('Invalid hand notation');
@@ -47,7 +49,7 @@ export function handFromNotation(str: string, forWind: Wind = Wind.East, deck?: 
         melds: []
     };
 
-    for (const s of str.match(/[1-9'x]+[mspz]/g)) {
+    for (const s of str.match(/[1-9`x]+[mspz]/g)) {
         const kind = kindFromLetter(s.charAt(s.length - 1));
 
         if (s.charAt(1) === 'x') {
@@ -67,7 +69,7 @@ export function handFromNotation(str: string, forWind: Wind = Wind.East, deck?: 
             continue;
         }
 
-        const values = s.match(/[1-9x]'?/g).map(t => ({
+        const values = s.match(/[1-9x]1?/g).map(t => ({
             rank: parseInt(t === 'x' ? s.charAt(0) : t, 10),
             claimed: t.length > 1
         }));
@@ -138,8 +140,4 @@ function takeTile(deck: Tile[], kind: TileKind, rank: number) {
         throw new HandNotationError(`Deck does not contain all required tiles`);
     }
     return deck.splice(index, 1)[0];
-}
-
-function isKanClaimPattern(values: {claimed: boolean}[], pattern: (0 | 1)[]) {
-    return values.every((v, i) => v.claimed = !!pattern[i]);
 }

@@ -32,6 +32,8 @@ It is possible to create open melds using a single quote after the tile that has
 * `44'4s` Pon of 4 of Sou that has been claimed from the player opposite
 * `666'z` Pon of green dragons 4 of Sou that has been claimed from the player to the right
 
+> The single quote chatacter is prefered, however double quotes and backticks are also supported to help avoid the need for escaping characters in code.
+
 > It is invalid to have a chi from any other player than the left. `12'3p` is considered invalid notation.
 
 > Tiles within a meld can appear in any valid order. `2'13p` is a an open chi of 123 Pin where we claimed the 2 of Pin

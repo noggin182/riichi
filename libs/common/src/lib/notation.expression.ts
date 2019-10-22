@@ -31,8 +31,6 @@ export const validHandExpression = new RegExp(
     ('^(' + validRuns.join('|') + ')+$')
         // ...strip out white space and the dummy '%' character
             .replace(/%|\s/g, '')
-        // ...replace the ^ character with '
-            .replace(/`/g, '\'')
         // ...expand S to valid suit ranks
             .replace(/S/g, '[1-9]')
         // ...expand H to valid honor ranks
