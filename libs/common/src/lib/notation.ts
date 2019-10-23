@@ -1,9 +1,9 @@
-import { Tile, TileKind, Wind } from './definitions/tile';
-import { createNewDeck } from './tile-utils';
+import { Tile, TileKind, Wind } from './types/tile';
+import { createNewDeck } from './utils/tile';
 import { sequentialNumberGenerator } from './utils/random';
-import { Hand, MeldKind as MeldKind } from './definitions/hand';
+import { Hand, MeldKind as MeldKind } from './types/hand';
 import { validHandExpression } from './notation.expression';
-import { relativeSeatToWind, RelativeSeat } from './wind-utils';
+import { relativeSeatToWind, RelativeSeat } from './utils/wind';
 
 /*
 
@@ -69,7 +69,7 @@ export function handFromNotation(str: string, forWind: Wind = Wind.East, deck?: 
             continue;
         }
 
-        const values = s.match(/[1-9x]1?/g).map(t => ({
+        const values = s.match(/[1-9x]`?/g).map(t => ({
             rank: parseInt(t === 'x' ? s.charAt(0) : t, 10),
             claimed: t.length > 1
         }));
@@ -137,7 +137,7 @@ function kindFromLetter(letter: string) {
 function takeTile(deck: Tile[], kind: TileKind, rank: number) {
     const index = deck.findIndex(t => t.kind === kind && t.rank === rank);
     if (index === -1) {
-        throw new HandNotationError(`Deck does not contain all required tiles`);
+        throw new HandNotationError(`Deck does not contain all required tiles. Cannot find ${rank}[${kind}]`);
     }
     return deck.splice(index, 1)[0];
 }

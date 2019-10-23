@@ -1,4 +1,4 @@
-import { Tile, TileKind, Dragon, Wind } from './definitions/tile';
+import { Tile, TileKind, Dragon, Wind } from '../types/tile';
 
 
 export function isSuited(tile: Tile) {

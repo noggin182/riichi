@@ -1,0 +1,15 @@
+<form role="group" class="scorer-radio-group">
+    <legend>Wind</legend>
+    
+    <input type="radio" name="wind" id="wind_{{id}}_east" (input)="updateValue($event)" [value]="wind.East" [attr.checked]="value === wind.East || null"/>
+    <label for="wind_{{id}}_east">East</label>
+
+    <input type="radio" name="wind" id="wind_{{id}}_south" (input)="updateValue($event)" [value]="wind.South" [attr.checked]="value === wind.South || null"/>
+    <label for="wind_{{id}}_south">South</label>
+
+    <input type="radio" name="wind" id="wind_{{id}}_west" (input)="updateValue($event)" [value]="wind.West" [attr.checked]="value === wind.West || null"/>
+    <label for="wind_{{id}}_west">West</label>
+
+    <input type="radio" name="wind" id="wind_{{id}}_north" (input)="updateValue($event)" [value]="wind.North" [attr.checked]="value === wind.North || null"/>
+    <label for="wind_{{id}}_north">North</label>
+</form>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { createDummySetOfTiles } from '@riichi/common';
 import { State, AppendStyle } from '../../state';
 
@@ -7,15 +7,12 @@ import { State, AppendStyle } from '../../state';
     templateUrl: './palette.component.html',
     styleUrls: ['./palette.component.scss']
 })
-export class PaletteComponent implements OnInit {
+export class PaletteComponent {
 
     constructor(readonly state: State) { }
 
     AppendStyle = AppendStyle;
     allTiles = createDummySetOfTiles();
-
-    ngOnInit() {
-    }
 
     updateAppendStyle(event: {target: HTMLInputElement }) {
         console.log(event.target);

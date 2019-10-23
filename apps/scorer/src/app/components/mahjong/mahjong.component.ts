@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { WinningHand } from '@riichi/common';
+import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import {  Mahjong } from '@riichi/common';
+
 
 @Component({
   selector: 'scorer-mahjong',
@@ -9,5 +10,5 @@ import { WinningHand } from '@riichi/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MahjongComponent {
-    @Input() hand: WinningHand;
+    @Input() mahjong: Mahjong;
 }

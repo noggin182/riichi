@@ -1,7 +1,7 @@
 import { handFromNotation } from './notation';
 import { checkForMahjong, calculateWaits } from './mahjong';
-import { Wind, TileName } from './definitions/tile';
-import { getTileName } from './tile-utils';
+import { Wind, TileName } from './types/tile';
+import { getTileName } from './utils/tile';
 
 describe('Mahjong detector', () => {
 

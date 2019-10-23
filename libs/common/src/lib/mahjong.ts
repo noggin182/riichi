@@ -1,8 +1,8 @@
-import { createDummySetOfTiles, sortTiles, getTileName } from './tile-utils';
-import { Mahjong, FinalMeld, FinalMeldKind, ReadonlyHand } from './definitions/hand';
-import { distinct, groupBy, exclude } from './utils';
-import { Tile, Wind } from './definitions/tile';
-import { isTerminalOrHonor, isSuited } from './tile-checks';
+import { createDummySetOfTiles, sortTiles, getTileName } from './utils/tile';
+import { Mahjong, FinalMeld, FinalMeldKind, ReadonlyHand } from './types/hand';
+import { distinct, groupBy, exclude } from './utils/array';
+import { Tile, Wind } from './types/tile';
+import { isTerminalOrHonor, isSuited } from './utils/tile-checks';
 
 export function calculateWaits(hand: ReadonlyHand) {
     return getPossibleMahjongs(hand).map(result => result.tile);
@@ -15,7 +15,7 @@ export function getPossibleMahjongs(hand: ReadonlyHand) {
     return possibleTiles.map(tile => ({
         tile: tile,
         mahjongs: checkForMahjong({
-             concealedTiles: hand.concealedTiles.concat(tile),
+            concealedTiles: hand.concealedTiles.concat(tile),
             melds: hand.melds
         }, Wind.None, Wind.None),
     })).filter(result => result.mahjongs.length);
@@ -39,13 +39,14 @@ export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind:
     if (!melds.length) {
         // manual check for 13 orphans
         if (distinctNames.length === 13 && tiles.every(isTerminalOrHonor)) {
-            return [{melds: [formMeld(tiles, FinalMeldKind.Orphans)]}];
+            return [{melds: [formMeld(tiles, FinalMeldKind.Orphans)], finalTile: winningTile}];
         }
         // manual check for 7 pairs
         if (tilesGroupedByName.length === 7 && tilesGroupedByName.every(s => s.length === 2)) {
-            mahjong.push({melds: [
-                ...tilesGroupedByName.map(set => formMeld(set, FinalMeldKind.OpenPair, FinalMeldKind.ClosedPair))
-            ]});
+            mahjong.push({
+                melds: [...tilesGroupedByName.map(set => formMeld(set, FinalMeldKind.OpenPair, FinalMeldKind.ClosedPair))],
+                finalTile: winningTile
+            });
             // don't return, other hands may be valid (Ryan peikou)
         }
     }
@@ -59,7 +60,8 @@ export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind:
         const hands: FinalMeld[][] = [];
         walk(current, [formMeld(pair, FinalMeldKind.OpenPair, FinalMeldKind.ClosedPair)], hands);
         mahjong.push(...hands.map(sets => ({
-            melds: melds.concat(sets)
+            melds: melds.concat(sets),
+            finalTile: winningTile
         })));
     }
 

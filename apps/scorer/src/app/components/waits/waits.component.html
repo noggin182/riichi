@@ -2,7 +2,7 @@
     <h2>Waits</h2>
     <output *ngFor="let wait of state.possibleWaits">
         <scorer-tile [tile]="wait.tile"></scorer-tile>
-        <scorer-mahjong [hand]="wait.result.winningHand"></scorer-mahjong>
+        <scorer-mahjong [mahjong]="wait.result.mahjong"></scorer-mahjong>
         <div *ngIf="!wait.result.yaku.length; else scoreOuput" class="scorer-waits__no-yaku">
             No yaku
         </div>

@@ -1,5 +1,4 @@
-
-import { Wind } from './definitions/tile';
+import { Wind } from '../types/tile';
 
 export const enum RelativeSeat {
     Right = 1,

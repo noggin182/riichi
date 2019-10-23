@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { State } from '../../state';
 
 @Component({
@@ -6,13 +6,9 @@ import { State } from '../../state';
   templateUrl: './hand.component.html',
   styleUrls: ['./hand.component.scss']
 })
-export class HandComponent implements OnInit {
+export class HandComponent {
 
   constructor(readonly state: State) {
-    
-  }
-
-  ngOnInit() {
   }
 
 }

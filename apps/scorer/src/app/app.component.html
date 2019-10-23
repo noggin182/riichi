@@ -10,11 +10,32 @@
 
 <scorer-hand></scorer-hand>
 
-<scorer-computed-hand *ngFor="let result of state.winningResults || []; let index = index"
+<section>
+    <h3>Options</h3>
+    <div>
+
+        <div><input type="checkbox" [(ngModel)]="state.roundInfo.riichi" /> Riichi</div>
+        <div><input type="checkbox" [(ngModel)]="state.roundInfo.doubleRiichi" /> Double Riichi</div>
+        <div><input type="checkbox" [(ngModel)]="state.roundInfo.oneShot" /> One Shot</div>
+
+        <div><input type="checkbox" [(ngModel)]="state.roundInfo.firstRound" /> First round</div>
+        <div><input type="checkbox" [(ngModel)]="state.roundInfo.selfDrawnAfterKan" /> Self drawn after kan</div>
+        <div><input type="checkbox" [(ngModel)]="state.roundInfo.robbedFromKan" /> Robbed from kan</div>
+        <div><input type="checkbox" [(ngModel)]="state.roundInfo.lastTile" /> Last tile</div>
+
+        
+        <div>Prevalent wind: <scorer-wind-input [(ngModel)]="state.roundInfo.prevalentWind"></scorer-wind-input></div>
+        <div>Seat wind: <scorer-wind-input [(ngModel)]="state.roundInfo.seatWind"></scorer-wind-input></div>
+        <div>Discarding wind: <scorer-wind-input [(ngModel)]="state.roundInfo.winningTileFromWind"></scorer-wind-input></div>
+
+        <div>Dora indicator: <input (input)="state.roundInfo.doraIndicator = handFromNotation($event.target.value).concealedTiles"></div>
+        <div>Ura dora indicator: <input (input)="state.roundInfo.uraDoraIndicator = handFromNotation($event.target.value).concealedTiles"></div>
+    </div>
+</section>
+
+<scorer-computed-hand *ngFor="let scoredHand of state.winningResults || []; let index = index"
     [index]="index"
-    [winningHand]="result.winningHand"
-    [yaku]="result.yaku"
-    [fu]="result.fu"
+    [scoredHand]="scoredHand"
 ></scorer-computed-hand>
 
 <scorer-waits *ngIf="state.possibleWaits && state.possibleWaits.length" [waits]="state.possibleWaits"></scorer-waits>

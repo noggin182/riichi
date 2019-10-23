@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input } from '@angular/core';
-import { State, WinningResult } from '../../state';
-import { Tile } from '@riichi/common';
+import { State } from '../../state';
+import { Tile, ScoredHand } from '@riichi/common';
 
 @Component({
     selector: 'scorer-waits',
@@ -13,5 +13,5 @@ export class WaitsComponent {
     constructor(readonly state: State) {
     }
 
-    @Input() waits: {tile: Tile, result: WinningResult}[];
+    @Input() waits: {tile: Tile, result: ScoredHand}[];
 }

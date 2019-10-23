@@ -1,5 +1,5 @@
-import { TileKind, TileName, Dragon, Wind, Tile } from './definitions/tile';
-import { randomNumberGenerator } from './utils/random';
+import { TileKind, TileName, Dragon, Wind, Tile } from '../types/tile';
+import { randomNumberGenerator } from './random';
 
 const DUMMY_TILE_ID = 0xFF;
 
@@ -56,6 +56,11 @@ export function createNewDeck(rng?: Iterator<number>): Tile[] {
     });
     deck.sort((t1, t2) => t1.id - t2.id);
     return deck;
+}
+
+export function allSuitsPresent(tiles: readonly Tile[]) {
+    const presentSuits = tiles.map(t => t.kind);
+    return [TileKind.Man, TileKind.Pin, TileKind.Sou].every(suit => presentSuits.includes(suit));
 }
 
 // export function tileToUnicode(tile: TileDef) {

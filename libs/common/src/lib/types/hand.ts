@@ -46,4 +46,5 @@ export interface FinalMeld {
 
 export interface Mahjong {
     readonly melds: readonly FinalMeld[];
+    readonly finalTile: Tile;
 }

@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { TileComponent } from './components/tile/tile.component';
@@ -11,11 +12,12 @@ import { NamePipe } from './pipes/name.pipe';
 import { MeldComponent } from './components/meld/meld.component';
 import { WaitsComponent } from './components/waits/waits.component';
 import { MahjongComponent } from './components/mahjong/mahjong.component';
-import { WinningHandComponent } from './components/winning-hand/winning-hand.component';
+import { WindPipe } from './pipes/wind.pipe';
+import { WindInputComponent } from './components/wind-input/wind-input.component';
 
 @NgModule({
-  declarations: [AppComponent, TileComponent, PaletteComponent, TileButtonComponent, HandComponent, ComputedHandComponent, NamePipe, MeldComponent, WaitsComponent, MahjongComponent, WinningHandComponent ],
-  imports: [BrowserModule],
+  declarations: [AppComponent, TileComponent, PaletteComponent, TileButtonComponent, HandComponent, ComputedHandComponent, NamePipe, MeldComponent, WaitsComponent, MahjongComponent, WindPipe, WindInputComponent ],
+  imports: [BrowserModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent]
 })

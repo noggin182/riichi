@@ -1,15 +1,14 @@
-
 <h3>hand {{index + 1}}</h3>
 
-<scorer-mahjong [hand]="winningHand"></scorer-mahjong>
+<scorer-mahjong [mahjong]="scoredHand.mahjong"></scorer-mahjong>
 
 <div class="scorer-computed-hand__yaku">
-    <h4>Yaku <span *ngIf="totalFan > 0">{{totalFan}} Fan</span></h4>
+    <h4>Yaku <span *ngIf="scoredHand.totalFan > 0">{{scoredHand.totalFan}} Fan</span></h4>
     <ul>
-        <ng-container *ngFor="let y of yaku">
+        <ng-container *ngFor="let y of scoredHand.yaku">
             <li>
                 {{ y.definition | name }}
-                <span *ngIf="totalFan > 0">{{ y.fan }} Fan</span>
+                <span *ngIf="scoredHand.totalFan > 0">{{ y.fan }} Fan</span>
             </li>
             <li *ngFor="let extra of y.extras" class="scorer-computed-hand__extra">
                 {{ extra | name }}
@@ -20,9 +19,9 @@
 </div>
 
 <div class="scorer-computed-hand__fu">
-    <h4>Fu <span>{{totalFu}} Fu</span></h4>
+    <h4>Fu <span>{{scoredHand.totalFu}} Fu</span></h4>
     <ul>
-        <li *ngFor="let fu of fu">
+        <li *ngFor="let fu of scoredHand.fu">
             {{ fu.definition | name }}
             <span>{{ fu.definition.fu }} Fu</span>
         </li>
@@ -32,11 +31,11 @@
 <hr />
 
 <div class="scorer-computed-hand__limit">
-    {{payment.limit}}
+    {{scoredHand.payment.limit}}
 </div>
 
 <div class="scorer-computed-hand__points">
-    <div *ngFor="let p of payment.payments">
-        {{p.ammount}} from {{p.from}}
+    <div *ngFor="let p of scoredHand.payment.payments">
+        {{p.ammount}} from {{p.from | wind}}
     </div>
 </div>
