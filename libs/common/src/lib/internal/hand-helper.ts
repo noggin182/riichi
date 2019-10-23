@@ -51,8 +51,8 @@ export class HandHelper {
 
         this.isPinfu = !this.isOpen
                     && !this.pons.length
-                    &&  this.chis.some(s => (s[0] === mahjong.finalTile && s[2].rank !== 7)
-                                             || (s[2] === mahjong.finalTile && s[0].rank !== 3))
+                    &&  this.chis.some(s => (s[0] === mahjong.finalTile && s[0].rank !== 7)
+                                         || (s[2] === mahjong.finalTile && s[2].rank !== 3))
                     &&  this.valuelessPair;
     }
 
