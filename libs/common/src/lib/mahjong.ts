@@ -60,7 +60,7 @@ export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind:
         const hands: FinalMeld[][] = [];
         walk(current, [formMeld(pair, FinalMeldKind.OpenPair, FinalMeldKind.ClosedPair)], hands);
         mahjong.push(...hands.map(sets => ({
-            melds: melds.concat(sets),
+            melds: melds.concat(sets).sort(sortMelds(winningTile)),
             finalTile: winningTile
         })));
     }
@@ -108,4 +108,13 @@ export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind:
                 hands);
         }
     }
+}
+
+function sortMelds(winningTile: Tile) {
+    return function (meldA: FinalMeld, meldB: FinalMeld) {
+        return (meldA.tiles.includes(winningTile) ? 100 : 0) - (meldB.tiles.includes(winningTile) ? 100 : 0)
+            || (meldA.kind - meldB.kind)
+            || (meldA.tiles[0].kind - meldB.tiles[0].kind)
+            || (meldA.tiles[0].rank - meldB.tiles[0].rank);
+    };
 }

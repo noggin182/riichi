@@ -74,6 +74,6 @@ export class State {
     }
 
     sortByBest(result1: ScoredHand, result2: ScoredHand) {
-        return result1.payment.basePoints - result2.payment.basePoints;
+        return result2.payment.basePoints - result1.payment.basePoints;
     }
 }
