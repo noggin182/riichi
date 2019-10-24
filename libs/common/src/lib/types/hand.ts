@@ -43,6 +43,7 @@ export interface FinalMeld {
     readonly from: Wind;
     readonly tiles: readonly Tile[];
     readonly claimedTile: Tile | null;
+    readonly finalSet: boolean;
 }
 
 export interface Mahjong {

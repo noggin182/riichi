@@ -35,7 +35,7 @@ export class HandHelper {
             return {
                 id: tiles[0].id,
                 rank: tiles[0].rank,
-                kind: tiles[0].rank,
+                kind: tiles[0].kind,
                 length: tiles.length,
                 meld: m,
                 concealed: isClosedMeld(m),

@@ -1,10 +1,11 @@
-import { Component, Input, ChangeDetectionStrategy, HostBinding } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, HostBinding, ViewEncapsulation } from '@angular/core';
 import { Tile, TileKind, Wind, Dragon } from '@riichi/common';
 
 @Component({
     selector: 'scorer-tile',
     templateUrl: './tile.component.html',
     styleUrls: ['./tile.component.scss'],
+    encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TileComponent {
@@ -12,10 +13,14 @@ export class TileComponent {
     @Input() size: 'normal' | 'small' | 'tiny' = 'normal';
     @Input() tile: Tile;
 
+    @Input() finalTile: boolean;
     @Input() claimed: boolean;
 
     @HostBinding('attr.data-rotated')
     get claimedAttribute() { return this.claimed || null; }
+
+    @HostBinding('attr.data-final')
+    get finalAttribute() { return this.finalTile || null; }
 
     back: string;
     front: string;

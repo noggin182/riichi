@@ -1,1 +1,6 @@
-<scorer-tile *ngFor="let tile of meld.tiles" [tile]="tile" [claimed]="tile === meld.claimedTile" [size]="size"></scorer-tile>
+<scorer-tile *ngFor="let tile of meld.tiles"
+    [tile]="tile"
+    [size]="size"
+    [claimed]="tile === meld.claimedTile && meld.from !== state.roundInfo.seatWind"
+    [finalTile]="meld.finalSet && tile === meld.claimedTile"
+></scorer-tile>

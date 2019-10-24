@@ -1,5 +1,6 @@
 import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { FinalMeld } from '@riichi/common';
+import { State } from '../../state';
 
 @Component({
     selector: 'scorer-meld',
@@ -9,7 +10,9 @@ import { FinalMeld } from '@riichi/common';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MeldComponent {
-    @Input() meld: FinalMeld;
+    constructor(readonly state: State) {
 
+    }
+    @Input() meld: FinalMeld;
     @Input() size: 'normal' | 'small' | 'tiny' = 'normal';
 }

@@ -1,10 +1,20 @@
-$margin: 5%;
+@mixin sizes($height) {
+    padding: ceil($height / 20);
+    &:before {
+        height: $height;
+        width: ceil($height * 3/4);
+    }
+    &[data-rotated]:before {
+        margin: ($height - ceil($height * 3/4)) / -2 0 ;
+        width: $height;
+    }
+}
 
-:host {
+scorer-tile                  { @include sizes(80px); }
+scorer-tile[data-size=small] { @include sizes(40px); }
+
+scorer-tile {
     display: inline-flex;
-    align-self: flex-start;
-    width: 60px;
-    height: 80px;
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
@@ -15,34 +25,22 @@ $margin: 5%;
     border-style: solid;
 }
 
-:host[data-size=small] {
-    width: 30px;
-    height: 40px;
+scorer-tile[data-final] {
+    background: linear-gradient(to bottom, #eff8ff 0%, #cfeaff 100%);
 }
 
-:host[data-rotated] {
+scorer-tile[data-rotated]:before {
     transform: rotate(90deg);
-    margin-right: 20px;
-    transform-origin: 50% 62.8%;
 }
 
-:host[data-rotated][data-size=small] {
-    margin-right: 8px;
-}
-
-:host:before {
+scorer-tile:before {
     content: "";
     background-size: contain;
     background-position: 50% 50%;
     background-repeat: no-repeat;
-    position: absolute;
-    top:    $margin;
-    left:   $margin;
-    bottom: $margin;
-    right:  $margin;
 };
 
-span {
+scorer-tile span {
     position: absolute;
     bottom: 100%;
 }
@@ -55,7 +53,7 @@ $tiles:
     'Chun', 'Hatsu', 'Haku';
 
 @each $tile in $tiles {
-    :host[data-tile=#{$tile}]:before {
+    scorer-tile[data-tile=#{$tile}]:before {
         background-image: url('/assets/riichi-mahjong-tiles/Regular/#{$tile}.svg');
     }
 }

@@ -47,7 +47,7 @@ export function calculatePayments(hand: HandHelper, fan: number, fu: number, lim
     let payments: { from: Wind; ammount: number; }[] = [];
 
     if (!hand.selfDrawn) {
-        payments = [{ from: hand.state.winningTileFromWind, ammount: basePoints * hand.state.seatWind === Wind.East ? 6 : 4 }];
+        payments = [{ from: hand.state.winningTileFromWind, ammount: basePoints * (hand.state.seatWind === Wind.East ? 6 : 4) }];
     } else {
         payments = [Wind.East, Wind.North, Wind.South, Wind.West].filter(w => w !== hand.state.seatWind).map(w => ({
             from: w,

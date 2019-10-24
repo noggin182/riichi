@@ -54,10 +54,10 @@ export class State {
         this.winningResults = [];
         this.possibleWaits = [];
         if (effectiveTiles === 13) {
-            this.possibleWaits = getPossibleMahjongs(this.hand).map(r => ({
+            this.possibleWaits = getPossibleMahjongs(this.hand, this.roundInfo.seatWind).map(r => ({
                 tile: r.tile,
                 result: r.mahjongs.map(m => getWinningScore(m, this.roundInfo)).sort(this.sortByBest)[0]
-            }));
+            })).sort((a, b) => this.sortByBest(a.result, b.result));
         } else if (effectiveTiles === 14) {
             this.winningTile = this.hand.concealedTiles[this.hand.concealedTiles.length - 1];
             this.winningResults = checkForMahjong(this.hand, this.roundInfo.seatWind, this.roundInfo.winningTileFromWind).map(m => getWinningScore(m, this.roundInfo)).sort(this.sortByBest);
@@ -74,6 +74,10 @@ export class State {
     }
 
     sortByBest(result1: ScoredHand, result2: ScoredHand) {
-        return result2.payment.basePoints - result1.payment.basePoints;
+        return result2.payment.basePoints - result1.payment.basePoints
+            || Math.abs(result2.totalFan) - Math.abs(result1.totalFan)
+            || (result1.totalFan > 0 && result2.totalFu - result1.totalFu)
+            || result1.mahjong.finalTile.kind - result2.mahjong.finalTile.kind
+            || result1.mahjong.finalTile.rank - result2.mahjong.finalTile.rank;
     }
 }

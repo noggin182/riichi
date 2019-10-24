@@ -5,10 +5,10 @@ import { Tile, Wind } from './types/tile';
 import { isTerminalOrHonor, isSuited } from './utils/tile-checks';
 
 export function calculateWaits(hand: ReadonlyHand) {
-    return getPossibleMahjongs(hand).map(result => result.tile);
+    return getPossibleMahjongs(hand, Wind.None).map(result => result.tile);
 }
 
-export function getPossibleMahjongs(hand: ReadonlyHand) {
+export function getPossibleMahjongs(hand: ReadonlyHand, seatWind: Wind) {
     const possibleTiles = createDummySetOfTiles();
     // TODO: reject tiles we already hold 4 of
     // TODO: could also ignore suits that we don't have in our hand
@@ -17,7 +17,7 @@ export function getPossibleMahjongs(hand: ReadonlyHand) {
         mahjongs: checkForMahjong({
             concealedTiles: hand.concealedTiles.concat(tile),
             melds: hand.melds
-        }, Wind.None, Wind.None),
+        }, seatWind, seatWind),
     })).filter(result => result.mahjongs.length);
 }
 
@@ -69,12 +69,14 @@ export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind:
     return mahjong;
 
     function formMeld(tileSet: readonly Tile[], kindIfRon: FinalMeldKind, closedKind = FinalMeldKind.ClosedSet): FinalMeld {
-        const isClaimed = !selfDraw && tileSet.includes(winningTile);
+        const isFinal = tileSet.includes(winningTile);
+        const isClaimed = !selfDraw && isFinal;
         return {
             kind: isClaimed ? kindIfRon : closedKind,
             from: isClaimed ? discardWind : seatWind,
             tiles: tileSet,
-            claimedTile: isClaimed ? winningTile : null
+            claimedTile: isFinal ? winningTile : null,
+            finalSet: isFinal
         };
     }
 
