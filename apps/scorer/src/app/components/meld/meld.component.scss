@@ -1,4 +1,8 @@
 scorer-meld {
     display: flex;
     align-items: flex-end;
+    align-self: center;
+    scorer-tile + scorer-tile {
+        margin-left: -1px;
+    }
 }

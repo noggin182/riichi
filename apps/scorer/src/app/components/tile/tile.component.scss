@@ -12,6 +12,7 @@
 
 scorer-tile                  { @include sizes(80px); }
 scorer-tile[data-size=small] { @include sizes(40px); }
+scorer-tile[data-size=tiny]  { @include sizes(12px); }
 
 scorer-tile {
     display: inline-flex;

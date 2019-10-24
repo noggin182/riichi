@@ -64,6 +64,23 @@ scorer-computed-hand {
         }
     }
 
+    .scorer-computed-hand__fu ul {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        column-gap: 5px;
+        li {
+            display: contents;
+
+            scorer-meld {
+                grid-column: 2;
+            }
+
+            span {
+                grid-column: 3;
+            }
+        }
+    }
+
     .scorer-computed-hand__yaku-total, .scorer-computed-hand__fu-total {
         color: $primary-color;
         font-weight: 500;

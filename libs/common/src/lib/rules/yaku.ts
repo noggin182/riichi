@@ -118,7 +118,7 @@ export const defaultYakuDefinitions: YakuDefinition[] = [
         check: hand => hand.chis.length
                     && hand.allTiles.some(isHonor) // sets containing terminals but no honors is Junchan
                     && hand.sets.every(s => isTerminalOrHonor(s[0]) || isTerminal(s[s.length - 1]))
-                    && isTerminalOrHonor(hand.pairTile),
+                    && isTerminalOrHonor(hand.pair),
         extras: [extraIfConcealed]
     },
     {
@@ -203,7 +203,7 @@ export const defaultYakuDefinitions: YakuDefinition[] = [
         name: ['Little Three Dragons', 'Shou sangen'],
         description: 'Two pungs/kongs of dragons and a pair of dragons',
         canBeOpen: true,
-        check: hand => isDragon(hand.pairTile)
+        check: hand => isDragon(hand.pair)
                     && hand.pons.filter(isDragon).length === 2
     },
     {
@@ -220,7 +220,7 @@ export const defaultYakuDefinitions: YakuDefinition[] = [
         canBeOpen: true,
         check: hand => hand.chis.length
                     && hand.allTiles.every(isSuited) // anything with an honour is Chanta
-                    && isTerminal(hand.pairTile)
+                    && isTerminal(hand.pair)
                     && hand.sets.every(s => isTerminal(s[0]) || isTerminal(s[2])),
         extras: [extraIfConcealed]
     },
@@ -335,7 +335,7 @@ export const defaultYakuDefinitions: YakuDefinition[] = [
         description: 'Three pungs/kongs of winds and a pair of winds',
         canBeOpen: true,
         check: hand => hand.pons.filter(isWind).length === 3
-                    && isWind(hand.pairTile)
+                    && isWind(hand.pair)
     },
     {
         fan: YAKUMAN_FAN,

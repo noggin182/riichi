@@ -23,6 +23,7 @@
     <ul>
         <li *ngFor="let fu of scoredHand.fu">
             {{ fu.definition | name }}
+            <scorer-meld *ngIf="fu.meld" [meld]="fu.meld" size="tiny"></scorer-meld>
             <span>{{ fu.definition.fu }} Fu</span>
         </li>
     </ul>

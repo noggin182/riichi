@@ -26,9 +26,26 @@ export class HandHelper {
         this.isOpen = mahjong.melds.some(m => !m.tiles.includes(mahjong.finalTile) && !isClosedMeld(m));
         this.selfDrawn = state.winningTileFromWind === state.seatWind;
 
-        this.pairTiles = !this.isSevenPairs && mahjong.melds.map(m => m.tiles).find(s => s.length === 2) || [dummyBlankTile, dummyBlankTile];
-        this.pairTile = this.pairTiles[0];
-        this.valuelessPair = !isDragon(this.pairTile) && !this.isSeatWind(this.pairTile) && !this.isPrevalentWind(this.pairTile);
+        const pairMeld = !this.isSevenPairs && mahjong.melds.find(m => m.tiles.length === 2);
+        this.pair = pairMeld ? {
+            id: pairMeld.tiles[0].id,
+            rank: pairMeld.tiles[0].rank,
+            kind: pairMeld.tiles[0].kind,
+            length: pairMeld.tiles.length,
+            meld: pairMeld,
+            concealed: isClosedMeld(pairMeld),
+            0: pairMeld.tiles[0],
+            1: pairMeld.tiles[1],
+        } : {
+            id: 0xFF,
+            rank: 0,
+            kind: TileKind.Unknown,
+            length: 0,
+            meld: null,
+            concealed: false
+        };
+
+        this.valuelessPair = !isDragon(this.pair) && !this.isSeatWind(this.pair) && !this.isPrevalentWind(this.pair);
 
         const sets = mahjong.melds.filter(m => m.tiles.length > 2).map(m => {
             const tiles = m.tiles.slice().sort();
@@ -62,8 +79,7 @@ export class HandHelper {
     readonly isOpen: boolean;
     readonly selfDrawn: boolean;
     readonly isPinfu: boolean;
-    readonly pairTile: Tile;
-    readonly pairTiles: readonly Tile[];
+    readonly pair: TileSet;
     readonly valuelessPair: boolean;
     readonly finalTile: Tile;
 
