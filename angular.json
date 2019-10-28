@@ -20,7 +20,7 @@
                         "main": "apps/scorer/src/main.ts",
                         "polyfills": "apps/scorer/src/polyfills.ts",
                         "tsConfig": "apps/scorer/tsconfig.app.json",
-                        "aot": false,
+                        "aot": true,
                         "assets": [
                             "apps/scorer/src/favicon.ico",
                             "apps/scorer/src/assets"
