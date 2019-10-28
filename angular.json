@@ -1,65 +1,6 @@
 {
     "version": 1,
     "projects": {
-        "10fan": {
-            "root": "apps/10fan",
-            "sourceRoot": "apps/10fan/src",
-            "projectType": "application",
-            "prefix": "10fan",
-            "schematics": {},
-            "architect": {
-                "build": {
-                    "builder": "@nrwl/node:build",
-                    "options": {
-                        "outputPath": "dist/apps/10fan",
-                        "main": "apps/10fan/src/main.ts",
-                        "tsConfig": "apps/10fan/tsconfig.app.json",
-                        "assets": [
-                            "apps/10fan/src/assets"
-                        ]
-                    },
-                    "configurations": {
-                        "production": {
-                            "optimization": true,
-                            "extractLicenses": true,
-                            "inspect": false,
-                            "fileReplacements": [
-                                {
-                                    "replace": "apps/10fan/src/environments/environment.ts",
-                                    "with": "apps/10fan/src/environments/environment.prod.ts"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "serve": {
-                    "builder": "@nrwl/node:execute",
-                    "options": {
-                        "buildTarget": "10fan:build"
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": [
-                            "apps/10fan/tsconfig.app.json",
-                            "apps/10fan/tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**",
-                            "!apps/10fan/**"
-                        ]
-                    }
-                },
-                "test": {
-                    "builder": "@nrwl/jest:jest",
-                    "options": {
-                        "jestConfig": "apps/10fan/jest.config.js",
-                        "tsConfig": "apps/10fan/tsconfig.spec.json"
-                    }
-                }
-            }
-        },
         "scorer": {
             "projectType": "application",
             "schematics": {

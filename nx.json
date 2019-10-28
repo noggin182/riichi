@@ -8,9 +8,6 @@
         "nx.json": "*"
     },
     "projects": {
-        "10fan": {
-            "tags": []
-        },
         "scorer": {
             "tags": []
         },

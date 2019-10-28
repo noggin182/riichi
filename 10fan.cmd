@@ -1,1 +1,0 @@
-@ng b 10fan > nul && node .\dist\apps\10fan\main.js %*
