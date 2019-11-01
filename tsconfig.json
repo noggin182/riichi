@@ -26,9 +26,6 @@
             ]
         }
     },
-    "angularCompilerOptions": {
-        "enableIvy": true
-    },
     "exclude": [
         "node_modules",
         "tmp"
