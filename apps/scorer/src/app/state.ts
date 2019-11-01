@@ -19,7 +19,7 @@ export class State {
     winningResults: ScoredHand[];
     tileId = 1;
 
-    roundInfo: WinState = {
+    roundInfo: {-readonly[P in keyof WinState]: WinState[P]} = {
         firstRound: false,
         selfDrawnAfterKan: false,
         robbedFromKan: false,
