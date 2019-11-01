@@ -86,8 +86,8 @@ export const defaultYakuDefinitions: YakuDefinition[] = [
         canBeOpen: true,
         extras: [extraIfConcealed],
         check: hand => hand.chis.some(t1 => t1.rank === 1
-                    && hand.chis.some(t2 => t2.rank === 4 && t2.kind === t1.kind)
-                    && hand.chis.some(t3 => t3.rank === 7 && t3.kind === t1.kind))
+                                         && hand.chis.some(t2 => t2.rank === 4 && t2.kind === t1.kind)
+                                         && hand.chis.some(t3 => t3.rank === 7 && t3.kind === t1.kind))
     },
     {
         fan: 1,
@@ -117,7 +117,7 @@ export const defaultYakuDefinitions: YakuDefinition[] = [
         canBeOpen: true,
         check: hand => hand.chis.length
                     && hand.allTiles.some(isHonor) // sets containing terminals but no honors is Junchan
-                    && hand.sets.every(s => isTerminalOrHonor(s[0]) || isTerminal(s[s.length - 1]))
+                    && hand.sets.every(s => isTerminalOrHonor(s) || isTerminal(s[s.length - 1]))
                     && isTerminalOrHonor(hand.pair),
         extras: [extraIfConcealed]
     },
@@ -347,7 +347,7 @@ export const defaultYakuDefinitions: YakuDefinition[] = [
 
     // ================== 0 fan ==================
     // "Zero fan" yakus are yaku like rules that don't give a yaku.
-    // They are marked as zero to indicate they are not yaku but will be counted as 1 fan
+    // Although they are marked as zero to indicate they are not yaku, they will be counted as 1 fan as long as there is a valid yaku
     {
         fan: 0,
         name: ['Dora', 'Dora'],
