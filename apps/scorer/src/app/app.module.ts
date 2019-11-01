@@ -14,9 +14,10 @@ import { WaitsComponent } from './components/waits/waits.component';
 import { MahjongComponent } from './components/mahjong/mahjong.component';
 import { WindPipe } from './pipes/wind.pipe';
 import { WindInputComponent } from './components/wind-input/wind-input.component';
+import { OptionsComponent } from './components/options/options.component';
 
 @NgModule({
-  declarations: [AppComponent, TileComponent, PaletteComponent, TileButtonComponent, HandComponent, ComputedHandComponent, NamePipe, MeldComponent, WaitsComponent, MahjongComponent, WindPipe, WindInputComponent ],
+  declarations: [AppComponent, TileComponent, PaletteComponent, TileButtonComponent, HandComponent, ComputedHandComponent, NamePipe, MeldComponent, WaitsComponent, MahjongComponent, WindPipe, WindInputComponent, OptionsComponent ],
   imports: [BrowserModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent]

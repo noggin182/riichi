@@ -1,0 +1,45 @@
+@import "../../../theming";
+
+scorer-options {
+    > input[type=checkbox] {
+        position: absolute;
+        bottom: 100%;
+    }
+
+    > label {
+        display: block;
+        padding: 2px;
+        margin: 2px;
+        border-radius: 5px;
+        // width: 2px;
+        // flex: 1 1 auto;
+        // text-align: center;
+        background-color: $button-color;
+        border: 1px solid #999;
+        // line-height: 1.75em;
+        cursor: pointer;
+    }
+
+    > label.scorer-option__nested {
+        margin-left: 40px;
+        margin-right: 20px;
+    }    
+
+    > input[type=checkbox][disabled] + label {
+        opacity: 0.6;
+    }
+
+    > input[type=checkbox]:checked:not([disabled]) + label {
+        background-color: $accent-color;
+        color: $contrast-text;
+    }
+
+    > input[type=checkbox]:active + label {
+        background-color: $accent-color-lighter;
+        color: $contrast-text;
+    }
+
+    > input[type=checkbox]:focus + label {
+        border-color: $accent-color-lighter;
+    }
+}

@@ -1,0 +1,28 @@
+<div>Prevalent wind: <scorer-wind-input [(ngModel)]="state.roundInfo.prevalentWind"></scorer-wind-input></div>
+<div>Seat wind: <scorer-wind-input [(ngModel)]="state.roundInfo.seatWind"></scorer-wind-input></div>
+<div>Discarding wind: <scorer-wind-input [(ngModel)]="state.roundInfo.winningTileFromWind"></scorer-wind-input></div>
+
+<input type="checkbox" id="opt_riichi" [(ngModel)]="state.roundInfo.riichi" />
+<label for="opt_riichi">Riichi</label>
+
+<input type="checkbox" id="opt_doubleRiichi" [attr.disabled]="!state.roundInfo.riichi || null" [(ngModel)]="state.roundInfo.doubleRiichi" />
+<label for="opt_doubleRiichi" class="scorer-option__nested">Double Riichi</label>
+
+<input type="checkbox" id="opt_oneShot" [attr.disabled]="!state.roundInfo.riichi || null" [(ngModel)]="state.roundInfo.oneShot" />
+<label for="opt_oneShot" class="scorer-option__nested">One Shot</label>
+
+<input type="checkbox" id="opt_firstRound" [(ngModel)]="state.roundInfo.firstRound" />
+<label for="opt_firstRound">First round</label>
+
+<input type="checkbox" id="opt_selfDrawnAfterKan" [(ngModel)]="state.roundInfo.selfDrawnAfterKan" [attr.disabled]="state.roundInfo.seatWind !== state.roundInfo.winningTileFromWind || null" />
+<label for="opt_selfDrawnAfterKan">Self drawn after kan</label>
+
+<input type="checkbox" id="opt_robbedFromKan" [(ngModel)]="state.roundInfo.robbedFromKan" [attr.disabled]="state.roundInfo.seatWind === state.roundInfo.winningTileFromWind || null" />
+<label for="opt_robbedFromKan">Robbed from kan</label>
+
+<input type="checkbox" id="opt_lastTile" [(ngModel)]="state.roundInfo.lastTile" [attr.disabled]="state.roundInfo.firstRound || null" />
+<label for="opt_lastTile">Last tile</label>
+
+
+<div>Dora indicator: <input (input)="state.roundInfo.doraIndicator = handFromNotation($event.target.value).concealedTiles"></div>
+<div>Ura dora indicator: <input (input)="state.roundInfo.uraDoraIndicator = handFromNotation($event.target.value).concealedTiles"></div>
