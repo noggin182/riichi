@@ -16,7 +16,8 @@ export const defaultFuDefinitions: FuDefinition[] = [
     {
         fu: 25,
         name: ['Seven Pairs', 'Chii Toitsu'],
-        check: hand => hand.isSevenPairs
+        check: hand => hand.isSevenPairs,
+        blocksRounding: true
     },
     // ============ Simple melds =============
     {

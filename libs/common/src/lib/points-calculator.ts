@@ -20,17 +20,18 @@ export function countFu(hand: HandHelper, fuDefinitions: readonly FuDefinition[]
             }
         }
     }
-
-    const digit = counted.reduce((total, c) => total + c.definition.fu, 0) % 10;
-    if (digit) {
-        counted.push({
-            definition: {
-                fu: 10 - digit,
-                name: ['Round up', 'Round up'],
-                check: () => true
-            },
-            meld: null
-        });
+    if (!counted.some(c => c.definition.blocksRounding)) {
+        const digit = counted.reduce((total, c) => total + c.definition.fu, 0) % 10;
+        if (digit) {
+            counted.push({
+                definition: {
+                    fu: 10 - digit,
+                    name: ['Round up', 'Round up'],
+                    check: () => true
+                },
+                meld: null
+            });
+        }
     }
 
     return counted;

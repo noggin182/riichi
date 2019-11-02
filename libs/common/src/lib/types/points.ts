@@ -7,6 +7,7 @@ export interface FuDefinition {
     readonly fu: number;
     readonly name: [string, string];
     readonly check: (hand: HandHelper) => boolean | readonly TileSet[];
+    readonly blocksRounding?: boolean;
 }
 
 export interface CountedFu {
