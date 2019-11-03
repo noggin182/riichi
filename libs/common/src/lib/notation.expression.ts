@@ -15,7 +15,7 @@ const validRuns = [
     // concealed honors
     'H+z',
     // open chi suits - can only be from the left but doesn't check the values!
-    '(S`S{2} | S{2}`S | S{3}`)[msp]',
+    '(S`S{2})[msp]',
     // pon of suits, must be the same tile
     '(?<ps>S) (%`## | %#`# | %##`)[msp]',
     // pon of honors, must be the same tile
