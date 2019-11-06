@@ -44,7 +44,7 @@ export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind:
         // manual check for 7 pairs
         if (tilesGroupedByName.length === 7 && tilesGroupedByName.every(s => s.length === 2)) {
             mahjong.push({
-                melds: [...tilesGroupedByName.map(set => formMeld(set, FinalMeldKind.OpenPair, FinalMeldKind.ClosedPair))],
+                melds: [...tilesGroupedByName.map(set => formMeld(set, FinalMeldKind.OpenPair, FinalMeldKind.ClosedPair)).sort(sortMelds(winningTile))],
                 finalTile: winningTile
             });
             // don't return, other hands may be valid (Ryan peikou)
