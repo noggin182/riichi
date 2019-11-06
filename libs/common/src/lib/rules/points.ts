@@ -116,7 +116,7 @@ export const defaultFuDefinitions: FuDefinition[] = [
     {
         fu: 2,
         name: ['Edge wait', 'Penchan-machi'],
-        check: hand => !hand.isPinfu && hand.chis.filter(c => c[0] === hand.finalTile || c[2] === hand.finalTile)
+        check: hand => !hand.isPinfu && hand.chis.filter(c => (c[0] === hand.finalTile && c[0].rank === 7) || (c[2] === hand.finalTile && c[2].rank === 3))
     },
 
     // ============ Hand Style =============
