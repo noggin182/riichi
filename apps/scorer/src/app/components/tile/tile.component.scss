@@ -1,5 +1,5 @@
 @mixin sizes($height) {
-    padding: ceil($height / 20);
+    padding: ceil($height / 10) floor($height / 10 * 3/4);
     &:before {
         height: $height;
         width: ceil($height * 3/4);
@@ -10,7 +10,7 @@
     }
 }
 
-scorer-tile                  { @include sizes(80px); }
+scorer-tile                  { @include sizes(50px); }
 scorer-tile[data-size=small] { @include sizes(40px); }
 scorer-tile[data-size=tiny]  { @include sizes(12px); }
 

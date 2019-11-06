@@ -1,39 +1,6 @@
-@import '../src/theming';
+@import "../../../theming";
 
-html, body {
-    height: 100%;
-    background-color: #F5F5F5;
-}
-
-body {
-    margin: 0;
-    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
-
-.scorer-spacer {
-    flex: 1 1 auto;
-}
-
-section {
-    display: inline-flex;
-    flex-direction: column;
-
-    > h2 {
-        background-color: $primary-color;
-        color: $contrast-text;
-        padding: 4px;
-        border-radius: $border-radius;
-        text-align: center;
-        font-weight: normal;
-        font-size: 18px;
-    }
-    
-    .scorer-radio-group[role=group] {
-        margin-bottom: 16px;
-    }
-}
-
-.scorer-radio-group[role=group] {
+scorer-radio-group {
     overflow: hidden;
     position: relative;
     display: flex;
@@ -44,22 +11,23 @@ section {
 
     > legend:first-child {
         position: absolute;
-        bottom: 100%;
+        bottom: 200%;
     }
 
     > input[type=radio] {
         position: absolute;
-        bottom: 100%;
+        bottom: 200%;
     }
 
     > label {
         display: block;
-        width: 2px;
-        flex: 1 1 auto;
+        flex: 1 0 auto;
         text-align: center;
         background-color: $button-color;
         border: $element-border;
         line-height: 1.75em;
+        white-space: nowrap;
+        padding: 0 4px;
         cursor: pointer;
 
         &:first-of-type {
@@ -78,7 +46,7 @@ section {
     }
 
     > input[type=radio][disabled] + label {
-        cursor: not-allowed;
+        cursor: default;
         opacity: 0.6
     }
 
@@ -87,12 +55,12 @@ section {
         color: $contrast-text;
     }
 
-    > input[type=radio]:active + label {
+    > input[type=radio]:active:not([disabled]) + label {
         background-color: $accent-color-lighter;
         color: $contrast-text;
     }
 
-    > input[type=radio]:focus + label {
+    > input[type=radio]:focus:not([disabled]) + label {
         z-index: 20;
         border-color: $accent-color-lighter;
     }

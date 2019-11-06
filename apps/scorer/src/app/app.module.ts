@@ -15,9 +15,10 @@ import { MahjongComponent } from './components/mahjong/mahjong.component';
 import { WindPipe } from './pipes/wind.pipe';
 import { WindInputComponent } from './components/wind-input/wind-input.component';
 import { OptionsComponent } from './components/options/options.component';
+import { RadioGroupComponent } from './components/radio-group/radio-group.component';
 
 @NgModule({
-  declarations: [AppComponent, TileComponent, PaletteComponent, TileButtonComponent, HandComponent, ComputedHandComponent, NamePipe, MeldComponent, WaitsComponent, MahjongComponent, WindPipe, WindInputComponent, OptionsComponent ],
+  declarations: [AppComponent, TileComponent, PaletteComponent, TileButtonComponent, HandComponent, ComputedHandComponent, NamePipe, MeldComponent, WaitsComponent, MahjongComponent, WindPipe, WindInputComponent, OptionsComponent, RadioGroupComponent ],
   imports: [BrowserModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent]

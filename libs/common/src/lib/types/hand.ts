@@ -2,7 +2,7 @@ import { Wind, Tile } from './tile';
 
 export const enum MeldKind {
     /* The order here (and in FinalMeldKind) is used to sort groups when displaying winning hands */
-    ClosedKan = 3,
+    ConcealedKan = 3,
     Kan,
     AddedKan,
     Chi,
@@ -28,7 +28,7 @@ export interface ReadonlyHand {
 
 export const enum FinalMeldKind {
     ClosedSet,
-    ClosedKan    = MeldKind.ClosedKan,
+    ClosedKan    = MeldKind.ConcealedKan,
     OpenKan      = MeldKind.Kan,
     OpenAddedKan = MeldKind.AddedKan,
     OpenChi      = MeldKind.Chi,

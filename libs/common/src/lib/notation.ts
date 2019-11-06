@@ -56,7 +56,7 @@ export function handFromNotation(str: string, forWind: Wind = Wind.East, deck?: 
             const rank = parseInt(s.charAt(0), 10);
             // special handling for closed kan
             hand.melds.push({
-                kind: MeldKind.ClosedKan,
+                kind: MeldKind.ConcealedKan,
                 claimedTile: null,
                 from: forWind,
                 tiles: [

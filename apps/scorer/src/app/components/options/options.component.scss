@@ -1,45 +1,80 @@
 @import "../../../theming";
 
+$cb-height: 2em;
+
 scorer-options {
     > input[type=checkbox] {
         position: absolute;
         bottom: 100%;
     }
 
-    > label {
+    > input[type=checkbox] + label {
+        margin-bottom: 4px;
+        border-radius: $border-radius;
+        border: $element-border;
         display: block;
-        padding: 2px;
-        margin: 2px;
-        border-radius: 5px;
-        // width: 2px;
-        // flex: 1 1 auto;
-        // text-align: center;
-        background-color: $button-color;
-        border: 1px solid #999;
-        // line-height: 1.75em;
+        line-height: $cb-height;
         cursor: pointer;
+        user-select: none;
+        overflow: hidden;
+        padding-right: 0.5em;
+
+        &:before {
+            content: '\2714';
+            text-align: center;
+            display: inline-block;
+            width: $cb-height;
+            background-color: $button-color;
+            margin-right: 0.5em;
+            color: rgba(255, 255, 255, 0);
+        }
     }
 
-    > label.scorer-option__nested {
-        margin-left: 40px;
-        margin-right: 20px;
-    }    
+    > input[type=checkbox]:checked:not([disabled]) + label:before {
+        background-color: $accent-color;
+        color: white;
+    }
 
     > input[type=checkbox][disabled] + label {
         opacity: 0.6;
+        cursor: default;
     }
 
-    > input[type=checkbox]:checked:not([disabled]) + label {
-        background-color: $accent-color;
-        color: $contrast-text;
+    label.scorer-option__nested {
+        margin-left: 2em;
     }
 
-    > input[type=checkbox]:active + label {
-        background-color: $accent-color-lighter;
-        color: $contrast-text;
-    }
+    // > label {
+    //     display: block;
+    //     padding: 2px;
+    //     margin: 2px;
+    //     border-radius: $border-radius;
+    //     background-color: $button-color;
+    //     border: 1px solid #999;
+    //     // line-height: 1.75em;
+    //     cursor: pointer;
+    // }
 
-    > input[type=checkbox]:focus + label {
-        border-color: $accent-color-lighter;
-    }
+    // > label.scorer-option__nested {
+    //     margin-left: 40px;
+    //     margin-right: 20px;
+    // }    
+
+    // > input[type=checkbox][disabled] + label {
+    //     opacity: 0.6;
+    // }
+
+    // > input[type=checkbox]:checked:not([disabled]) + label {
+    //     background-color: $accent-color;
+    //     color: $contrast-text;
+    // }
+
+    // > input[type=checkbox]:active + label {
+    //     background-color: $accent-color-lighter;
+    //     color: $contrast-text;
+    // }
+
+    // > input[type=checkbox]:focus + label {
+    //     border-color: $accent-color-lighter;
+    // }
 }

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Hand, Tile, handFromNotation, getPossibleMahjongs, ScoredHand, WinState, getWinningScore, checkForMahjong, Wind } from '@riichi/common';
+import { Hand, Tile, handFromNotation, getPossibleMahjongs, ScoredHand, WinState, getWinningScore, checkForMahjong, Wind, RelativeSeat, relativeSeatToWind, MeldKind } from '@riichi/common';
 
 export enum AppendStyle {
     Concealed,
     Chi,
     Pon,
     Kan,
-    ClosedKan
+    AddedKan,
+    ConcealedKan
 }
 
 @Injectable({providedIn: 'root'})
@@ -14,6 +15,7 @@ export class State {
     currentLanguage: 0 | 1 = 0;
     blackTiles = false;
     appendStyle = AppendStyle.Concealed;
+    fromSeat = RelativeSeat.Left;
     possibleWaits: {tile: Tile, result: ScoredHand}[];
     winningTile: Tile;
     winningResults: ScoredHand[];
@@ -38,12 +40,40 @@ export class State {
 
     hand: Hand = {concealedTiles: [], melds: []};
 
+    duplicateTile(tile: Tile) {
+        return {
+            id: this.tileId++,
+            kind: tile.kind,
+            rank: tile.rank
+        };
+    }
+
     appendTile(tile: Tile) {
         if (this.appendStyle === AppendStyle.Concealed) {
-            this.hand.concealedTiles.push({
-                id: this.tileId++,
-                kind: tile.kind,
-                rank: tile.rank
+            this.hand.concealedTiles.push(this.duplicateTile(tile));
+        } else if (this.appendStyle === AppendStyle.Chi) {
+            // TODO
+        } else if (this.appendStyle === AppendStyle.ConcealedKan) {
+            const tiles = [this.duplicateTile(tile), this.duplicateTile(tile), this.duplicateTile(tile), this.duplicateTile(tile)];
+            this.hand.melds.push({
+                claimedTile: null,
+                from: this.roundInfo.seatWind,
+                kind: MeldKind.ConcealedKan,
+                tiles: tiles
+            });
+        } else {
+            const tiles = [this.duplicateTile(tile), this.duplicateTile(tile), this.duplicateTile(tile)];
+            if (this.appendStyle !== AppendStyle.Pon) {
+                tiles.push(this.duplicateTile(tile));
+            }
+            const turnedTile = this.fromSeat === RelativeSeat.Left  ? 0
+                             : this.fromSeat === RelativeSeat.Right ? tiles.length - 1
+                             : 1;
+            this.hand.melds.push({
+                claimedTile: tiles[turnedTile],
+                from: relativeSeatToWind(this.roundInfo.seatWind, this.fromSeat),
+                kind: MeldKind.Pon,
+                tiles: tiles
             });
         }
         this.checkHand();

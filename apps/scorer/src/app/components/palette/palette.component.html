@@ -1,24 +1,20 @@
 <section>
     <h2>Available Tiles</h2>
 
-    <form role="group" class="scorer-radio-group">
-        <legend>Tile style</legend>
-        
-        <input type="radio" name="tileStyle" id="tileStyle_concealed" (input)="updateAppendStyle($event)" [value]="AppendStyle.Concealed" checked/>
-        <label for="tileStyle_concealed">Concealed</label>
-        
-        <input type="radio" name="tileStyle" id="tileStyle_chi" (input)="updateAppendStyle($event)" [value]="AppendStyle.Chi"/>
-        <label for="tileStyle_chi">Chi</label>
+    <scorer-radio-group
+        title="Style"
+        name="tileStyle"
+        [options]="styles"
+        [(ngModel)]="state.appendStyle"
+    ></scorer-radio-group>
 
-        <input type="radio" name="tileStyle" id="tileStyle_pon" (input)="updateAppendStyle($event)" [value]="AppendStyle.Pon"/>
-        <label for="tileStyle_pon">Pon</label>
-
-        <input type="radio" name="tileStyle" id="tileStyle_kan" (input)="updateAppendStyle($event)" [value]="AppendStyle.Kan"/>
-        <label for="tileStyle_kan">Kan</label>
-
-        <input type="radio" name="tileStyle" id="tileStyle_closedKan" (input)="updateAppendStyle($event)" [value]="AppendStyle.ClosedKan"/>
-        <label for="tileStyle_closedKan">Closed Kan</label>
-    </form>
+    <scorer-radio-group
+        title="Claimed from"
+        name="claimedFrom"
+        [options]="claims"
+        [(ngModel)]="state.fromSeat"
+        [disabled]="state.appendStyle === styles[0].value"
+    ></scorer-radio-group>
 
     <ul>
         <li *ngFor="let tile of allTiles">

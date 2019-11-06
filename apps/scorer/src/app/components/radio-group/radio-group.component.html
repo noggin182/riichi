@@ -1,0 +1,12 @@
+<legend *ngIf="ariaTitle">{{ariaTitle}}</legend>
+<ng-container *ngFor="let option of options">
+    <input type="radio"
+        [name]="name || ('rg' + id)"
+        id="rg{{id}}_{{option.value}}"
+        (input)="updateValue($event)"
+        [value]="option.value"
+        [attr.checked]="value === option.value || null"
+        [attr.disabled]="disabled || null"
+    />
+    <label for="rg{{id}}_{{option.value}}">{{option.caption || option.value}}</label>
+</ng-container>
