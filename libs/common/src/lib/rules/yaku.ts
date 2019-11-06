@@ -292,7 +292,7 @@ export const defaultYakuDefinitions: YakuDefinition[] = [
         name: ['Four Concealed Pungs', 'Suu ankou'],
         description: 'Four concealed pungs/kongs and a pair',
         canBeOpen: false,
-        check: hand => hand.pons.length === 4
+        check: hand => hand.pons.filter(s => s.concealed).length === 4
     },
     {
         fan: YAKUMAN_FAN,
