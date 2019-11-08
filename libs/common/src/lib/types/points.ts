@@ -16,9 +16,10 @@ export interface CountedFu {
 }
 
 export interface CountedYaku {
+    readonly abbreviation: string;
     readonly definition: Readonly<YakuDefinition>;
     readonly fan: number;
-    readonly extras: readonly ExtraFan[];
+    readonly extras: readonly (ExtraFan & {abbreviation: string})[];
 }
 
 export interface PointsLimit {

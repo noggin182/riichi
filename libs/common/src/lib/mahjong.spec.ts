@@ -10,7 +10,7 @@ describe('Mahjong detector', () => {
      });
 
      it('should calculate pair wait with open hand', () => {
-         const hand = handFromNotation(`2p 123'p 123'm 123's 111z `);
+         const hand = handFromNotation(`2p 1'23p 1'23m 1'23s 111z `);
          expect(calculateWaits(hand).map(getTileName)).toEqual([TileName.Pin2]);
      });
 

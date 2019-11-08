@@ -3,7 +3,7 @@ import { Mahjong } from './types/hand';
 import { countYaku } from './yaku-calculator';
 import { calculatePayments, countFu, } from './points-calculator';
 import { CountedYaku, CountedFu, PaymentInfo } from './types/points';
-import { defaultYakuDefinitions } from './rules/yaku';
+import { defaultYakuCollection } from './rules/yaku';
 import { defaultFuDefinitions } from './rules/points';
 import { defaultLimits } from './rules/limits';
 import { WinState } from './types/state';
@@ -20,7 +20,7 @@ export interface ScoredHand {
 }
 
 const defaultRules = {
-    yaku: defaultYakuDefinitions,
+    yaku: defaultYakuCollection,
     fu: defaultFuDefinitions,
     limits: defaultLimits
 };
