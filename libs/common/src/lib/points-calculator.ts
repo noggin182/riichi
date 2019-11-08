@@ -37,12 +37,12 @@ export function countFu(hand: HandHelper, fuDefinitions: readonly FuDefinition[]
     return counted;
 }
 
-export function calculatePayments(hand: HandHelper, fan: number, fu: number, limits: readonly PointsLimit[]): PaymentInfo {
+export function calculatePayments(hand: HandHelper, han: number, fu: number, limits: readonly PointsLimit[]): PaymentInfo {
     // TODO: special payment for feeding last pon for big dragons/winds
-    const rawPoints = fu * 2 ** (fan + 2);
+    const rawPoints = fu * 2 ** (han + 2);
 
     let limitName = '';
-    const limit = limits.find(l => l.check(fan, rawPoints));
+    const limit = limits.find(l => l.check(han, rawPoints));
     limitName = limit && limit.name;
     const basePoints = limit ? limit.points : rawPoints;
     let payments: { from: Wind; ammount: number; }[] = [];

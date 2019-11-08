@@ -1,18 +1,18 @@
-<h3>hand {{index + 1}}</h3>
+<h3>Hand {{index + 1}}</h3>
 
 <scorer-mahjong [mahjong]="scoredHand.mahjong"></scorer-mahjong>
 
 <div class="scorer-computed-hand__yaku">
-    <h4>Yaku <span *ngIf="scoredHand.totalFan > 0">{{scoredHand.totalFan}} Fan</span></h4>
+    <h4>Yaku <span *ngIf="scoredHand.totalHan > 0">{{scoredHand.totalHan}} Han</span></h4>
     <ul>
         <ng-container *ngFor="let y of scoredHand.yaku">
             <li>
                 {{ y.definition | name }}
-                <span *ngIf="scoredHand.totalFan > 0">{{ y.fan }} Fan</span>
+                <span *ngIf="scoredHand.totalHan > 0">{{ y.han }} Han</span>
             </li>
             <li *ngFor="let extra of y.extras" class="scorer-computed-hand__extra">
                 {{ extra | name }}
-                <span>+1 Fan</span>
+                <span>+1 Han</span>
             </li>
         </ng-container>
     </ul>

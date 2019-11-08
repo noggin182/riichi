@@ -1,6 +1,6 @@
 import { HandHelper } from '../internal/hand-helper';
 
-export interface ExtraFan {
+export interface ExtraHan {
     readonly name: string[]; // [string, string, string];
     readonly description: string;
     readonly check: (hand: HandHelper) => boolean;
@@ -13,7 +13,7 @@ export interface YakuDefinition {
     readonly canBeOpen: boolean;
     readonly check: (hand: HandHelper) => boolean | number;
     readonly extras?: {
-        [abbreviation: string]: ExtraFan
+        [abbreviation: string]: ExtraHan
     };
 }
 

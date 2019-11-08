@@ -105,8 +105,8 @@ export class State {
 
     sortByBest(result1: ScoredHand, result2: ScoredHand) {
         return result2.payment.basePoints - result1.payment.basePoints
-            || Math.abs(result2.totalFan) - Math.abs(result1.totalFan)
-            || (result1.totalFan > 0 && result2.totalFu - result1.totalFu)
+            || Math.abs(result2.totalHan) - Math.abs(result1.totalHan)
+            || (result1.totalHan > 0 && result2.totalFu - result1.totalFu)
             || result1.mahjong.finalTile.kind - result2.mahjong.finalTile.kind
             || result1.mahjong.finalTile.rank - result2.mahjong.finalTile.rank;
     }

@@ -1,17 +1,17 @@
-import { ExtraFan, YakuCollection } from '../types/yaku';
+import { ExtraHan, YakuCollection } from '../types/yaku';
 import { getDoraNameFromIndicator, getTileName, allSuitsPresent } from '../utils/tile';
 import { distinct } from '../utils/array';
 import { Wind, TileName, TileKind } from '../types/tile';
 import { areSimilarTiles, isSimple, isDragon, isHonor, isTerminalOrHonor, isTerminal, isSuited, isWind } from '../utils/tile-checks';
 
-export const YAKUMAN_FAN = -1;
+export const YAKUMAN_HAN = -1;
 
 const extraIfConcealed = {
     'MEN' : {
         name: ['Concealed', 'Menzin'],
-        description: 'Extra fan for concealed',
+        description: 'Extra han for concealed',
         check: hand => !hand.isOpen
-    } as ExtraFan
+    } as ExtraHan
 };
 
 /*
@@ -25,7 +25,7 @@ const extraIfConcealed = {
 */
 
 export const defaultYakuCollection: YakuCollection = {
-    // ================== 1 fan ==================
+    // ================== 1 han ==================
     'RCH': {
         han: 1,
         name: ['Ready hand', 'Riichi', '立直'],
@@ -142,7 +142,7 @@ export const defaultYakuCollection: YakuCollection = {
                    && !hand.selfDrawn
     },
 
-    // ================== 2 fan ==================
+    // ================== 2 han ==================
     'CHI': {
         han: 2,
         name: ['Seven pairs', 'Chiitoitsu', '七対子'],
@@ -166,21 +166,21 @@ export const defaultYakuCollection: YakuCollection = {
     },
     'SNK': {
         han: 2,
-        name: ['Three Kongs', 'Sankantsu', '三色同刻]'],
+        name: ['Three quads', 'Sankantsu', '三色同刻]'],
         description: '',
         canBeOpen: true,
         check: hand => hand.pons.filter(s => s.length === 4).length === 3
     },
     'TOI': {
         han: 2,
-        name: ['All Pon', 'Toitoi', '対々'],
-        description: 'Four pon/kan and a pair',
+        name: ['All triplet hand', 'Toitoi', '対々'],
+        description: 'Four triplets/quads and a pair',
         canBeOpen: true,
         check: hand => hand.pons.length === 4
     },
     'HON': {
         han: 2,
-        name: ['Half Flush', 'Honitsu', '混一色'],
+        name: ['Half-flush', 'Honitsu', '混一色'],
         description: 'One suit including honours',
         canBeOpen: true,
         check: hand => hand.allTiles.some(isHonor)
@@ -190,23 +190,23 @@ export const defaultYakuCollection: YakuCollection = {
     },
     'SSG': {
         han: 2,
-        name: ['Little Three Dragons', 'Shousangen', '小三元'],
-        description: 'Two pon/kan of dragons and a pair of dragons',
+        name: ['Little three dragons', 'Shousangen', '小三元'],
+        description: 'Two triplets or quads of dragons, plus a pair of dragons',
         canBeOpen: true,
         check: hand => isDragon(hand.pair)
                     && hand.pons.filter(isDragon).length === 2
     },
     'HRO': {
         han: 2,
-        name: ['All Terms and Honours', 'Honroutou', '混老頭'],
-        description: 'All sets consist of terminals or honours',
+        name: ['All terminals and honours', 'Honroutou', '混老頭'],
+        description: 'Hand consists of only terminals and honours',
         canBeOpen: true,
         check: hand => hand.allTiles.every(isTerminalOrHonor)
     },
     'JUN': {
         han: 2,
-        name: ['Terminals in All Sets', 'Junchan taiyao', '純全帯么'],
-        description: 'All sets contain terminals. At least one chow.',
+        name: ['Terminal in each set', 'Junchan taiyao', '純全帯么'],
+        description: 'All sets contain terminals. At least one sequence and no honors',
         canBeOpen: true,
         check: hand => hand.chis.length
                     && hand.allTiles.every(isSuited) // anything with an honour is Chanta
@@ -215,20 +215,20 @@ export const defaultYakuCollection: YakuCollection = {
         extras: extraIfConcealed
     },
 
-    // ================== 3 fan ==================
+    // ================== 3 han ==================
     'RPK': {
         han: 3,
-        name: ['Twice Pure Double Chow', 'Ryanpeikou', '二盃口'],
-        description: 'Two times two identical chow and a pair',
+        name: ['Two sets of identical sequences', 'Ryanpeikou', '二盃口'],
+        description: 'Two sets of identical sequences',
         canBeOpen: false,
         check: hand => hand.chis.filter(t1 => hand.chis.filter(t2 => areSimilarTiles(t1, t2)).length > 1).length === 4
     },
 
-    // ================== 5 fan ==================
+    // ================== 5 han ==================
     'CHN': {
         han: 5,
-        name: ['Full Flush', 'Chinitsu', '清一色'],
-        description: 'One suit, no honours',
+        name: ['Flush', 'Chinitsu', '清一色'],
+        description: 'All tiles are of the same suit and no honours',
         canBeOpen: true,
         check: hand => hand.allTiles.every(isSuited)
                     && hand.allTiles.map(t => t.kind).filter(distinct).length === 1,
@@ -236,7 +236,7 @@ export const defaultYakuCollection: YakuCollection = {
     },
     'REN': {
         han: 5, // TODO don't count other yaku
-        name: ['Blessing of Man', 'Renho'],
+        name: ['Hand of man', 'Renho', '人和'],
         description: 'Mahjong on discard in the first round',
         canBeOpen: false,
         check: hand => hand.state.firstRound && !hand.selfDrawn
@@ -244,24 +244,24 @@ export const defaultYakuCollection: YakuCollection = {
 
     // ================== Yakuman ==================
     'KMU': {
-        han: YAKUMAN_FAN,
-        name: ['Thirteen Orphans', 'Kokushi musou', '国士無双'],
+        han: YAKUMAN_HAN,
+        name: ['Thirteen orphans', 'Kokushi musou', '国士無双'],
         description: 'One of each honour and terminal and one duplicate',
         canBeOpen: false,
         check: (hand) => hand.isThirteenOrphans
     },
     'CHU': {
-        han: YAKUMAN_FAN,
-        name: ['Nine Gates', 'Chuuren poutou', '九連宝燈'],
-        description: '1112345678999 + one duplicate of the same suit',
+        han: YAKUMAN_HAN,
+        name: ['Nine gates', 'Chuuren poutou', '九連宝燈'],
+        description: '1112345678999 of the same suit, plus one other tile of the same suit',
         canBeOpen: false,
         check: hand => hand.allTiles.every(isSuited)
                     && hand.allTiles.map(t => t.kind).filter(distinct).length === 1
                     && [1, 2, 3, 4, 5, 6, 7, 8, 9].every(v => hand.allTiles.some(t => t.rank === v))
     },
     'TEN': {
-        han: YAKUMAN_FAN,
-        name: ['Blessing of Heaven', 'Tenho', '天和'],
+        han: YAKUMAN_HAN,
+        name: ['Heavenly hand', 'Tenho', '天和'],
         description: 'East mahjong on initial fourteen tiles',
         canBeOpen: false,
         check: hand => hand.state.firstRound
@@ -269,8 +269,8 @@ export const defaultYakuCollection: YakuCollection = {
                     && hand.state.seatWind === Wind.East
     },
     'CHH': {
-        han: YAKUMAN_FAN,
-        name: ['Blessing of Earth', 'Chiihou', '地和'],
+        han: YAKUMAN_HAN,
+        name: ['Hand of earth', 'Chiihou', '地和'],
         description: 'Mahjong on self-draw in the first round',
         canBeOpen: false,
         check: hand => hand.state.firstRound
@@ -278,77 +278,77 @@ export const defaultYakuCollection: YakuCollection = {
                     && hand.state.seatWind !== Wind.East
     },
     'SUA': {
-        han: YAKUMAN_FAN,
-        name: ['Four Concealed Pon', 'Suuankou', '四暗刻'],
-        description: 'Four concealed pon/kan and a pair',
+        han: YAKUMAN_HAN,
+        name: ['Four concealed triplets', 'Suuankou', '四暗刻'],
+        description: 'Four concealed triplets or quads and a pair',
         canBeOpen: false,
         check: hand => hand.pons.filter(s => s.concealed).length === 4
     },
     'SUK': {
-        han: YAKUMAN_FAN,
-        name: ['Four Kongs', 'Suukantsu', '四槓子'],
-        description: 'Four kan and a pair',
+        han: YAKUMAN_HAN,
+        name: ['Four quads', 'Suukantsu', '四槓子'],
+        description: 'Four quads and a pair',
         canBeOpen: true,
         check: hand => hand.pons.filter(s => s.length === 4).length === 4
     },
     'RYU': {
-        han: YAKUMAN_FAN,
-        name: ['All Green', 'Ryuuiisou', '緑一色'],
-        description: 'Hand of green tiles: bamboo 2, 3, 4, 6, 8 and green dragon',
+        han: YAKUMAN_HAN,
+        name: ['All green', 'Ryuuiisou', '緑一色'],
+        description: 'Hand of only green tiles: 2, 3, 4, 6, 8 of bamboo and green dragon',
         canBeOpen: true,
         check: hand => hand.allTiles.every(t => getTileName(t) === TileName.Hatsu || (t.kind === TileKind.Sou && [2, 3, 4, 6, 8].includes(t.rank)))
     },
     'CHR': {
-        han: YAKUMAN_FAN,
-        name: ['All Terminals', 'Chinroutou', '清老頭'],
-        description: 'All sets consist of terminals',
+        han: YAKUMAN_HAN,
+        name: ['All terminals', 'Chinroutou', '清老頭'],
+        description: 'Hand consists of only terminals, 1s and 9s',
         canBeOpen: true,
         check: hand => hand.allTiles.every(isTerminal)
     },
     'TSU': {
-        han: YAKUMAN_FAN,
-        name: ['All Honours', 'Tsuuiisou', '字一色'],
-        description: 'All sets consist of honours',
+        han: YAKUMAN_HAN,
+        name: ['All honours', 'Tsuuiisou', '字一色'],
+        description: 'Hand consists entirely of honours',
         canBeOpen: true,
         check: hand => hand.allTiles.every(isHonor)
     },
     'DSG': {
-        han: YAKUMAN_FAN,
-        name: ['Big Three Dragons', 'Daisangen', '大三元'],
-        description: 'Three pungs/kongs of dragons',
+        han: YAKUMAN_HAN,
+        name: ['Big three dragons', 'Daisangen', '大三元'],
+        description: 'Three triplets or quads of dragons',
         canBeOpen: true,
         check: hand => hand.pons.filter(isDragon).length === 3
     },
     'SSS': {
-        han: YAKUMAN_FAN,
-        name: ['Little Four Winds', 'Shousuushii', '小四喜'],
-        description: 'Three pungs/kongs of winds and a pair of winds',
+        han: YAKUMAN_HAN,
+        name: ['Little four winds', 'Shousuushii', '小四喜'],
+        description: 'Three triplets or quads of winds and a pair of winds',
         canBeOpen: true,
         check: hand => hand.pons.filter(isWind).length === 3
                     && isWind(hand.pair)
     },
     'DSS': {
-        han: YAKUMAN_FAN,
-        name: ['Big Four Winds', 'Daisuushii', '大四喜'],
-        description: 'Four pungs/kongs of winds',
+        han: YAKUMAN_HAN,
+        name: ['Big four winds', 'Daisuushii', '大四喜'],
+        description: 'Four triplets or quads of winds',
         canBeOpen: true,
         check: hand => hand.pons.filter(isWind).length === 4
     },
 
-    // ================== 0 fan ==================
-    // "Zero fan" yakus are yaku like rules that don't give a yaku.
-    // Although they are marked as zero to indicate they are not yaku, they will be counted as 1 fan as long as there is a valid yaku
+    // ================== 0 han ==================
+    // "Zero han" yakus are yaku like rules that don't give a yaku.
+    // Although they are marked as zero to indicate they are not yaku, they will be counted as 1 han as long as there is a valid yaku
     'DOR': {
         han: 0,
         name: ['Dora', 'Dora', 'ドラ'],
-        description: 'Extra fan for dora',
+        description: 'Extra han for dora',
         canBeOpen: true,
         check: hand => hand.state.doraIndicator.map(getDoraNameFromIndicator).reduce((total, doraName) => total + hand.allTiles.filter(t => getTileName(t) === doraName).length, 0)
     },
     'URA': {
         han: 0,
         name: ['Underneath dora', 'Uradora', '裏ドラ'],
-        description: 'Extra fan for uradora',
+        description: 'Extra han for uradora',
         canBeOpen: true,
         check: hand => hand.state.riichi && hand.state.uraDoraIndicator.map(getDoraNameFromIndicator).reduce((total, doraName) => total + hand.allTiles.filter(t => getTileName(t) === doraName).length, 0)
     }

@@ -15,7 +15,7 @@ export interface ScoredHand {
     readonly fu:   readonly CountedFu[];
     readonly payment: PaymentInfo;
 
-    readonly totalFan: number;
+    readonly totalHan: number;
     readonly totalFu: number;
 }
 
@@ -31,9 +31,9 @@ export function getWinningScore(mahjong: Mahjong, round: WinState, rules = defau
     const fu = countFu(helper, rules.fu);
 
     const totalFu = fu.reduce((total, f) => total + f.definition.fu, 0);
-    const totalFan = yaku.reduce((total, y) => total + y.fan + y.extras.length , 0);
+    const totalHan = yaku.reduce((total, y) => total + y.han + y.extras.length , 0);
 
-    const payments = calculatePayments(helper, totalFan, totalFu, rules.limits);
+    const payments = calculatePayments(helper, totalHan, totalFu, rules.limits);
 
     return {
         mahjong: mahjong,
@@ -41,7 +41,7 @@ export function getWinningScore(mahjong: Mahjong, round: WinState, rules = defau
         yaku: yaku,
         fu: fu,
         totalFu: totalFu,
-        totalFan: totalFan,
+        totalHan: totalHan,
         payment: payments
     };
 }
