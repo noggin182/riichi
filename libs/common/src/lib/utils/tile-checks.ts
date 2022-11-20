@@ -1,6 +1,5 @@
 import { Tile, TileKind, Dragon, Wind } from '../types/tile';
 
-
 export function isSuited(tile: Tile) {
     return tile.kind === TileKind.Man
         || tile.kind === TileKind.Sou

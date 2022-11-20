@@ -1,25 +1,26 @@
-import { TileKind, TileName, Dragon, Wind, Tile } from '../types/tile';
+import { TileKind, TileName, Dragon, Wind, Tile, TileNames } from '../types/tile';
 import { randomNumberGenerator } from './random';
 
-const DUMMY_TILE_ID = 0xFF;
-
 export const dummyBlankTile: Tile = {
-    id: DUMMY_TILE_ID,
     kind: TileKind.Unknown,
     rank: 0
 };
 
 export function createDummySetOfTiles(): Tile[] {
     return [
-        ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(rank => ({id: DUMMY_TILE_ID, kind: TileKind.Man,   rank})),
-        ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(rank => ({id: DUMMY_TILE_ID, kind: TileKind.Sou,   rank})),
-        ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(rank => ({id: DUMMY_TILE_ID, kind: TileKind.Pin,   rank})),
-        ...[1, 2, 3, 4, 5, 6, 7      ].map(rank => ({id: DUMMY_TILE_ID, kind: TileKind.Honor, rank}))
+        ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(rank => ({kind: TileKind.Man,   rank})),
+        ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(rank => ({kind: TileKind.Sou,   rank})),
+        ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(rank => ({kind: TileKind.Pin,   rank})),
+        ...[1, 2, 3, 4, 5, 6, 7      ].map(rank => ({kind: TileKind.Honor, rank}))
     ];
 }
 
-export function buildTileName(kind: TileKind, rank: number) {
-    return kind * 10 + rank;
+export function buildTileName(kind: TileKind, rank: number): TileName {
+    return getTileName({kind, rank});
+}
+
+export function getTileName(tile: Tile): TileName {
+    return TileNames[tile.kind][tile.rank].toString() as TileName;
 }
 
 export function getDoraNameFromIndicator(indicator: Tile) {
@@ -42,20 +43,15 @@ export function sortTiles(tileA: Tile, tileB: Tile) {
     return tileA.kind - tileB.kind || tileA.rank - tileB.rank;
 }
 
-export function getTileName(tile: Tile): TileName {
-    return tile.kind * 10 + tile.rank;
-}
-
 export function createNewDeck(rng?: Iterator<number>): Tile[] {
     const deck = [...createDummySetOfTiles(), ...createDummySetOfTiles(), ...createDummySetOfTiles(), ...createDummySetOfTiles()];
 
     rng ??= randomNumberGenerator();
 
-    deck.forEach((tile: {id: number}) => {
-        tile.id = rng?.next().value;
-    });
-    deck.sort((t1, t2) => t1.id - t2.id);
-    return deck;
+    return deck
+        .map(tile => ({tile, v: rng?.next().value}))
+        .sort((t1, t2) => t1.v - t2.v)
+        .map(t => t.tile);
 }
 
 export function allSuitsPresent(tiles: readonly Tile[]) {

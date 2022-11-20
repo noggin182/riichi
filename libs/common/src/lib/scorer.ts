@@ -6,7 +6,7 @@ import { CountedYaku, CountedFu, PaymentInfo } from './types/points';
 import { defaultYakuCollection } from './rules/yaku';
 import { defaultFuDefinitions } from './rules/points';
 import { defaultLimits } from './rules/limits';
-import { WinState } from './types/state';
+import { WinState } from './types/win-state';
 
 export interface ScoredHand {
     readonly mahjong: Mahjong;

@@ -93,8 +93,8 @@ export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind:
         const tile = remainingTiles.shift()!;
         const tileName = getTileName(tile);
         if (isSuited(tile) && tile.rank <= 7) {
-            const tile1 = remainingTiles.find(t => getTileName(t) === tileName + 1);
-            const tile2 = remainingTiles.find(t => getTileName(t) === tileName + 2);
+            const tile1 = remainingTiles.find(t => t.kind === tile.kind && t.rank === tile.rank + 1);
+            const tile2 = remainingTiles.find(t => t.kind === tile.kind && t.rank === tile.rank + 2);
             if (tile1 && tile2) {
                 // make a chi
                 walk(exclude(remainingTiles, tile1, tile2),

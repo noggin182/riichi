@@ -1,5 +1,5 @@
 export function *randomNumberGenerator(seed?: number): Iterator<number> {
-    let w = seed === undefined ? new Date().getTime() : seed;
+    let w = seed ?? new Date().getTime();
     let x = 987654321;
     const mask = 0xffffffff;
     while (true) {

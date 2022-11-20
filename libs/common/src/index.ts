@@ -4,7 +4,7 @@ export * from './lib/rules/yaku';
 
 export * from './lib/types/hand';
 export * from './lib/types/points';
-export * from './lib/types/state';
+export * from './lib/types/win-state';
 export * from './lib/types/tile';
 export * from './lib/types/yaku';
 

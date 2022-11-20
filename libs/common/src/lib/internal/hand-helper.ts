@@ -2,7 +2,7 @@ import { Tile, TileKind, Wind } from '../types/tile';
 import { Mahjong, FinalMeld, FinalMeldKind } from '../types/hand';
 import { sortTiles, dummyBlankTile } from '../utils/tile';
 import { isDragon } from '../utils/tile-checks';
-import { WinState } from '../types/state';
+import { WinState } from '../types/win-state';
 
 function isClosedMeld(meld: FinalMeld) {
     return meld.kind === FinalMeldKind.ClosedSet
@@ -28,7 +28,6 @@ export class HandHelper {
 
         const pairMeld = !this.isSevenPairs && mahjong.melds.find(m => m.tiles.length === 2);
         this.pair = pairMeld ? {
-            id: pairMeld.tiles[0].id,
             rank: pairMeld.tiles[0].rank,
             kind: pairMeld.tiles[0].kind,
             length: pairMeld.tiles.length,
@@ -37,7 +36,6 @@ export class HandHelper {
             0: pairMeld.tiles[0],
             1: pairMeld.tiles[1],
         } : {
-            id: 0xFF,
             rank: 0,
             kind: TileKind.Unknown,
             length: 0,
@@ -56,7 +54,6 @@ export class HandHelper {
         const sets = mahjong.melds.filter(m => m.tiles.length > 2).map(m => {
             const tiles = m.tiles.slice().sort();
             return {
-                id: tiles[0].id,
                 rank: tiles[0].rank,
                 kind: tiles[0].kind,
                 length: tiles.length,
