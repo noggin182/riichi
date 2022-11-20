@@ -1,13 +1,13 @@
 {
-  "name": "@riichi/server-core",
+  "name": "@riichi/common",
   "version": "0.1.0",
-  "description": "Test server library for Riichi",
+  "description": "Core library for Riichi",
   "keywords": [
     "riichi"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/noggin182/riichi/libs/test-server"
+    "url": "https://github.com/noggin182/riichi/libs/common"
   },
   "author": "Matthew Gregory",
   "license": "MIT",
