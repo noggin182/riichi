@@ -1,0 +1,84 @@
+{
+  "name": "test-harness",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/test-harness/src",
+  "prefix": "rth",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/test-harness",
+        "index": "apps/test-harness/src/index.html",
+        "main": "apps/test-harness/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/test-harness/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/test-harness/src/favicon.ico",
+          "apps/test-harness/src/assets"
+        ],
+        "styles": ["apps/test-harness/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "test-harness:build:production"
+        },
+        "development": {
+          "browserTarget": "test-harness:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4230
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "test-harness:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/test-harness/**/*.ts",
+          "apps/test-harness/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
