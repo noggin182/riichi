@@ -34,7 +34,7 @@ export class WindInputComponent implements ControlValueAccessor {
         this.onChange = fn;
     }
 
-    registerOnTouched(fn: any): void {
+    registerOnTouched(fn: () => void): void {
         // Nada
     }
 

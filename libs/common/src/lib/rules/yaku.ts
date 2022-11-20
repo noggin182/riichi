@@ -8,7 +8,7 @@ export const YAKUMAN_HAN = -1;
 
 const extraIfConcealed = {
     'MEN' : {
-        name: ['Concealed', 'Menzin'],
+        name: ['Concealed', 'Menzin', 'Menzin'],
         description: 'Extra han for concealed',
         check: hand => !hand.isOpen
     } as ExtraHan

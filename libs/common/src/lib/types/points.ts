@@ -5,7 +5,7 @@ import { YakuDefinition, ExtraHan } from './yaku';
 
 export interface FuDefinition {
     readonly fu: number;
-    readonly name: [string, string];
+    readonly name: [string, string, string];
     readonly check: (hand: HandHelper) => boolean | readonly TileSet[];
     readonly blocksRounding?: boolean;
 }

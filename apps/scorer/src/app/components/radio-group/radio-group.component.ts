@@ -26,25 +26,24 @@ export class RadioGroupComponent implements ControlValueAccessor {
     value: number | undefined;
     id = ++id;
 
-    @Input()
-    disabled: boolean = false;
+    @Input() disabled = false;
     @HostBinding('attr.disabled')
     get attrDisabled() { return this.disabled || null; }
 
     @HostListener('focusout')
     private onTouched = () => { /* nothing by default, will be overriden */ }
-    private onChange  = (_: number) => { /* nothing by default, will be overriden */ };
+    private onChange: (value: number) => void = () => { /* nothing by default, will be overriden */ };
 
     writeValue(value: number): void {
         this.value = value;
         this.changeDetector.markForCheck();
     }
 
-    registerOnChange(fn: (value: number) => {}): void {
+    registerOnChange(fn: (value: number) => void): void {
         this.onChange = fn;
     }
 
-    registerOnTouched(fn: () => {}): void {
+    registerOnTouched(fn: () => void): void {
         this.onTouched = fn;
     }
 

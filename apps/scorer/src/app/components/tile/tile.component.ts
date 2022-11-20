@@ -13,8 +13,8 @@ export class TileComponent {
     @Input() size: 'normal' | 'small' | 'tiny' = 'normal';
     @Input() tile: Tile | undefined;
 
-    @Input() finalTile: boolean = false;
-    @Input() claimed: boolean = false;
+    @Input() finalTile = false;
+    @Input() claimed = false;
 
     @HostBinding('attr.data-rotated')
     get claimedAttribute() { return this.claimed || null; }

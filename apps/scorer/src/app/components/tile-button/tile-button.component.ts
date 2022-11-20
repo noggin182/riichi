@@ -2,7 +2,7 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { Tile } from '@riichi/common';
 
 @Component({
-  // tslint:disable-next-line: component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'button[scorer-tile-button]',
   exportAs: 'scorerTileButton',
   templateUrl: './tile-button.component.html',

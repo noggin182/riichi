@@ -26,7 +26,7 @@ export function countFu(hand: HandHelper, fuDefinitions: readonly FuDefinition[]
             counted.push({
                 definition: {
                     fu: 10 - digit,
-                    name: ['Round up', 'Round up'],
+                    name: ['Round up', 'Round up', 'Round up'],
                     check: () => true
                 },
                 meld: null
