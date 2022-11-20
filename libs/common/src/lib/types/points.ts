@@ -30,7 +30,7 @@ export interface PointsLimit {
 
 export interface PaymentInfo {
     readonly basePoints: number;
-    readonly limit: string;
+    readonly limit: string | undefined;
     readonly payments: readonly {
         readonly from: Wind;
         readonly ammount: number;

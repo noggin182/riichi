@@ -10,5 +10,5 @@ import {  Mahjong } from '@riichi/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MahjongComponent {
-    @Input() mahjong: Mahjong;
+    @Input() mahjong: Mahjong | undefined;
 }

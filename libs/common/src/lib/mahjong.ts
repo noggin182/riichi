@@ -90,7 +90,7 @@ export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind:
             throw new Error('unexpected number of tiles left in hand');
         }
 
-        const tile = remainingTiles.shift();
+        const tile = remainingTiles.shift()!;
         const tileName = getTileName(tile);
         if (isSuited(tile) && tile.rank <= 7) {
             const tile1 = remainingTiles.find(t => getTileName(t) === tileName + 1);

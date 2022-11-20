@@ -13,5 +13,5 @@ export class WaitsComponent {
     constructor(readonly state: State) {
     }
 
-    @Input() waits: {tile: Tile, result: ScoredHand}[];
+    @Input() waits: {tile: Tile, result: ScoredHand}[] | undefined;
 }

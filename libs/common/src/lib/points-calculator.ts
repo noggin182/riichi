@@ -41,9 +41,9 @@ export function calculatePayments(hand: HandHelper, han: number, fu: number, lim
     // TODO: special payment for feeding last pon for big dragons/winds
     const rawPoints = fu * 2 ** (han + 2);
 
-    let limitName = '';
+    let limitName: string | undefined = '';
     const limit = limits.find(l => l.check(han, rawPoints));
-    limitName = limit && limit.name;
+    limitName = limit?.name;
     const basePoints = limit ? limit.points : rawPoints;
     let payments: { from: Wind; ammount: number; }[] = [];
 

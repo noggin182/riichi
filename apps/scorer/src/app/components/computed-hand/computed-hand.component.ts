@@ -13,7 +13,7 @@ export class ComputedHandComponent {
 
     constructor(readonly state: State) { }
 
-    @Input() index: number;
-    @Input() scoredHand: ScoredHand;
+    @Input() index: number | undefined;
+    @Input() scoredHand: ScoredHand | undefined;
 
 }

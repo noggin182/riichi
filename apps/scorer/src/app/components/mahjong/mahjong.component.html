@@ -1,1 +1,3 @@
-<scorer-meld *ngFor="let meld of mahjong.melds" [meld]="meld" size="small"></scorer-meld>
+<ng-container *ngIf="mahjong">
+    <scorer-meld *ngFor="let meld of mahjong.melds" [meld]="meld" size="small"></scorer-meld>
+</ng-container>

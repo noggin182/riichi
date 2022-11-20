@@ -11,10 +11,10 @@ import { Tile, TileKind, Wind, Dragon } from '@riichi/common';
 export class TileComponent {
     @HostBinding('attr.data-size')
     @Input() size: 'normal' | 'small' | 'tiny' = 'normal';
-    @Input() tile: Tile;
+    @Input() tile: Tile | undefined;
 
-    @Input() finalTile: boolean;
-    @Input() claimed: boolean;
+    @Input() finalTile: boolean = false;
+    @Input() claimed: boolean = false;
 
     @HostBinding('attr.data-rotated')
     get claimedAttribute() { return this.claimed || null; }
@@ -22,12 +22,12 @@ export class TileComponent {
     @HostBinding('attr.data-final')
     get finalAttribute() { return this.finalTile || null; }
 
-    back: string;
-    front: string;
+    back: string | undefined;
+    front: string | undefined;
 
     @HostBinding('attr.data-tile')
     get tileName() {
-        switch (this.tile.kind) {
+        switch (this.tile?.kind) {
             case TileKind.Man: return 'Man' + this.tile.rank;
             case TileKind.Pin: return 'Pin' + this.tile.rank;
             case TileKind.Sou: return 'Sou' + this.tile.rank;

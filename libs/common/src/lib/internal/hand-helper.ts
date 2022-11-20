@@ -1,4 +1,4 @@
-import { Tile, TileKind } from '../types/tile';
+import { Tile, TileKind, Wind } from '../types/tile';
 import { Mahjong, FinalMeld, FinalMeldKind } from '../types/hand';
 import { sortTiles, dummyBlankTile } from '../utils/tile';
 import { isDragon } from '../utils/tile-checks';
@@ -20,7 +20,7 @@ export interface TileSet extends Tile {
 export class HandHelper {
     constructor(mahjong: Readonly<Mahjong>, readonly state: WinState) {
         this.finalTile = mahjong.finalTile;
-        this.allTiles = [].concat(...mahjong.melds.map(m => m.tiles)).sort(sortTiles);
+        this.allTiles = mahjong.melds.map(m => m.tiles).flat().sort(sortTiles);
         this.isSevenPairs = mahjong.melds.length === 7;
         this.isThirteenOrphans = mahjong.melds.length === 1 && mahjong.melds[0].tiles.length === 14;
         this.isOpen = mahjong.melds.some(m => !m.tiles.includes(mahjong.finalTile) && !isClosedMeld(m));
@@ -41,7 +41,13 @@ export class HandHelper {
             rank: 0,
             kind: TileKind.Unknown,
             length: 0,
-            meld: null,
+            meld: {
+                kind: FinalMeldKind.ClosedKan,
+                claimedTile: dummyBlankTile,
+                finalSet: false,
+                from: Wind.None,
+                tiles: []
+            },
             concealed: false
         };
 

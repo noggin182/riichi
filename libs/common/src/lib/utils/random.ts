@@ -1,4 +1,3 @@
-// tslint:disable: no-bitwise
 export function *randomNumberGenerator(seed?: number): Iterator<number> {
     let w = seed === undefined ? new Date().getTime() : seed;
     let x = 987654321;
@@ -10,7 +9,7 @@ export function *randomNumberGenerator(seed?: number): Iterator<number> {
     }
 }
 
-export function *sequentialNumberGenerator(seed: number = 0): Iterator<number> {
+export function *sequentialNumberGenerator(seed = 0): Iterator<number> {
     while (true) {
         yield seed++;
     }

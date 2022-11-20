@@ -13,7 +13,7 @@ export interface OpenMeld {
     readonly kind: MeldKind;
     readonly from: Wind;
     readonly tiles: readonly Tile[];
-    readonly claimedTile: Tile;
+    readonly claimedTile: Tile | null;
 }
 
 export interface Hand {

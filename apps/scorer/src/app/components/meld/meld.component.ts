@@ -1,5 +1,5 @@
 import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { FinalMeld } from '@riichi/common';
+import { FinalMeld, OpenMeld } from '@riichi/common';
 import { State } from '../../state';
 
 @Component({
@@ -11,8 +11,12 @@ import { State } from '../../state';
 })
 export class MeldComponent {
     constructor(readonly state: State) {
-
     }
-    @Input() meld: FinalMeld;
+
+    @Input() meld: OpenMeld | FinalMeld | undefined;
     @Input() size: 'normal' | 'small' | 'tiny' = 'normal';
+
+    protected get isfinalSet() {
+        return !!(this.meld && 'finalSet' in this.meld && this.meld.finalSet);
+    }
 }

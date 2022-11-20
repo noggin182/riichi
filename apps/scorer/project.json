@@ -1,0 +1,75 @@
+{
+  "name": "scorer",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/scorer/src",
+  "prefix": "riichi",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/scorer",
+        "index": "apps/scorer/src/index.html",
+        "main": "apps/scorer/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/scorer/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/scorer/src/favicon.ico", "apps/scorer/src/assets"],
+        "styles": ["apps/scorer/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "scorer:build:production"
+        },
+        "development": {
+          "browserTarget": "scorer:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "scorer:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/scorer/**/*.ts", "apps/scorer/**/*.html"]
+      }
+    }
+  },
+  "tags": []
+}

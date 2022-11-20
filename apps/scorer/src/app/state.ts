@@ -1,5 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Hand, Tile, handFromNotation, getPossibleMahjongs, ScoredHand, WinState, getWinningScore, checkForMahjong, Wind, RelativeSeat, relativeSeatToWind, MeldKind } from '@riichi/common';
+import {
+    Hand,
+    Tile,
+    handFromNotation,
+    getPossibleMahjongs,
+    ScoredHand,
+    WinState,
+    getWinningScore,
+    checkForMahjong,
+    Wind,
+    RelativeSeat,
+    relativeSeatToWind,
+    MeldKind
+} from '@riichi/common';
 
 export enum AppendStyle {
     Concealed,
@@ -16,9 +29,9 @@ export class State {
     blackTiles = false;
     appendStyle = AppendStyle.Concealed;
     fromSeat = RelativeSeat.Left;
-    possibleWaits: {tile: Tile, result: ScoredHand}[];
-    winningTile: Tile;
-    winningResults: ScoredHand[];
+    possibleWaits: {tile: Tile, result: ScoredHand}[] | undefined;
+    winningTile: Tile | undefined;
+    winningResults: ScoredHand[]| undefined;
     tileId = 1;
 
     roundInfo: {-readonly[P in keyof WinState]: WinState[P]} = {

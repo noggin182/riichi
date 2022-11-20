@@ -40,16 +40,18 @@ export function handFromNotation(str: string, forWind: Wind = Wind.East, deck?: 
              .replace(/\s/g, '')   // remove all whitespace
              .replace(/['"]/g, '`'); // convert all chi markers to backtick
 
-    if (!validHandExpression.test(str)) {
-        throw new HandNotationError('Invalid hand notation');
-    }
-
     const hand: Hand = {
         concealedTiles: [],
         melds: []
     };
 
-    for (const s of str.match(/[1-9`x]+[mspz]/g)) {
+    const matches = validHandExpression.test(str) && str.match(/[1-9`x]+[mspz]/g);
+
+    if (!matches) {
+        throw new HandNotationError('Invalid hand notation');
+    }
+
+    for (const s of matches) {
         const kind = kindFromLetter(s.charAt(s.length - 1));
 
         if (s.charAt(1) === 'x') {
@@ -69,7 +71,7 @@ export function handFromNotation(str: string, forWind: Wind = Wind.East, deck?: 
             continue;
         }
 
-        const values = s.match(/[1-9x]`?/g).map(t => ({
+        const values = s.match(/[1-9x]`?/g)!.map(t => ({
             rank: parseInt(t === 'x' ? s.charAt(0) : t, 10),
             claimed: t.length > 1
         }));

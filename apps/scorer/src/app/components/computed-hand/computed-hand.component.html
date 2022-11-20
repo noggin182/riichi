@@ -1,42 +1,44 @@
-<h3>Hand {{index + 1}}</h3>
+<ng-container *ngIf="index !== undefined && scoredHand">
+    <h3>Hand {{index + 1}}</h3>
 
-<scorer-mahjong [mahjong]="scoredHand.mahjong"></scorer-mahjong>
+    <scorer-mahjong [mahjong]="scoredHand.mahjong"></scorer-mahjong>
 
-<div class="scorer-computed-hand__yaku">
-    <h4>Yaku <span *ngIf="scoredHand.totalHan > 0">{{scoredHand.totalHan}} Han</span></h4>
-    <ul>
-        <ng-container *ngFor="let y of scoredHand.yaku">
-            <li>
-                {{ y.definition | name }}
-                <span *ngIf="scoredHand.totalHan > 0">{{ y.han }} Han</span>
-            </li>
-            <li *ngFor="let extra of y.extras" class="scorer-computed-hand__extra">
-                {{ extra | name }}
-                <span>+1 Han</span>
-            </li>
-        </ng-container>
-    </ul>
-</div>
-
-<div class="scorer-computed-hand__fu">
-    <h4>Fu <span>{{scoredHand.totalFu}} Fu</span></h4>
-    <ul>
-        <li *ngFor="let fu of scoredHand.fu">
-            {{ fu.definition | name }}
-            <scorer-meld *ngIf="fu.meld" [meld]="fu.meld" size="tiny"></scorer-meld>
-            <span>{{ fu.definition.fu }} Fu</span>
-        </li>
-    </ul>
-</div>
-
-<hr />
-
-<div class="scorer-computed-hand__limit">
-    {{scoredHand.payment.limit}}
-</div>
-
-<div class="scorer-computed-hand__points">
-    <div *ngFor="let p of scoredHand.payment.payments">
-        {{p.ammount}} from {{p.from | wind}}
+    <div class="scorer-computed-hand__yaku">
+        <h4>Yaku <span *ngIf="scoredHand.totalHan > 0">{{scoredHand.totalHan}} Han</span></h4>
+        <ul>
+            <ng-container *ngFor="let y of scoredHand.yaku">
+                <li>
+                    {{ y.definition | name }}
+                    <span *ngIf="scoredHand.totalHan > 0">{{ y.han }} Han</span>
+                </li>
+                <li *ngFor="let extra of y.extras" class="scorer-computed-hand__extra">
+                    {{ extra | name }}
+                    <span>+1 Han</span>
+                </li>
+            </ng-container>
+        </ul>
     </div>
-</div>
+
+    <div class="scorer-computed-hand__fu">
+        <h4>Fu <span>{{scoredHand.totalFu}} Fu</span></h4>
+        <ul>
+            <li *ngFor="let fu of scoredHand.fu">
+                {{ fu.definition | name }}
+                <scorer-meld *ngIf="fu.meld" [meld]="fu.meld" size="tiny"></scorer-meld>
+                <span>{{ fu.definition.fu }} Fu</span>
+            </li>
+        </ul>
+    </div>
+
+    <hr />
+
+    <div class="scorer-computed-hand__limit">
+        {{scoredHand.payment.limit}}
+    </div>
+
+    <div class="scorer-computed-hand__points">
+        <div *ngFor="let p of scoredHand.payment.payments">
+            {{p.ammount}} from {{p.from | wind}}
+        </div>
+    </div>
+</ng-container>

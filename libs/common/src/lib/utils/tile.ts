@@ -48,11 +48,11 @@ export function getTileName(tile: Tile): TileName {
 
 export function createNewDeck(rng?: Iterator<number>): Tile[] {
     const deck = [...createDummySetOfTiles(), ...createDummySetOfTiles(), ...createDummySetOfTiles(), ...createDummySetOfTiles()];
-    if (!rng) {
-        rng = randomNumberGenerator();
-    }
+
+    rng ??= randomNumberGenerator();
+
     deck.forEach((tile: {id: number}) => {
-        tile.id = rng.next().value;
+        tile.id = rng?.next().value;
     });
     deck.sort((t1, t2) => t1.id - t2.id);
     return deck;

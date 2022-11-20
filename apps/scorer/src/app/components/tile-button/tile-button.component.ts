@@ -10,5 +10,5 @@ import { Tile } from '@riichi/common';
   encapsulation: ViewEncapsulation.None
 })
 export class TileButtonComponent {
-  @Input() tile: Tile;
+  @Input() tile: Tile | undefined;
 }

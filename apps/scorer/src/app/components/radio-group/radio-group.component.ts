@@ -19,15 +19,15 @@ export class RadioGroupComponent implements ControlValueAccessor {
     constructor(private readonly changeDetector: ChangeDetectorRef) {
     }
 
-    @Input() ariaTitle: string;
-    @Input() name: string;
+    @Input() ariaTitle: string | undefined;
+    @Input() name: string | undefined;
 
-    @Input() options: {caption: string, value: number}[];
-    value: number;
+    @Input() options: {caption: string, value: number}[] | undefined;
+    value: number | undefined;
     id = ++id;
 
     @Input()
-    disabled: boolean;
+    disabled: boolean = false;
     @HostBinding('attr.disabled')
     get attrDisabled() { return this.disabled || null; }
 
@@ -53,8 +53,8 @@ export class RadioGroupComponent implements ControlValueAccessor {
         this.changeDetector.markForCheck();
     }
 
-    updateValue(event: {target: HTMLInputElement }) {
-        if (event.target.checked) {
+    updateValue(event: Event) {
+        if (event.target instanceof HTMLInputElement && event.target.checked) {
             this.value = +event.target.value;
             this.onChange(this.value);
         }

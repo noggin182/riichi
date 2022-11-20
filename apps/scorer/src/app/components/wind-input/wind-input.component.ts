@@ -21,10 +21,10 @@ export class WindInputComponent implements ControlValueAccessor {
         West:  Wind.West,
         North: Wind.North,
     };
-    value: Wind;
+    value: Wind | undefined;
     id = ++id;
 
-    private onChange: (value: Wind) => void;
+    private onChange: ((value: Wind) => void) | undefined ;
 
     writeValue(wind: Wind): void {
         this.value = wind;
@@ -42,8 +42,8 @@ export class WindInputComponent implements ControlValueAccessor {
         // Nada
     }
 
-    updateValue(event: {target: HTMLInputElement }) {
-        if (event.target.checked) {
+    updateValue(event: Event) {
+        if (event.target instanceof HTMLInputElement && event.target.checked) {
             this.value = +event.target.value as Wind;
             if (this.onChange) {
                 this.onChange(this.value);
