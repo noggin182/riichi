@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@riichi/common": ["libs/common/src/index.ts"]
+      "@riichi/common": ["libs/common/src/index.ts"],
+      "@riichi/server-core": ["libs/server-core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
