@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@riichi/common": ["libs/common/src/index.ts"],
-      "@riichi/server-core": ["libs/server-core/src/index.ts"]
+      "@riichi/server-core": ["libs/server-core/src/index.ts"],
+      "@riichi/test-server": ["libs/test-server/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
