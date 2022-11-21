@@ -3,9 +3,10 @@ export * from './lib/rules/points';
 export * from './lib/rules/yaku';
 
 export * from './lib/types/hand';
+export * from './lib/types/game-state';
 export * from './lib/types/points';
-export * from './lib/types/win-state';
 export * from './lib/types/tile';
+export * from './lib/types/win-state';
 export * from './lib/types/yaku';
 
 

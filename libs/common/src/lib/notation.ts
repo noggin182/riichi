@@ -137,9 +137,9 @@ function kindFromLetter(letter: string) {
 }
 
 function takeTile(deck: Tile[], kind: TileKind, rank: number) {
-    const index = deck.findIndex(t => t.kind === kind && t.rank === rank);
+    const index = deck.indexOf(`${kind}${rank}` as Tile);
     if (index === -1) {
-        throw new HandNotationError(`Deck does not contain all required tiles. Cannot find ${rank}[${kind}]`);
+        throw new HandNotationError(`Deck does not contain all required tiles. Cannot find ${kind}${rank}`);
     }
     return deck.splice(index, 1)[0];
 }

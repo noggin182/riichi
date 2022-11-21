@@ -53,21 +53,13 @@ export class State {
 
     hand: Hand = {concealedTiles: [], melds: []};
 
-    duplicateTile(tile: Tile) {
-        return {
-            id: this.tileId++,
-            kind: tile.kind,
-            rank: tile.rank
-        };
-    }
-
     appendTile(tile: Tile) {
         if (this.appendStyle === AppendStyle.Concealed) {
-            this.hand.concealedTiles.push(this.duplicateTile(tile));
+            this.hand.concealedTiles.push(tile);
         } else if (this.appendStyle === AppendStyle.Chi) {
             // TODO
         } else if (this.appendStyle === AppendStyle.ConcealedKan) {
-            const tiles = [this.duplicateTile(tile), this.duplicateTile(tile), this.duplicateTile(tile), this.duplicateTile(tile)];
+            const tiles = [tile, tile, tile, tile];
             this.hand.melds.push({
                 claimedTile: null,
                 from: this.roundInfo.seatWind,
@@ -75,9 +67,9 @@ export class State {
                 tiles: tiles
             });
         } else {
-            const tiles = [this.duplicateTile(tile), this.duplicateTile(tile), this.duplicateTile(tile)];
+            const tiles = [tile, tile, tile];
             if (this.appendStyle !== AppendStyle.Pon) {
-                tiles.push(this.duplicateTile(tile));
+                tiles.push(tile);
             }
             const turnedTile = this.fromSeat === RelativeSeat.Left  ? 0
                              : this.fromSeat === RelativeSeat.Right ? tiles.length - 1
@@ -120,7 +112,6 @@ export class State {
         return result2.payment.basePoints - result1.payment.basePoints
             || Math.abs(result2.totalHan) - Math.abs(result1.totalHan)
             || (result1.totalHan > 0 && result2.totalFu - result1.totalFu)
-            || result1.mahjong.finalTile.kind - result2.mahjong.finalTile.kind
-            || result1.mahjong.finalTile.rank - result2.mahjong.finalTile.rank;
+            || result1.mahjong.finalTile.localeCompare(result2.mahjong.finalTile);
     }
 }

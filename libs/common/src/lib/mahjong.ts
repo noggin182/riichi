@@ -1,4 +1,4 @@
-import { createDummySetOfTiles, sortTiles, getTileName } from './utils/tile';
+import { createDummySetOfTiles, tileKind, tileRank, tileValue } from './utils/tile';
 import { Mahjong, FinalMeld, FinalMeldKind, ReadonlyHand } from './types/hand';
 import { distinct, groupBy, exclude } from './utils/array';
 import { Tile, Wind } from './types/tile';
@@ -28,17 +28,17 @@ export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind:
 
     const selfDraw = seatWind === discardWind;
     const winningTile = hand.concealedTiles[hand.concealedTiles.length - 1];
-    const tiles = hand.concealedTiles.slice().sort(sortTiles);
+    const tiles = hand.concealedTiles.slice().sort();
     const melds = hand.melds.slice() as unknown as FinalMeld[];
 
     const mahjong: Mahjong[] = [];
 
-    const distinctNames = tiles.map(getTileName).filter(distinct);
-    const tilesGroupedByName = Array.from(groupBy(tiles, getTileName).values());
+    const distinctTiles = tiles.filter(distinct);
+    const tilesGroupedByName = Array.from(groupBy(tiles, t => t).values()); // TODO: review this
 
     if (!melds.length) {
         // manual check for 13 orphans
-        if (distinctNames.length === 13 && tiles.every(isTerminalOrHonor)) {
+        if (distinctTiles.length === 13 && tiles.every(isTerminalOrHonor)) {
             return [{melds: [formMeld(tiles, FinalMeldKind.Orphans)], finalTile: winningTile}];
         }
         // manual check for 7 pairs
@@ -91,10 +91,9 @@ export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind:
         }
 
         const tile = remainingTiles.shift()!;
-        const tileName = getTileName(tile);
-        if (isSuited(tile) && tile.rank <= 7) {
-            const tile1 = remainingTiles.find(t => t.kind === tile.kind && t.rank === tile.rank + 1);
-            const tile2 = remainingTiles.find(t => t.kind === tile.kind && t.rank === tile.rank + 2);
+        if (isSuited(tile) && tileValue(tile) <= 7) {
+            const tile1 = remainingTiles.find(t => tileKind(t) === tileKind(tile) && tileValue(t) === tileValue(tile) + 1);
+            const tile2 = remainingTiles.find(t => tileKind(t) === tileKind(tile) && tileValue(t) === tileValue(tile) + 2);
             if (tile1 && tile2) {
                 // make a chi
                 walk(exclude(remainingTiles, tile1, tile2),
@@ -103,8 +102,8 @@ export function checkForMahjong(hand: ReadonlyHand, seatWind: Wind, discardWind:
             }
         }
 
-        if (tileName === getTileName(remainingTiles[0]) && tileName === getTileName(remainingTiles[1])
-            && (!remainingTiles[2] || tileName !== getTileName(remainingTiles[2])) /* don't take a pon if there are 4, we already took the chi */) {
+        if (tile === remainingTiles[0] && tile === remainingTiles[1]
+            && (!remainingTiles[2] || tile !== remainingTiles[2]) /* don't take a pon if there are 4, we already took the chi */) {
             walk(remainingTiles.slice(2),
                 currentHand.concat(formMeld([tile, remainingTiles[0], remainingTiles[1]], FinalMeldKind.OpenPon)),
                 hands);
@@ -116,7 +115,6 @@ function sortMelds(winningTile: Tile) {
     return function (meldA: FinalMeld, meldB: FinalMeld) {
         return (meldA.tiles.includes(winningTile) ? 100 : 0) - (meldB.tiles.includes(winningTile) ? 100 : 0)
             || (meldA.kind - meldB.kind)
-            || (meldA.tiles[0].kind - meldB.tiles[0].kind)
-            || (meldA.tiles[0].rank - meldB.tiles[0].rank);
+            || (meldA.tiles[0].localeCompare(meldB.tiles[0]));
     };
 }

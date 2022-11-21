@@ -1,9 +1,19 @@
 // import * as utils from './tile-utils';
 // import { TileDef, TileSuit } from '@riichi/common';
 
-describe('Tile utils', () => {
-     it('should have at least one test', () => {
+import { TileKind } from "../types/tile";
+import { distinct } from "./array";
+import { createDummySetOfTiles, tileKind } from "./tile";
 
+describe('Tile utils', () => {
+     it('should create a set of tiles', () => {
+        const tiles = createDummySetOfTiles();
+        expect(tiles.length).toBe(9 + 9 + 9 + 4 + 3);
+        expect(tiles.filter(distinct).length).toBe(tiles.length);
+        expect(tiles.filter(t => tileKind(t) === TileKind.Man).length).toBe(9);
+        expect(tiles.filter(t => tileKind(t) === TileKind.Pin).length).toBe(9);
+        expect(tiles.filter(t => tileKind(t) === TileKind.Sou).length).toBe(9);
+        expect(tiles.filter(t => tileKind(t) === TileKind.Honor).length).toBe(4 + 3);
      });
 
 //     it('should translate tiles to unicode', () => {

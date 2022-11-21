@@ -1,46 +1,43 @@
-import { TileKind, TileName, Dragon, Wind, Tile, TileNames } from '../types/tile';
+import { TileKind, Dragon, Wind, Tile, Honor, TileRank } from '../types/tile';
 import { randomNumberGenerator } from './random';
-
-export const dummyBlankTile: Tile = {
-    kind: TileKind.Unknown,
-    rank: 0
-};
 
 export function createDummySetOfTiles(): Tile[] {
     return [
-        ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(rank => ({kind: TileKind.Man,   rank})),
-        ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(rank => ({kind: TileKind.Sou,   rank})),
-        ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(rank => ({kind: TileKind.Pin,   rank})),
-        ...[1, 2, 3, 4, 5, 6, 7      ].map(rank => ({kind: TileKind.Honor, rank}))
+        'm1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8', 'm9',
+        'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9',
+        's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9',
+        'z1', 'z2', 'z3', 'z4',
+        'z5', 'z6', 'z7'
     ];
 }
 
-export function buildTileName(kind: TileKind, rank: number): TileName {
-    return getTileName({kind, rank});
+export function tileKind(tile: Tile): TileKind {
+    return tile[0] as TileKind;
 }
 
-export function getTileName(tile: Tile): TileName {
-    return TileNames[tile.kind][tile.rank].toString() as TileName;
+export function tileRank(tile: Tile): TileRank {
+    return tile[1] as '-';
 }
 
-export function getDoraNameFromIndicator(indicator: Tile) {
-    if (indicator.kind === TileKind.Honor) {
-        switch (indicator.rank) {
-            case Wind.East:  return buildTileName(TileKind.Honor, Wind.South);
-            case Wind.South: return buildTileName(TileKind.Honor, Wind.West);
-            case Wind.West:  return buildTileName(TileKind.Honor, Wind.North);
-            case Wind.North: return buildTileName(TileKind.Honor, Wind.East);
-            case Dragon.Haku:  return buildTileName(TileKind.Honor, Dragon.Hatsu);
-            case Dragon.Hatsu: return buildTileName(TileKind.Honor, Dragon.Chun);
-            case Dragon.Chun:  return buildTileName(TileKind.Honor, Dragon.Haku);
+export function tileValue(tile: Tile): number {
+    return tile === '--' ? 0 : +tile[1];
+}
+
+export function getDoraFromIndicator(indicator: Tile): Tile {
+    if (indicator === '--') return indicator;
+    if (indicator[0] === TileKind.Honor) {
+        switch (indicator[1]) {
+            case Wind.East:    return `${TileKind.Honor}${Wind.South}`;
+            case Wind.South:   return `${TileKind.Honor}${Wind.West}`;
+            case Wind.West:    return `${TileKind.Honor}${Wind.North}`;
+            case Wind.North:   return `${TileKind.Honor}${Wind.East}`;
+            case Dragon.Haku:  return `${TileKind.Honor}${Dragon.Hatsu}`;
+            case Dragon.Hatsu: return `${TileKind.Honor}${Dragon.Chun}`;
+            case Dragon.Chun:  return `${TileKind.Honor}${Dragon.Haku}`;
         }
     }
 
-    return buildTileName(indicator.kind, indicator.rank % 9 + 1);
-}
-
-export function sortTiles(tileA: Tile, tileB: Tile) {
-    return tileA.kind - tileB.kind || tileA.rank - tileB.rank;
+    return indicator[0] + (+indicator[1] % 9 + 1) as Tile;
 }
 
 export function createNewDeck(rng?: Iterator<number>): Tile[] {
@@ -55,7 +52,7 @@ export function createNewDeck(rng?: Iterator<number>): Tile[] {
 }
 
 export function allSuitsPresent(tiles: readonly Tile[]) {
-    const presentSuits = tiles.map(t => t.kind);
+    const presentSuits = tiles.map(t => t[0]);
     return [TileKind.Man, TileKind.Pin, TileKind.Sou].every(suit => presentSuits.includes(suit));
 }
 

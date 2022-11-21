@@ -3,7 +3,16 @@ export function distinct<T>(item: T, index: number, array: T[]) {
 }
 
 export function exclude<T>(items: T[], ...excluded: T[]) {
-    return items.filter(item => !excluded.includes(item));
+    // TODO: improve this
+    // We can no longer do this by reference
+    items = items.slice();
+    for (const ex of excluded) {
+        const index = items.indexOf(ex);
+        if (index >= 0) {
+            items.splice(index, 1);
+        }
+    }
+    return items;
 }
 
 export function groupBy<T, TKey>(items: readonly T[], delegate: (item: T) => TKey): Map<TKey, readonly T[]> {

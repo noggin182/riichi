@@ -8,5 +8,5 @@ export const enum RelativeSeat {
 }
 
 export function relativeSeatToWind(playerWind: Wind, relative: RelativeSeat): Wind {
-    return (((playerWind - 1) + relative) % 4) + 1;
+    return `${(((+playerWind - 1) + (+relative)) % 4) + 1}` as Wind;
 }

@@ -1,8 +1,8 @@
-import { Tile, TileKind, Wind } from '../types/tile';
+import { Tile, TileKind, TileRank, Wind } from '../types/tile';
 import { Mahjong, FinalMeld, FinalMeldKind } from '../types/hand';
-import { sortTiles, dummyBlankTile } from '../utils/tile';
 import { isDragon } from '../utils/tile-checks';
 import { WinState } from '../types/win-state';
+import { tileKind, tileRank, tileValue } from '../utils/tile';
 
 function isClosedMeld(meld: FinalMeld) {
     return meld.kind === FinalMeldKind.ClosedSet
@@ -10,8 +10,10 @@ function isClosedMeld(meld: FinalMeld) {
         || meld.kind === FinalMeldKind.ClosedPair;
 }
 
-export interface TileSet extends Tile {
+export interface TileSet {
     [index: number]: Tile;
+    readonly rank: TileRank;
+    readonly kind: TileKind;
     readonly meld: FinalMeld;
     readonly length: number;
     readonly concealed: boolean;
@@ -20,7 +22,7 @@ export interface TileSet extends Tile {
 export class HandHelper {
     constructor(mahjong: Readonly<Mahjong>, readonly state: WinState) {
         this.finalTile = mahjong.finalTile;
-        this.allTiles = mahjong.melds.map(m => m.tiles).flat().sort(sortTiles);
+        this.allTiles = mahjong.melds.map(m => m.tiles).flat().sort();
         this.isSevenPairs = mahjong.melds.length === 7;
         this.isThirteenOrphans = mahjong.melds.length === 1 && mahjong.melds[0].tiles.length === 14;
         this.isOpen = mahjong.melds.some(m => !m.tiles.includes(mahjong.finalTile) && !isClosedMeld(m));
@@ -28,20 +30,20 @@ export class HandHelper {
 
         const pairMeld = !this.isSevenPairs && mahjong.melds.find(m => m.tiles.length === 2);
         this.pair = pairMeld ? {
-            rank: pairMeld.tiles[0].rank,
-            kind: pairMeld.tiles[0].kind,
+            rank: tileRank(pairMeld.tiles[0]),
+            kind: tileKind(pairMeld.tiles[0]),
             length: pairMeld.tiles.length,
             meld: pairMeld,
             concealed: isClosedMeld(pairMeld),
             0: pairMeld.tiles[0],
             1: pairMeld.tiles[1],
         } : {
-            rank: 0,
+            rank: '-',
             kind: TileKind.Unknown,
             length: 0,
             meld: {
                 kind: FinalMeldKind.ClosedKan,
-                claimedTile: dummyBlankTile,
+                claimedTile: '--',
                 finalSet: false,
                 from: Wind.None,
                 tiles: []
@@ -49,13 +51,13 @@ export class HandHelper {
             concealed: false
         };
 
-        this.valuelessPair = !isDragon(this.pair) && !this.isSeatWind(this.pair) && !this.isPrevalentWind(this.pair);
+        this.valuelessPair = !isDragon(this.pair[0]) && !this.isSeatWind(this.pair[0]) && !this.isPrevalentWind(this.pair[0]);
 
         const sets = mahjong.melds.filter(m => m.tiles.length > 2).map(m => {
             const tiles = m.tiles.slice().sort();
             return {
-                rank: tiles[0].rank,
-                kind: tiles[0].kind,
+                rank: tileRank(tiles[0]),
+                kind: tileKind(tiles[0]),
                 length: tiles.length,
                 meld: m,
                 concealed: isClosedMeld(m),
@@ -66,13 +68,13 @@ export class HandHelper {
             };
         });
         this.sets = sets;
-        this.chis = sets.filter(s => s[0].rank !== s[1].rank);
-        this.pons = sets.filter(s => s[0].rank === s[1].rank);
+        this.chis = sets.filter(s => s[0] !== s[1]);
+        this.pons = sets.filter(s => s[0] === s[1]);
 
         this.isPinfu = !this.isOpen
                     && !this.pons.length
-                    &&  this.chis.some(s => (s[0] === mahjong.finalTile && s[0].rank !== 7)
-                                         || (s[2] === mahjong.finalTile && s[2].rank !== 3))
+                    &&  this.chis.some(s => (s[0] === mahjong.finalTile && tileValue(s[0]) !== 7)
+                                         || (s[2] === mahjong.finalTile && tileValue(s[2]) !== 3))
                     &&  this.valuelessPair;
     }
 
@@ -92,11 +94,11 @@ export class HandHelper {
 
     // ======== helper functions ========
     isPrevalentWind = (tile: Tile) => {
-        return tile.kind === TileKind.Honor && tile.rank === this.state.prevalentWind;
+        return tileKind(tile) === TileKind.Honor && tileRank(tile) === this.state.prevalentWind;
     }
 
     isSeatWind = (tile: Tile) => {
-        return tile.kind === TileKind.Honor && tile.rank === this.state.seatWind;
+        return tileKind(tile) === TileKind.Honor && tileRank(tile) === this.state.seatWind;
     }
 
 

@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy, HostBinding, ViewEncapsulation } from '@angular/core';
-import { Tile, TileKind, Wind, Dragon } from '@riichi/common';
+import { Tile, TileKind, Wind, Dragon, tileRank, tileKind } from '@riichi/common';
 
 @Component({
     selector: 'scorer-tile',
@@ -27,19 +27,21 @@ export class TileComponent {
 
     @HostBinding('attr.data-tile')
     get tileName() {
-        switch (this.tile?.kind) {
-            case TileKind.Man: return 'Man' + this.tile.rank;
-            case TileKind.Pin: return 'Pin' + this.tile.rank;
-            case TileKind.Sou: return 'Sou' + this.tile.rank;
-            case TileKind.Honor: {
-                switch (this.tile.rank) {
-                    case Wind.East:  return 'Ton';
-                    case Wind.South: return 'Nan';
-                    case Wind.West:  return 'Shaa';
-                    case Wind.North: return 'Pei';
-                    case Dragon.Chun:  return 'Chun';
-                    case Dragon.Haku:  return 'Haku';
-                    case Dragon.Hatsu: return 'Hatsu';
+        if (this.tile) {
+            switch (tileKind(this.tile)) {
+                case TileKind.Man: return 'Man' + tileRank(this.tile);
+                case TileKind.Pin: return 'Pin' + tileRank(this.tile);
+                case TileKind.Sou: return 'Sou' + tileRank(this.tile);
+                case TileKind.Honor: {
+                    switch (tileRank(this.tile)) {
+                        case Wind.East:  return 'Ton';
+                        case Wind.South: return 'Nan';
+                        case Wind.West:  return 'Shaa';
+                        case Wind.North: return 'Pei';
+                        case Dragon.Chun:  return 'Chun';
+                        case Dragon.Haku:  return 'Haku';
+                        case Dragon.Hatsu: return 'Hatsu';
+                    }
                 }
             }
         }

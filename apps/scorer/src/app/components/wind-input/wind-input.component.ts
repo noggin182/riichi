@@ -44,7 +44,7 @@ export class WindInputComponent implements ControlValueAccessor {
 
     updateValue(event: Event) {
         if (event.target instanceof HTMLInputElement && event.target.checked) {
-            this.value = +event.target.value as Wind;
+            this.value = event.target.value as Wind;
             if (this.onChange) {
                 this.onChange(this.value);
             }
