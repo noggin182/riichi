@@ -90,24 +90,24 @@ export const defaultFuDefinitions: FuDefinition[] = [
     {
         fu: 2,
         name: ['Pair of seated winds', 'Toitsu', 'Toitsu'],
-        check: hand => !hand.isSevenPairs && hand.isSeatWind(hand.pair[0]) && [hand.pair]
+        check: hand => !!hand.pair && hand.isSeatWind(hand.pair[0]) && [hand.pair]
     },
     {
         fu: 2,
         name: ['Pair of prevailing winds', 'Toitsu', 'Toitsu'],
-        check: hand => !hand.isSevenPairs && hand.isPrevalentWind(hand.pair[0]) && [hand.pair]
+        check: hand => !!hand.pair && hand.isPrevalentWind(hand.pair[0]) && [hand.pair]
     },
     {
         fu: 2,
         name: ['Pair of dragons', 'Toitsu', 'Toitsu'],
-        check: hand => !hand.isSevenPairs && isDragon(hand.pair[0]) && [hand.pair]
+        check: hand => !!hand.pair && isDragon(hand.pair[0]) && [hand.pair]
     },
 
     // ============ Waits =============
     {
         fu: 2,
         name: ['Pair wait', 'Tanki-machi', 'Tanki-machi'],
-        check: hand => !hand.isSevenPairs && hand.pair.meld.tiles.includes(hand.finalTile) && [hand.pair]
+        check: hand => !!hand.pair && hand.pair.meld.tiles.includes(hand.finalTile) && [hand.pair]
     },
     {
         fu: 2,

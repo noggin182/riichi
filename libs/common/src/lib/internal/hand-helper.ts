@@ -1,4 +1,4 @@
-import { Tile, TileKind, TileRank, Wind } from '../types/tile';
+import { Tile, TileKind, TileRank } from '../types/tile';
 import { Mahjong, FinalMeld, FinalMeldKind } from '../types/hand';
 import { isDragon } from '../utils/tile-checks';
 import { WinState } from '../types/win-state';
@@ -29,29 +29,19 @@ export class HandHelper {
         this.selfDrawn = state.winningTileFromWind === state.seatWind;
 
         const pairMeld = !this.isSevenPairs && mahjong.melds.find(m => m.tiles.length === 2);
-        this.pair = pairMeld ? {
-            rank: tileRank(pairMeld.tiles[0]),
-            kind: tileKind(pairMeld.tiles[0]),
-            length: pairMeld.tiles.length,
-            meld: pairMeld,
-            concealed: isClosedMeld(pairMeld),
-            0: pairMeld.tiles[0],
-            1: pairMeld.tiles[1],
-        } : {
-            rank: '-',
-            kind: TileKind.Unknown,
-            length: 0,
-            meld: {
-                kind: FinalMeldKind.ClosedKan,
-                claimedTile: '--',
-                finalSet: false,
-                from: Wind.None,
-                tiles: []
-            },
-            concealed: false
-        };
+        if (pairMeld) {
+            this.pair = {
+                rank: tileRank(pairMeld.tiles[0]),
+                kind: tileKind(pairMeld.tiles[0]),
+                length: pairMeld.tiles.length,
+                meld: pairMeld,
+                concealed: isClosedMeld(pairMeld),
+                0: pairMeld.tiles[0],
+                1: pairMeld.tiles[1],
+            };
+        }
 
-        this.valuelessPair = !isDragon(this.pair[0]) && !this.isSeatWind(this.pair[0]) && !this.isPrevalentWind(this.pair[0]);
+        this.valuelessPair = !!this.pair && !isDragon(this.pair[0]) && !this.isSeatWind(this.pair[0]) && !this.isPrevalentWind(this.pair[0]);
 
         const sets = mahjong.melds.filter(m => m.tiles.length > 2).map(m => {
             const tiles = m.tiles.slice().sort();
@@ -84,7 +74,7 @@ export class HandHelper {
     readonly isOpen: boolean;
     readonly selfDrawn: boolean;
     readonly isPinfu: boolean;
-    readonly pair: TileSet;
+    readonly pair: TileSet | undefined;
     readonly valuelessPair: boolean;
     readonly finalTile: Tile;
 

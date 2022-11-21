@@ -1,7 +1,7 @@
 import { ExtraHan, YakuCollection } from '../types/yaku';
-import { getDoraFromIndicator, allSuitsPresent, tileRank, tileValue, tileKind } from '../utils/tile';
+import { getDoraFromIndicator, allSuitsPresent, tileRank, tileKind } from '../utils/tile';
 import { distinct } from '../utils/array';
-import { Wind, TileName, TileKind } from '../types/tile';
+import { Wind, TileKind, Dragon } from '../types/tile';
 import { areSimilarTiles, isSimple, isDragon, isHonor, isTerminalOrHonor, isTerminal, isSuited, isWind } from '../utils/tile-checks';
 
 export const YAKUMAN_HAN = -1;
@@ -108,7 +108,7 @@ export const defaultYakuCollection: YakuCollection = {
         check: hand => hand.chis.length
                     && hand.allTiles.some(isHonor) // sets containing terminals but no honors is Junchan
                     && hand.sets.every(s => isTerminalOrHonor(s[0]) || isTerminal(s[s.length - 1]))
-                    && isTerminalOrHonor(hand.pair[0]),
+                    && !!hand.pair && isTerminalOrHonor(hand.pair[0]),
         extras: extraIfConcealed
     },
     'RIN': {
@@ -193,7 +193,7 @@ export const defaultYakuCollection: YakuCollection = {
         name: ['Little three dragons', 'Shousangen', '小三元'],
         description: 'Two triplets or quads of dragons, plus a pair of dragons',
         canBeOpen: true,
-        check: hand => isDragon(hand.pair[0])
+        check: hand => !!hand.pair && isDragon(hand.pair[0])
                     && hand.pons.filter(p => isDragon(p[0])).length === 2
     },
     'HRO': {
@@ -210,7 +210,7 @@ export const defaultYakuCollection: YakuCollection = {
         canBeOpen: true,
         check: hand => hand.chis.length
                     && hand.allTiles.every(isSuited) // anything with an honour is Chanta
-                    && isTerminal(hand.pair[0])
+                    && !!hand.pair && isTerminal(hand.pair[0])
                     && hand.sets.every(s => isTerminal(s[0]) || isTerminal(s[2])),
         extras: extraIfConcealed
     },
@@ -296,7 +296,7 @@ export const defaultYakuCollection: YakuCollection = {
         name: ['All green', 'Ryuuiisou', '緑一色'],
         description: 'Hand of only green tiles: 2, 3, 4, 6, 8 of bamboo and green dragon',
         canBeOpen: true,
-        check: hand => hand.allTiles.every(t => t === TileName.Hatsu || (tileKind(t) === TileKind.Sou && '23468'.includes(tileRank(t))))
+        check: hand => hand.allTiles.every(t => t === `${TileKind.Honor}${Dragon.Hatsu}` || (tileKind(t) === TileKind.Sou && '23468'.includes(tileRank(t))))
     },
     'CHR': {
         han: YAKUMAN_HAN,
@@ -325,7 +325,7 @@ export const defaultYakuCollection: YakuCollection = {
         description: 'Three triplets or quads of winds and a pair of winds',
         canBeOpen: true,
         check: hand => hand.pons.filter(p => isWind(p[0])).length === 3
-                    && isWind(hand.pair[0])
+                    && !!hand.pair && isWind(hand.pair[0])
     },
     'DSS': {
         han: YAKUMAN_HAN,

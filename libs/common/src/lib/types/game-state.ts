@@ -1,8 +1,11 @@
-import { Tile, TileIndex, Wind } from "./tile";
+import { Tile, Wind } from "./tile";
+
+export type TileIndex = number;
+export type DeckTile = Tile | '--';
 
 export interface GameState {
     prevelantWind: Wind,
-    deck: Tile[];
+    deck: DeckTile[];
     players: Record<Wind, {
         name: string,
         id: string,

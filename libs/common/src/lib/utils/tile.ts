@@ -1,4 +1,4 @@
-import { TileKind, Dragon, Wind, Tile, Honor, TileRank } from '../types/tile';
+import { TileKind, Dragon, Wind, Tile, TileRank } from '../types/tile';
 import { randomNumberGenerator } from './random';
 
 export function createDummySetOfTiles(): Tile[] {
@@ -16,15 +16,14 @@ export function tileKind(tile: Tile): TileKind {
 }
 
 export function tileRank(tile: Tile): TileRank {
-    return tile[1] as '-';
+    return tile[1] as TileRank;
 }
 
 export function tileValue(tile: Tile): number {
-    return tile === '--' ? 0 : +tile[1];
+    return +tile[1];
 }
 
 export function getDoraFromIndicator(indicator: Tile): Tile {
-    if (indicator === '--') return indicator;
     if (indicator[0] === TileKind.Honor) {
         switch (indicator[1]) {
             case Wind.East:    return `${TileKind.Honor}${Wind.South}`;

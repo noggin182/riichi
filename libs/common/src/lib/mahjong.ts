@@ -1,11 +1,11 @@
-import { createDummySetOfTiles, tileKind, tileRank, tileValue } from './utils/tile';
+import { createDummySetOfTiles, tileKind, tileValue } from './utils/tile';
 import { Mahjong, FinalMeld, FinalMeldKind, ReadonlyHand } from './types/hand';
 import { distinct, groupBy, exclude } from './utils/array';
 import { Tile, Wind } from './types/tile';
 import { isTerminalOrHonor, isSuited } from './utils/tile-checks';
 
 export function calculateWaits(hand: ReadonlyHand) {
-    return getPossibleMahjongs(hand, Wind.None).map(result => result.tile);
+    return getPossibleMahjongs(hand, Wind.East).map(result => result.tile);
 }
 
 export function getPossibleMahjongs(hand: ReadonlyHand, seatWind: Wind) {

@@ -1,6 +1,6 @@
 import { handFromNotation } from './notation';
 import { checkForMahjong, calculateWaits } from './mahjong';
-import { Wind, TileName } from './types/tile';
+import { Wind } from './types/tile';
 
 describe('Mahjong detector', () => {
 
@@ -10,7 +10,7 @@ describe('Mahjong detector', () => {
 
      it('should calculate pair wait with open hand', () => {
          const hand = handFromNotation(`2p 1'23p 1'23m 1'23s 111z `);
-         expect(calculateWaits(hand)).toEqual([TileName.Pin2]);
+         expect(calculateWaits(hand)).toEqual(['p2']);
      });
 
      it('should calculate 8 tile waits', () => {
