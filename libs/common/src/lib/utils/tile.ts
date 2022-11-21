@@ -70,7 +70,7 @@ export function tileToUnicode(tile: Tile | null | '--') {
                 }
         }
     }
-    return String.fromCodePoint(0x1F02B);
+    return String.fromCodePoint(0x1F3B4); //String.fromCodePoint(0x1F02B);
 }
 
 // export function handToUnicode(tiles: TileDef[]) {

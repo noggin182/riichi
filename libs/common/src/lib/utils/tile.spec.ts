@@ -14,8 +14,10 @@ describe('Tile utils', () => {
      });
 
     it('should translate tiles to unicode', () => {
-        expect(tileToUnicode(null)).toMatch('🀫');
-        expect(tileToUnicode('--')).toMatch('🀫');
+        //expect(tileToUnicode(null)).toMatch('🀫');
+        //expect(tileToUnicode('--')).toMatch('🀫');
+        expect(tileToUnicode(null)).toMatch('🎴');
+        expect(tileToUnicode('--')).toMatch('🎴');
 
         expect(tileToUnicode(`${TileKind.Honor}${Wind.East}`)).toMatch('🀀');
         expect(tileToUnicode(`${TileKind.Honor}${Wind.South}`)).toMatch('🀁');
