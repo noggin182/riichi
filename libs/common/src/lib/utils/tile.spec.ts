@@ -1,9 +1,6 @@
-// import * as utils from './tile-utils';
-// import { TileDef, TileSuit } from '@riichi/common';
-
-import { TileKind } from "../types/tile";
+import { Dragon, TileKind, Wind } from "../types/tile";
 import { distinct } from "./array";
-import { createDummySetOfTiles, tileKind } from "./tile";
+import { createDummySetOfTiles, tileKind, tileToUnicode } from "./tile";
 
 describe('Tile utils', () => {
      it('should create a set of tiles', () => {
@@ -16,44 +13,45 @@ describe('Tile utils', () => {
         expect(tiles.filter(t => tileKind(t) === TileKind.Honor).length).toBe(4 + 3);
      });
 
-//     it('should translate tiles to unicode', () => {
-//         expect(utils.tileToUnicode(TileDef.Blank)).toMatch('🀫');
+    it('should translate tiles to unicode', () => {
+        expect(tileToUnicode(null)).toMatch('🀫');
+        expect(tileToUnicode('--')).toMatch('🀫');
 
-//         expect(utils.tileToUnicode(TileDef.Ton)).toMatch('🀀');
-//         expect(utils.tileToUnicode(TileDef.Nan)).toMatch('🀁');
-//         expect(utils.tileToUnicode(TileDef.Shaa)).toMatch('🀂');
-//         expect(utils.tileToUnicode(TileDef.Pei)).toMatch('🀃');
-//         expect(utils.tileToUnicode(TileDef.Chun)).toMatch('🀄');
-//         expect(utils.tileToUnicode(TileDef.Hatsu)).toMatch('🀅');
-//         expect(utils.tileToUnicode(TileDef.Haku)).toMatch('🀆');
-//         expect(utils.tileToUnicode(TileDef.Man1)).toMatch('🀇');
-//         expect(utils.tileToUnicode(TileDef.Man2)).toMatch('🀈');
-//         expect(utils.tileToUnicode(TileDef.Man3)).toMatch('🀉');
-//         expect(utils.tileToUnicode(TileDef.Man4)).toMatch('🀊');
-//         expect(utils.tileToUnicode(TileDef.Man5)).toMatch('🀋');
-//         expect(utils.tileToUnicode(TileDef.Man6)).toMatch('🀌');
-//         expect(utils.tileToUnicode(TileDef.Man7)).toMatch('🀍');
-//         expect(utils.tileToUnicode(TileDef.Man8)).toMatch('🀎');
-//         expect(utils.tileToUnicode(TileDef.Man9)).toMatch('🀏');
-//         expect(utils.tileToUnicode(TileDef.Sou1)).toMatch('🀐');
-//         expect(utils.tileToUnicode(TileDef.Sou2)).toMatch('🀑');
-//         expect(utils.tileToUnicode(TileDef.Sou3)).toMatch('🀒');
-//         expect(utils.tileToUnicode(TileDef.Sou4)).toMatch('🀓');
-//         expect(utils.tileToUnicode(TileDef.Sou5)).toMatch('🀔');
-//         expect(utils.tileToUnicode(TileDef.Sou6)).toMatch('🀕');
-//         expect(utils.tileToUnicode(TileDef.Sou7)).toMatch('🀖');
-//         expect(utils.tileToUnicode(TileDef.Sou8)).toMatch('🀗');
-//         expect(utils.tileToUnicode(TileDef.Sou9)).toMatch('🀘');
-//         expect(utils.tileToUnicode(TileDef.Pin1)).toMatch('🀙');
-//         expect(utils.tileToUnicode(TileDef.Pin2)).toMatch('🀚');
-//         expect(utils.tileToUnicode(TileDef.Pin3)).toMatch('🀛');
-//         expect(utils.tileToUnicode(TileDef.Pin4)).toMatch('🀜');
-//         expect(utils.tileToUnicode(TileDef.Pin5)).toMatch('🀝');
-//         expect(utils.tileToUnicode(TileDef.Pin6)).toMatch('🀞');
-//         expect(utils.tileToUnicode(TileDef.Pin7)).toMatch('🀟');
-//         expect(utils.tileToUnicode(TileDef.Pin8)).toMatch('🀠');
-//         expect(utils.tileToUnicode(TileDef.Pin9)).toMatch('🀡');
-//     });
+        expect(tileToUnicode(`${TileKind.Honor}${Wind.East}`)).toMatch('🀀');
+        expect(tileToUnicode(`${TileKind.Honor}${Wind.South}`)).toMatch('🀁');
+        expect(tileToUnicode(`${TileKind.Honor}${Wind.West}`)).toMatch('🀂');
+        expect(tileToUnicode(`${TileKind.Honor}${Wind.North}`)).toMatch('🀃');
+        expect(tileToUnicode(`${TileKind.Honor}${Dragon.Chun}`)).toMatch('🀄');
+        expect(tileToUnicode(`${TileKind.Honor}${Dragon.Hatsu}`)).toMatch('🀅');
+        expect(tileToUnicode(`${TileKind.Honor}${Dragon.Haku}`)).toMatch('🀆');
+        expect(tileToUnicode(`${TileKind.Man}1`)).toMatch('🀇');
+        expect(tileToUnicode(`${TileKind.Man}2`)).toMatch('🀈');
+        expect(tileToUnicode(`${TileKind.Man}3`)).toMatch('🀉');
+        expect(tileToUnicode(`${TileKind.Man}4`)).toMatch('🀊');
+        expect(tileToUnicode(`${TileKind.Man}5`)).toMatch('🀋');
+        expect(tileToUnicode(`${TileKind.Man}6`)).toMatch('🀌');
+        expect(tileToUnicode(`${TileKind.Man}7`)).toMatch('🀍');
+        expect(tileToUnicode(`${TileKind.Man}8`)).toMatch('🀎');
+        expect(tileToUnicode(`${TileKind.Man}9`)).toMatch('🀏');
+        expect(tileToUnicode(`${TileKind.Sou}1`)).toMatch('🀐');
+        expect(tileToUnicode(`${TileKind.Sou}2`)).toMatch('🀑');
+        expect(tileToUnicode(`${TileKind.Sou}3`)).toMatch('🀒');
+        expect(tileToUnicode(`${TileKind.Sou}4`)).toMatch('🀓');
+        expect(tileToUnicode(`${TileKind.Sou}5`)).toMatch('🀔');
+        expect(tileToUnicode(`${TileKind.Sou}6`)).toMatch('🀕');
+        expect(tileToUnicode(`${TileKind.Sou}7`)).toMatch('🀖');
+        expect(tileToUnicode(`${TileKind.Sou}8`)).toMatch('🀗');
+        expect(tileToUnicode(`${TileKind.Sou}9`)).toMatch('🀘');
+        expect(tileToUnicode(`${TileKind.Pin}1`)).toMatch('🀙');
+        expect(tileToUnicode(`${TileKind.Pin}2`)).toMatch('🀚');
+        expect(tileToUnicode(`${TileKind.Pin}3`)).toMatch('🀛');
+        expect(tileToUnicode(`${TileKind.Pin}4`)).toMatch('🀜');
+        expect(tileToUnicode(`${TileKind.Pin}5`)).toMatch('🀝');
+        expect(tileToUnicode(`${TileKind.Pin}6`)).toMatch('🀞');
+        expect(tileToUnicode(`${TileKind.Pin}7`)).toMatch('🀟');
+        expect(tileToUnicode(`${TileKind.Pin}8`)).toMatch('🀠');
+        expect(tileToUnicode(`${TileKind.Pin}9`)).toMatch('🀡');
+    });
 
 //     it('should translate hands to unicode', () => {
 //         expect(utils.handToUnicode([TileDef.Chun, TileDef.Hatsu, TileDef.Man1, TileDef.Pin2])).toMatch('🀄 🀅 🀇 🀚');

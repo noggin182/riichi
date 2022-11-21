@@ -55,17 +55,23 @@ export function allSuitsPresent(tiles: readonly Tile[]) {
     return [TileKind.Man, TileKind.Pin, TileKind.Sou].every(suit => presentSuits.includes(suit));
 }
 
-// export function tileToUnicode(tile: TileDef) {
-//     const value = getValueFromTile(tile) - 1;
-//     switch (getSuitFromTile(tile)) {
-//         case TileSuit.Wind:   return String.fromCodePoint(0x1F000 + value);
-//         case TileSuit.Dragon: return String.fromCodePoint(0x1F004 + value);
-//         case TileSuit.Man:    return String.fromCodePoint(0x1F007 + value);
-//         case TileSuit.Sou:    return String.fromCodePoint(0x1F010 + value);
-//         case TileSuit.Pin:    return String.fromCodePoint(0x1F019 + value);
-//     }
-//     return String.fromCodePoint(0x1F02B);
-// }
+export function tileToUnicode(tile: Tile | null | '--') {
+    if (tile && tile !== '--') {
+        switch (tileKind(tile)) {
+            case TileKind.Man:    return String.fromCodePoint(0x1F006 + tileValue(tile));
+            case TileKind.Sou:    return String.fromCodePoint(0x1F00F + tileValue(tile));
+            case TileKind.Pin:    return String.fromCodePoint(0x1F018 + tileValue(tile));
+            case TileKind.Honor:
+                switch (tileRank(tile)) {
+                    case Dragon.Haku:  return String.fromCodePoint(0x1F006);
+                    case Dragon.Hatsu: return String.fromCodePoint(0x1F005);
+                    case Dragon.Chun:  return String.fromCodePoint(0x1F004);
+                    default: return String.fromCodePoint(0x1EFFF + tileValue(tile));
+                }
+        }
+    }
+    return String.fromCodePoint(0x1F02B);
+}
 
 // export function handToUnicode(tiles: TileDef[]) {
 //     return tiles.map(tileToUnicode).join(' ');
