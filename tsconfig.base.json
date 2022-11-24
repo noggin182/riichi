@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@riichi/ai": ["libs/ai/src/index.ts"],
       "@riichi/common": ["libs/common/src/index.ts"],
       "@riichi/server-core": ["libs/server-core/src/index.ts"],
       "@riichi/test-server": ["libs/test-server/src/index.ts"]

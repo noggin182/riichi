@@ -1,0 +1,16 @@
+{
+    "name": "@riichi/ai",
+    "version": "0.1.0",
+    "description": "AI library for Riichi",
+    "keywords": [
+      "riichi"
+    ],
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/noggin182/riichi/libs/ai"
+    },
+    "author": "Matthew Gregory",
+    "license": "MIT",
+    "homepage": "https://github.com/noggin182/riichi#readme"
+  }
+  
