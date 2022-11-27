@@ -1,4 +1,59 @@
-<pre>
-    <ng-container *ngFor="let tile of testServer.internalDeck">tile</ng-container>
-</pre>
-<rth-nx-welcome></rth-nx-welcome>
+<ng-container *ngIf="connection.playerState$ | async as playerState">
+    <div style="font-family: monospace;">
+        <ng-container *ngFor="let tile of playerState.deck">{{tile}} </ng-container>
+    </div>
+
+    <div *ngIf="connection.gameState$ | async as gameState">
+        <ng-container>
+            Wall:
+            <div style="font-family: monospace;">
+                <span *ngFor="let tileIndex of gameState.wall" class="tile">{{
+                    tileIndex === null ? undefined : playerState.deck[tileIndex] ?? '--' | tileUnicode
+                }}</span>
+            </div>
+
+            Known Tiles:
+            <div style="font-family: monospace;">
+                <ng-container *ngFor="let tile of playerState.deck">{{tile ?? '--'}} </ng-container>
+            </div>
+
+            <div>
+                <div *ngFor="let player of [gameState.players[1], gameState.players[2], gameState.players[3], gameState.players[4]]"
+                    style="margin:12px;">
+                    <div><b>{{player.name}}</b></div>
+                    <div>avatarUrl: {{player.avatarUrl}} </div>
+                    <div>points: {{player.points}} </div>
+                    <div>hand: {{player.hand | json}} </div>
+                    <div>
+                        <span *ngFor="let tile of player.hand | pad:14:-1" class="tile" (click)="discard(tile)">
+                            <ng-container *ngIf="tile !== -1">
+                                {{(playerState.deck[tile] ?? '--') | tileUnicode}}
+                            </ng-container>
+                        </span>
+                    </div>
+
+                    <div *ngIf="player === gameState.players[playerWind] && (sortTiles$ | async) as sortTiles">
+                        <span *ngFor="let tile of player.hand | sort:sortTiles | pad:14:-1" class="tile" (click)="discard(tile)" title="Dicard {{playerState.deck[tile]}}">
+                            <ng-container *ngIf="tile !== -1">
+                                {{(playerState.deck[tile] ?? '--') | tileUnicode}}
+                            </ng-container>
+                        </span>
+                    </div>
+
+                    <div>discards: {{player.discards}} </div>
+                    <div>
+                        <span *ngFor="let tile of player.discards" class="tile" (click)="discard(tile)">
+                            {{(playerState.deck[tile] ?? '--') | tileUnicode}}
+                        </span>
+                    </div>
+                    <div>melds: {{player.melds}} </div>
+                    <div>riichiTile: {{player.riichiTile}} </div>
+
+                    <ng-container *ngIf="player === gameState.players[playerWind]">
+                        <button (click)="drawTile()">Draw</button>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</ng-container>

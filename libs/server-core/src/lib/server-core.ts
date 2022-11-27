@@ -1,19 +1,14 @@
-import { GameState, Tile } from "@riichi/common";
+import { GameState, PlayerState, TileIndex } from "@riichi/common";
 import { Observable } from "rxjs";
 
 export function serverCore(): string {
     return 'server-core';
 }
 
-export interface RiichiServer {
+export interface RiichiServerConnection {
     readonly gameState$: Observable<GameState>;
+    readonly playerState$: Observable<PlayerState>;
+    
+    discard(tileIndex: TileIndex): Promise<void>;
+    drawTile(tileIndex: TileIndex): Promise<void>;
 }
-
-/// This function is called by the server
-export function makeMove(gameState: GameState, desk: Tile[], playerId: string, move: unknown): {
-    newState: GameState
-} {
-    return {
-        newState: gameState
-    }
-};

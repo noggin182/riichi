@@ -1,0 +1,16 @@
+.tile {
+    display: inline-block;
+    font-size: 30px;
+    width: 27px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+
+    &:empty:before {
+        content: '🟩';
+        font-size: 12px;
+        position: relative;
+        top: -5px;
+        opacity: 0.3;
+    }
+}
