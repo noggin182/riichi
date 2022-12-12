@@ -1,0 +1,27 @@
+rth-table {
+    display: inline-grid;
+    background-color: green;
+    border-color: brown;
+    border-style: solid;
+    border-width: 4px;
+    border-radius: 4px;
+
+    grid-template-columns: min-content;
+    grid-template-rows:  min-content;
+
+    > * {
+        grid-row: 1;
+        grid-column: 1;
+    }
+
+    > rth-seat {
+        transform-origin: top center;
+        pointer-events: none;
+        > * {
+            pointer-events: initial;
+        }
+    }
+    > rth-seat:nth-child(2) { transform: rotate(-90deg);}
+    > rth-seat:nth-child(3) { transform: rotate(180deg);}
+    > rth-seat:nth-child(4) { transform: rotate( 90deg);}
+}

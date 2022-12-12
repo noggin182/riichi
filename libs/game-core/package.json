@@ -1,13 +1,13 @@
 {
-  "name": "@riichi/test-server",
+  "name": "@riichi/game-core",
   "version": "0.1.0",
-  "description": "Test server library for Riichi",
+  "description": "Core game library for Riichi",
   "keywords": [
     "riichi"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/noggin182/riichi/libs/test-server"
+    "url": "https://github.com/noggin182/riichi/libs/game-core"
   },
   "author": "Matthew Gregory",
   "license": "MIT",

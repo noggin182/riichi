@@ -1,0 +1,13 @@
+<!-- <rth-discards [seat]="seat" [gameService]="gameService"></rth-discards> -->
+<rth-wall-side [gameService]="gameService" [seat]="seat" (tileClick)="tileClick.emit($event)"
+    [attr.data-tile-click-behaviour]="tileClickBehaviour$ | async"
+></rth-wall-side>
+<rth-hand [gameService]="gameService" [seat]="seat" ></rth-hand>
+
+<div>
+    <!-- <label for="active_seat_{{seat}}"><b>{{gameService.players[seat].name}}</b></label> -->
+    <ng-container *ngIf="(gameService.players$[seat] | async) as playerInfo">
+        {{windChars[playerInfo.seatWind]}}
+        {{playerInfo.name}}
+    </ng-container>
+</div>

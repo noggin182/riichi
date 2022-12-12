@@ -1,59 +1,173 @@
-<ng-container *ngIf="connection.playerState$ | async as playerState">
-    <div style="font-family: monospace;">
-        <ng-container *ngFor="let tile of playerState.deck">{{tile}} </ng-container>
-    </div>
+<div style="display:flex;justify-content: space-between; width: 648px">
+    <rth-player-select [(playerIndex)]="activePlayerIndex">
+    </rth-player-select>
 
-    <div *ngIf="connection.gameState$ | async as gameState">
-        <ng-container>
-            Wall:
-            <div style="font-family: monospace;">
-                <span *ngFor="let tileIndex of gameState.wall" class="tile">{{
-                    tileIndex === null ? undefined : playerState.deck[tileIndex] ?? '--' | tileUnicode
-                }}</span>
-            </div>
+    <rth-tile-click-behaviour-select></rth-tile-click-behaviour-select>
+</div>
 
-            Known Tiles:
-            <div style="font-family: monospace;">
-                <ng-container *ngFor="let tile of playerState.deck">{{tile ?? '--'}} </ng-container>
-            </div>
+<!-- <rth-table [gameState]="activePlayer.gameState" (tileClick)="clickWall($event.tileIndex, $event.type)"></rth-table> -->
+<rth-table [gameService]="activeConnection">
+    <!-- <span style="font-size: 2em; line-height: 0.1em; vertical-align: middle;cursor: pointer;" (click)="playerConnections[activeSeat].move.rollDice()"> -->
+    
+    <span style="font-size: 2em; line-height: 0.1em; vertical-align: middle;cursor: pointer;" (click)="activeConnection.move.rollDice()">
+        {{die((activeConnection.diceValues$ | async)?.[0])}}
+        {{die((activeConnection.diceValues$ | async)?.[1])}}
+    </span>
 
+</rth-table>
+
+
+<!-- <div *ngIf="connection.gameState$ | async as gameState">
+
+    <rth-table [gameState]="gameState" (tileClick)="clickWall($event.tileIndex, $event.type)">
+        
+            <span style="font-size: 2em; line-height: 0.1em; vertical-align: middle;cursor: pointer;" (click)="playerConnections[activeSeat].move.rollDice()">
+                {{die(gameState, 0)}}
+                {{die(gameState, 1)}}
+            </span>
+        
+    </rth-table>
+
+    <div style="display:flex;">
+        <div *ngFor="let seat of [east, south, west, north]">
             <div>
-                <div *ngFor="let player of [gameState.players[1], gameState.players[2], gameState.players[3], gameState.players[4]]"
-                    style="margin:12px;">
-                    <div><b>{{player.name}}</b></div>
-                    <div>avatarUrl: {{player.avatarUrl}} </div>
-                    <div>points: {{player.points}} </div>
-                    <div>hand: {{player.hand | json}} </div>
-                    <div>
-                        <span *ngFor="let tile of player.hand | pad:14:-1" class="tile" (click)="discard(tile)">
-                            <ng-container *ngIf="tile !== -1">
-                                {{(playerState.deck[tile] ?? '--') | tileUnicode}}
-                            </ng-container>
-                        </span>
-                    </div>
-
-                    <div *ngIf="player === gameState.players[playerWind] && (sortTiles$ | async) as sortTiles">
-                        <span *ngFor="let tile of player.hand | sort:sortTiles | pad:14:-1" class="tile" (click)="discard(tile)" title="Dicard {{playerState.deck[tile]}}">
-                            <ng-container *ngIf="tile !== -1">
-                                {{(playerState.deck[tile] ?? '--') | tileUnicode}}
-                            </ng-container>
-                        </span>
-                    </div>
-
-                    <div>discards: {{player.discards}} </div>
-                    <div>
-                        <span *ngFor="let tile of player.discards" class="tile" (click)="discard(tile)">
-                            {{(playerState.deck[tile] ?? '--') | tileUnicode}}
-                        </span>
-                    </div>
-                    <div>melds: {{player.melds}} </div>
-                    <div>riichiTile: {{player.riichiTile}} </div>
-
-                    <ng-container *ngIf="player === gameState.players[playerWind]">
-                        <button (click)="drawTile()">Draw</button>
-                    </ng-container>
-                </div>
+                <input type="radio" name="active_seat" id="active_seat_{{seat}}" [value]="seat" [checked]="activeSeat === seat" (click)="activeSeat = seat" />
+                <label for="active_seat_{{seat}}"><b>{{gameState.players[seat].name}}</b></label>
             </div>
-        </ng-container>
+        </div>
     </div>
-</ng-container>
+
+    <button (click)="playerConnections[activeSeat].move.rollDice()">Roll</button>
+
+
+    <div style="font-family: monospace;">
+        <ng-container *ngFor="let tile of gameState.knownTiles">{{tile}} </ng-container>
+    </div>
+    <ng-container>
+
+<riichi-tile tile="m1"></riichi-tile>
+<riichi-tile tile="m2"></riichi-tile>
+<riichi-tile tile="m3"></riichi-tile>
+<riichi-tile tile="m4"></riichi-tile>
+<riichi-tile tile="m5"></riichi-tile>
+<riichi-tile tile="m6"></riichi-tile>
+<riichi-tile tile="m7"></riichi-tile>
+<riichi-tile tile="m8"></riichi-tile>
+<riichi-tile tile="m9"></riichi-tile><br/>
+<riichi-tile tile="p1"></riichi-tile>
+<riichi-tile tile="p2"></riichi-tile>
+<riichi-tile tile="p3"></riichi-tile>
+<riichi-tile tile="p4"></riichi-tile>
+<riichi-tile tile="p5"></riichi-tile>
+<riichi-tile tile="p6"></riichi-tile>
+<riichi-tile tile="p7"></riichi-tile>
+<riichi-tile tile="p8"></riichi-tile>
+<riichi-tile tile="p9"></riichi-tile><br/>
+<riichi-tile tile="s1"></riichi-tile>
+<riichi-tile tile="s2"></riichi-tile>
+<riichi-tile tile="s3"></riichi-tile>
+<riichi-tile tile="s4"></riichi-tile>
+<riichi-tile tile="s5"></riichi-tile>
+<riichi-tile tile="s6"></riichi-tile>
+<riichi-tile tile="s7"></riichi-tile>
+<riichi-tile tile="s8"></riichi-tile>
+<riichi-tile tile="s9"></riichi-tile><br/>
+<riichi-tile tile="z1"></riichi-tile>
+<riichi-tile tile="z2"></riichi-tile>
+<riichi-tile tile="z3"></riichi-tile>
+<riichi-tile tile="z4"></riichi-tile>
+<riichi-tile tile="z5"></riichi-tile>
+<riichi-tile tile="z6"></riichi-tile>
+<riichi-tile tile="z7"></riichi-tile>
+<br />
+<b>
+    <riichi-tile tile="m1"></riichi-tile>
+<riichi-tile tile="m2"></riichi-tile>
+<riichi-tile tile="m3"></riichi-tile>
+<riichi-tile tile="m4"></riichi-tile>
+<riichi-tile tile="m5"></riichi-tile>
+<riichi-tile tile="m6"></riichi-tile>
+<riichi-tile tile="m7"></riichi-tile>
+<riichi-tile tile="m8"></riichi-tile>
+<riichi-tile tile="m9"></riichi-tile><br/>
+<riichi-tile tile="p1"></riichi-tile>
+<riichi-tile tile="p2"></riichi-tile>
+<riichi-tile tile="p3"></riichi-tile>
+<riichi-tile tile="p4"></riichi-tile>
+<riichi-tile tile="p5"></riichi-tile>
+<riichi-tile tile="p6"></riichi-tile>
+<riichi-tile tile="p7"></riichi-tile>
+<riichi-tile tile="p8"></riichi-tile>
+<riichi-tile tile="p9"></riichi-tile><br/>
+<riichi-tile tile="s1"></riichi-tile>
+<riichi-tile tile="s2"></riichi-tile>
+<riichi-tile tile="s3"></riichi-tile>
+<riichi-tile tile="s4"></riichi-tile>
+<riichi-tile tile="s5"></riichi-tile>
+<riichi-tile tile="s6"></riichi-tile>
+<riichi-tile tile="s7"></riichi-tile>
+<riichi-tile tile="s8"></riichi-tile>
+<riichi-tile tile="s9"></riichi-tile><br/>
+<riichi-tile tile="z1"></riichi-tile>
+<riichi-tile tile="z2"></riichi-tile>
+<riichi-tile tile="z3"></riichi-tile>
+<riichi-tile tile="z4"></riichi-tile>
+<riichi-tile tile="z5"></riichi-tile>
+<riichi-tile tile="z6"></riichi-tile>
+<riichi-tile tile="z7"></riichi-tile>
+</b>
+
+        Wall:
+        <div style="font-family: monospace;">
+            <span *ngFor="let tileIndex of gameState.wall" class="tile">{{
+                tileIndex === null ? undefined : gameState.knownTiles[tileIndex] ?? '--' | tileUnicode
+            }}</span>
+        </div>
+
+        Known Tiles:
+        <div style="font-family: monospace;">
+            <ng-container *ngFor="let tile of gameState.knownTiles">{{tile ?? '--'}} </ng-container>
+        </div>
+
+        <div>
+            <div *ngFor="let seat of [east, south, west, north]"
+                style="margin:12px;">
+                <div>
+                    <b>{{gameState.players[seat].name}}</b>
+                    <button (click)="playerConnections[seat].move.rollDice()">Roll</button>
+                </div>
+                <div>avatarUrl: {{gameState.players[seat].avatarUrl}} </div>
+                <div>points: {{gameState.players[seat].points}} </div>
+                <div>hand: {{gameState.players[seat].hand | json}} </div>
+                <div>
+                    <span *ngFor="let tile of gameState.players[seat].hand | pad:14:-1" class="tile" (click)="discard(tile)">
+                        <ng-container *ngIf="tile !== -1">
+                            {{(gameState.knownTiles[tile] ?? '--') | tileUnicode}}
+                        </ng-container>
+                    </span>
+                </div>
+
+                <div *ngIf="seat === playerWind && (sortTiles$ | async) as sortTiles">
+                    <span *ngFor="let tile of gameState.players[seat].hand | sort:sortTiles | pad:14:-1" class="tile" (click)="discard(tile)" title="Dicard {{gameState.knownTiles[tile]}}">
+                        <ng-container *ngIf="tile !== -1">
+                            {{(gameState.knownTiles[tile] ?? '--') | tileUnicode}}
+                        </ng-container>
+                    </span>
+                </div>
+
+                <div>discards: {{gameState.players[seat].discards}} </div>
+                <div>
+                    <span *ngFor="let tile of gameState.players[seat].discards" class="tile" (click)="discard(tile)">
+                        {{(gameState.knownTiles[tile] ?? '--') | tileUnicode}}
+                    </span>
+                </div>
+                <div>melds: {{gameState.players[seat].melds}} </div>
+                
+
+                <ng-container *ngIf="seat === playerWind">
+                    <button (click)="drawTile()">Draw</button>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+</div> -->

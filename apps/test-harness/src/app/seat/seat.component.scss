@@ -1,0 +1,24 @@
+rth-seat {
+    aspect-ratio: 2 / 1;
+    display: inline-grid;
+    grid-template-areas:
+        '. . . discards . . .'
+        'avatar avatar wall wall wall . .'
+        'avatar avatar hand hand hand . .';
+        
+    grid-template-rows: auto 50px 50px;
+    grid-template-columns: 50px 50px auto auto auto 50px 50px;
+    place-items: center center;
+    margin-top: 50%;
+    > rth-discards  { grid-area: discards; }
+    > rth-wall-side { grid-area: wall;     }
+    > rth-hand      { grid-area: hand;     }
+
+    > rth-discards {
+        margin-top: 50%;
+    }
+
+    > div {
+        grid-area: avatar;
+    }
+}

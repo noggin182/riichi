@@ -1,0 +1,6 @@
+<ng-container *ngIf="(tileClickBehaviour$ | async) as currentBehaviour">
+    <ng-container *ngFor="let behaviour of behaviours">
+        <input type="radio" id="tile-click-behaviour-select-{{behaviour.value}}" [checked]="behaviour.value === currentBehaviour" (click)="tileClickBehaviour$.next(behaviour.value)" />
+        <label for="tile-click-behaviour-select-{{behaviour.value}}">{{behaviour.name}}</label>
+    </ng-container>
+</ng-container>

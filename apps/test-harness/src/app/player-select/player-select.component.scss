@@ -1,0 +1,17 @@
+rth-player-select {
+    input {
+        display: none;
+    }
+    label { 
+        margin: 2px;
+        border: 1px solid silver;
+        background-color: cornflowerblue;
+        padding: 3px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    input:checked + label {
+        background-color: darkgoldenrod;
+    }
+}

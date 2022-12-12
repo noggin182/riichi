@@ -1,0 +1,66 @@
+rth-wall-side {
+    place-self: center center;
+    margin: 16px;
+    display: flex;
+    flex-direction: row-reverse;
+    width: 408px;
+    --number-of-splits: 0;
+    
+    transform: translateX(calc(max(0, calc(var(--number-of-splits) - 1)) * 10px));
+
+    &.rth-wall-side--multiple-splits {
+        margin-right: -10px;
+    }
+
+    &[data-tile-click-behaviour="splitAfter"] {
+        > riichi-tile:nth-child(2n):hover {
+            z-index: 10;
+            box-shadow: -4px 0px 0px 0px rgba(255,0,0,0.75);
+        }
+    }
+
+    &[data-tile-click-behaviour="splitBefore"] {
+        > riichi-tile:nth-child(2n):hover {
+            z-index: 10;
+            box-shadow: 4px 0px 0px 0px rgba(255,0,0,0.75);
+        }
+    }
+
+    > riichi-tile {
+        flex: 0 0 auto;
+        cursor: pointer;
+        position: relative;
+        z-index: 1;
+    }
+
+    > riichi-tile:not([data-tile]) {
+        visibility: hidden;
+    }
+
+    > riichi-tile:nth-child(2n) {
+        z-index: 2;
+        margin-right: -24px;
+        top: -4px;
+        left: -3px;
+    }
+
+    &.rth-wall-side--ready-to-break {
+        > riichi-tile:nth-child(2n + 1):hover {
+            z-index: 10;
+            box-shadow: -4px 0px 0px 0px rgba(255,0,0,0.75);
+        }
+    }
+
+    > riichi-tile.rth-wall-side__tile--split-after {
+        margin-left: 10px;
+    }
+
+    > riichi-tile:after {
+        content: attr(data-tile-index);
+        display: block;
+        text-align: center;
+        line-height: 32px;
+        font-size: x-small;
+        color: rgba(255, 255, 255, 0.6);
+    }
+}

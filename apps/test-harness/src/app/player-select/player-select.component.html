@@ -1,0 +1,4 @@
+<ng-container *ngFor="let name of playerNames; let index = index">
+    <input type="radio" id="player-select-{{index}}" [checked]="index === playerIndex" (click)="clickPlayer(index)" />
+    <label for="player-select-{{index}}">{{name}}</label>
+</ng-container>

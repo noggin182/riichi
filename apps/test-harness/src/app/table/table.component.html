@@ -1,0 +1,14 @@
+<rth-seat
+    *ngFor="let index of seatIndexes"
+    [seat]="index"
+    [gameService]="gameService"
+></rth-seat>
+
+<div style="
+    aspect-ratio: 1/1;
+    place-self: center center;
+    display: flex;
+    align-items: center;
+    justify-content: center;">
+    <ng-content></ng-content>
+</div>
