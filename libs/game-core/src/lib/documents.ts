@@ -9,17 +9,17 @@ export type TileIndex = number;
 export type PlayerIndex = 0 | 1 | 2 | 3;
 
 export interface PlayerInfo {
-    readonly name: string,
-    readonly id: string,
-    readonly avatarUrl: string,
-    readonly seatWind: Wind,
-    readonly points: number,
-    readonly hand: readonly TileIndex[],
-    readonly discards: readonly TileIndex[],
+    readonly name: string;
+    readonly id: string;
+    readonly avatarUrl: string;
+    readonly seatWind: Wind;
+    readonly points: number;
+    readonly hand: readonly TileIndex[];
+    readonly discards: readonly TileIndex[];
     readonly melds: {
         readonly tiles: readonly TileIndex[];
         readonly claimedTile?: TileIndex;
-    }[]
+    }[];
 }
 
 /**
@@ -27,7 +27,7 @@ export interface PlayerInfo {
  */
 export interface GameDocument {
     readonly prevelantWind: Wind;
-    readonly players: PlayerInfo[];
+    readonly players: readonly PlayerInfo[];
     readonly knownTiles: readonly (Tile | null)[];
     readonly ledger: readonly LogEntry[];
 }

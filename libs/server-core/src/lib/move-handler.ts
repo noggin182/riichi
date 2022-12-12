@@ -1,11 +1,23 @@
-import { calculateStartOfWall, calculateWallFromDiceValue, CallType, DECK_SIZE, getDiceValue, LogEntry, LogEntryType, MoveFunctions, PlayerIndex, PlayerInfo, TileIndex } from '@riichi/game-core';
-import { InternalGameDocument, InternalPlayerInfo } from "./documents";
+import {
+    calculateStartOfWall,
+    calculateWallFromDiceValue,
+    CallType,
+    DECK_SIZE,
+    getDiceValue,
+    LogEntry,
+    LogEntryType,
+    MoveFunctions,
+    PlayerIndex,
+    PlayerInfo,
+    TileIndex
+} from '@riichi/game-core';
+import { InternalGameDocument, InternalPlayerInfo } from "./internal/documents";
 
-export const moveHandlers: {[K in keyof MoveFunctions]: MoveFunctions[K] extends (...args: infer P) => void ? (game: InternalGameDocument, callingPlayer: PlayerIndex, ...args: P) => InternalGameDocument : never } = {
+export const moveHandlers: {[K in keyof MoveFunctions]: MoveFunctions[K] extends (...args: infer P) => void ? (game: InternalGameDocument, callingPlayer: PlayerIndex, ...args: P) => void : never } = {
 
     rollDice(game: InternalGameDocument, callingPlayer: PlayerIndex) {
         // TODO: should we store the seed or current w/x in the InternalGameDocument so this is deterministic?
-        return appendToLog(game, {
+        game.ledger.push({
             type: LogEntryType.DiceRolled,
             callingPlayer,
             values: [
@@ -17,7 +29,7 @@ export const moveHandlers: {[K in keyof MoveFunctions]: MoveFunctions[K] extends
 
     splitWall(game: InternalGameDocument, callingPlayer: PlayerIndex, tileIndex: TileIndex) {
         const topTile = tileIndex | 1;
-        return appendToLog(game, {
+        game.ledger.push({
             type: LogEntryType.WallSplit,
             callingPlayer,
             afterTile: topTile
@@ -25,18 +37,11 @@ export const moveHandlers: {[K in keyof MoveFunctions]: MoveFunctions[K] extends
     },
 
     takeTile(game: InternalGameDocument, callingPlayer: PlayerIndex, tileIndex: TileIndex) {
-        return patchGame(game, {
-            internalPlayerInfo: {
-                [callingPlayer]: {
-                    knownTiles: [...game.internalPlayerInfo[callingPlayer].knownTiles, tileIndex]
-                }
-            },
-            players: {
-                [callingPlayer]: {
-                    hand: [...game.players[callingPlayer].hand, tileIndex]
-                }
-            }
-        }, {
+        // TODO: ensure tile exists nowhere else
+        game.players[callingPlayer].hand.push(tileIndex);
+        game.players[callingPlayer].knownTiles.push(tileIndex);
+
+        game.ledger.push({
             type: LogEntryType.TookTile,
             callingPlayer,
             tileIndex
@@ -44,26 +49,14 @@ export const moveHandlers: {[K in keyof MoveFunctions]: MoveFunctions[K] extends
     },
 
     flipTileInWall(game: InternalGameDocument, callingPlayer: PlayerIndex, tileIndex: TileIndex) {
-        const personToFlip = calculateWallFromDiceValue(getDiceValue(game));
-        if (game.players[callingPlayer].seatWind !== personToFlip) {
-            console.warn('Wrong player flipping the dora', callingPlayer, personToFlip);
-        }
-
-        const tileToflip = (calculateStartOfWall(getDiceValue(game)) + DECK_SIZE - 6) % DECK_SIZE;
-        if (tileIndex !== tileToflip) {
-            console.warn("Wrong tile to flip", {callingPlayer, tileToflip, tileIndex});
-            return game;
-        }
+        // TODO: handle flipping after kan
+        game.players[0].knownTiles.push(tileIndex);
+        game.players[1].knownTiles.push(tileIndex);
+        game.players[2].knownTiles.push(tileIndex);
+        game.players[3].knownTiles.push(tileIndex);
 
         // TODO: handle flipping after kan
-        return patchGame(game, {
-            internalPlayerInfo: {
-                [0]: { knownTiles: [...game.internalPlayerInfo[0].knownTiles, tileIndex] },
-                [1]: { knownTiles: [...game.internalPlayerInfo[1].knownTiles, tileIndex] },
-                [2]: { knownTiles: [...game.internalPlayerInfo[2].knownTiles, tileIndex] },
-                [3]: { knownTiles: [...game.internalPlayerInfo[3].knownTiles, tileIndex] },
-            }
-        }, {
+        game.ledger.push({
             type: LogEntryType.FlippedTileInWall,
             callingPlayer,
             tileIndex
@@ -71,24 +64,20 @@ export const moveHandlers: {[K in keyof MoveFunctions]: MoveFunctions[K] extends
     },
 
     discard(game: InternalGameDocument, callingPlayer: PlayerIndex, tileIndex: TileIndex) {
-        if (!game.players[callingPlayer].hand.includes(tileIndex)) {
-            console.warn("Cannot discard a tile you don't have", {callingPlayer, tileIndex})
-            return game;
-        }
-        return patchGame(game, {
-            players: {
-                [callingPlayer]: {
-                    hand: game.players[callingPlayer].hand.filter(t => t !== tileIndex),
-                    discards: [...game.players[callingPlayer].discards, tileIndex]
-                }
-            },
-            internalPlayerInfo: {
-                [0]: { knownTiles: [...game.internalPlayerInfo[0].knownTiles, tileIndex] },
-                [1]: { knownTiles: [...game.internalPlayerInfo[1].knownTiles, tileIndex] },
-                [2]: { knownTiles: [...game.internalPlayerInfo[2].knownTiles, tileIndex] },
-                [3]: { knownTiles: [...game.internalPlayerInfo[3].knownTiles, tileIndex] },
-            }
-        }, {
+        // TODO: ensure tile exists nowhere
+        game.players[0].hand = game.players[0].hand.filter(t => t !== tileIndex);
+        game.players[1].hand = game.players[1].hand.filter(t => t !== tileIndex);
+        game.players[2].hand = game.players[2].hand.filter(t => t !== tileIndex);
+        game.players[3].hand = game.players[3].hand.filter(t => t !== tileIndex);
+
+        game.players[callingPlayer].discards.push(tileIndex);
+
+        game.players[0].knownTiles.push(tileIndex);
+        game.players[1].knownTiles.push(tileIndex);
+        game.players[2].knownTiles.push(tileIndex);
+        game.players[3].knownTiles.push(tileIndex);
+
+        game.ledger.push({
             type: LogEntryType.DiscardedTile,
             callingPlayer,
             tileIndex
@@ -112,44 +101,3 @@ export const moveHandlers: {[K in keyof MoveFunctions]: MoveFunctions[K] extends
     },
 }
 
-type PartialInternalGameDocument = Partial<Omit<InternalGameDocument, 'players' | 'internalPlayerInfo'>> & {
-    players?: Partial<Record<PlayerIndex, PlayerInfo>>;
-    internalPlayerInfo?: Partial<Record<PlayerIndex, InternalPlayerInfo>>;
-}
-
-function patchGame(game: InternalGameDocument, patch: PartialInternalGameDocument, logEntry: LogEntry): InternalGameDocument {
-    return {
-        prevelantWind: patch.prevelantWind ?? game.prevelantWind,
-        deck: patch.deck ?? game.deck,
-        players: [
-            patch.players?.[0] ? {...game.players[0], ...patch.players[0] } : game.players[0],
-            patch.players?.[1] ? {...game.players[1], ...patch.players[1] } : game.players[1],
-            patch.players?.[2] ? {...game.players[2], ...patch.players[2] } : game.players[2],
-            patch.players?.[3] ? {...game.players[3], ...patch.players[3] } : game.players[3],
-        ],
-        internalPlayerInfo: [
-            patch.internalPlayerInfo?.[0] ? {...game.internalPlayerInfo[0], ...patch.internalPlayerInfo[0] } : game.internalPlayerInfo[0],
-            patch.internalPlayerInfo?.[1] ? {...game.internalPlayerInfo[1], ...patch.internalPlayerInfo[1] } : game.internalPlayerInfo[1],
-            patch.internalPlayerInfo?.[2] ? {...game.internalPlayerInfo[2], ...patch.internalPlayerInfo[2] } : game.internalPlayerInfo[2],
-            patch.internalPlayerInfo?.[3] ? {...game.internalPlayerInfo[3], ...patch.internalPlayerInfo[3] } : game.internalPlayerInfo[3],
-        ],
-        ledger: [...game.ledger, logEntry],
-    }
-}
-
-function nextDrawableTile(game: InternalGameDocument): TileIndex {
-    const takenTiles = Object.values(game.players).map(p => [p.hand, p.discards, p.melds.map(m => m.tiles)]).flat(3);
-    const firstTile = calculateStartOfWall(getDiceValue(game));
-    if (takenTiles.length === 0) {
-        return firstTile;
-    }
-
-    return (Math.max(...takenTiles.map(t => (t - firstTile + DECK_SIZE) % DECK_SIZE)) + firstTile + 1 + DECK_SIZE)  % DECK_SIZE
-}
-
-function appendToLog(game: InternalGameDocument, logEntry: LogEntry): InternalGameDocument {
-    return {
-        ...game,
-        ledger: [...game.ledger, logEntry]
-    };
-}

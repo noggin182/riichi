@@ -1,6 +1,6 @@
 import { createNewDeck, randomNumberGenerator, Wind } from "@riichi/common";
-import { GameDocument, MoveFunctions, PlayerInfo } from "@riichi/game-core";
-import { InternalGameDocument } from "./documents";
+import { GameDocument, MoveFunctions } from "@riichi/game-core";
+import { InternalGameDocument, InternalPlayerInfo } from "./internal/documents";
 import { moveHandlers } from "./move-handler";
 import { DocumentStore } from "./stores";
 
@@ -9,30 +9,13 @@ export function serverCore(): string {
 }
 
 export function createNewGameDocument(players: {name: string, id: string, avatarUrl: string}[], rng: Iterator<number> = randomNumberGenerator()): InternalGameDocument {
-    const startingInfo: Omit<PlayerInfo, 'name'|'id'|'avatarUrl'|'seatWind'> = {
+    const startingInfo: Omit<InternalPlayerInfo, 'name'|'id'|'avatarUrl'|'seatWind'> = {
         points: 1000,
         hand: [],
         discards: [],
         melds: [],
+        knownTiles: [],
     };
-    
-    // return {
-    //     prevelantWind: Wind.East,
-    //     players: [
-    //         {...players[0], ...startingInfo, hand:[ 0, 1, 2, 3], seatWind: Wind.East},
-    //         {...players[1], ...startingInfo, hand:[ 4, 5, 6, 7], seatWind: Wind.South},
-    //         {...players[2], ...startingInfo, hand:[ 8, 9,10,11], seatWind: Wind.West},
-    //         {...players[3], ...startingInfo, hand:[12,13,14,15], seatWind: Wind.North},
-    //     ],
-    //     ledger: [],
-    //     deck: createNewDeck(rng),
-    //     tilesKnownToPlayers: {
-    //         [players[0].id]: [ 0, 1, 2, 3],
-    //         [players[1].id]: [ 4, 5, 6, 7],
-    //         [players[2].id]: [ 8, 9,10,11],
-    //         [players[3].id]: [12,13,14,15],
-    //     }
-    // };
 
     return {
         prevelantWind: Wind.East,
@@ -43,24 +26,32 @@ export function createNewGameDocument(players: {name: string, id: string, avatar
             {...players[3], ...startingInfo, seatWind: Wind.North},
         ],
         ledger: [],
-        deck: createNewDeck(rng),
-        internalPlayerInfo: [
-            {knownTiles: []},
-            {knownTiles: []},
-            {knownTiles: []},
-            {knownTiles: []}
-        ]
+        deck: createNewDeck(rng)
     };
 }
 
 export function createPlayerGameDocument(game: InternalGameDocument, playerId: string): GameDocument {
     const playerIndex = game.players.findIndex(p => p.id === playerId);
-    const knownTiles = game.internalPlayerInfo[playerIndex].knownTiles;
+    const knownTiles = game.players[playerIndex].knownTiles;
+    // InternalGameDocument is mutable and also contains properties that we don't want to accidentally store
+    // so explicitly copy each property
     return {
-        knownTiles: game.deck.map((tile, index) => knownTiles.includes(index) ? tile : null),
         prevelantWind: game.prevelantWind,
-        players: game.players,
-        ledger: game.ledger.slice()
+        players: game.players.map(p => ({
+            name: p.name,
+            id: p.id,
+            avatarUrl: p.avatarUrl,
+            seatWind: p.seatWind,
+            points: p.points,
+            hand: [...p.hand],
+            discards: [...p.discards],
+            melds: p.melds.map(m => ({
+                tiles: [...m.tiles],
+                claimedTile: m.claimedTile
+            }))
+        })),
+        knownTiles:  game.deck.map((tile, index) => knownTiles.includes(index) ? tile : null),
+        ledger: [...game.ledger]
     };
 }
 
