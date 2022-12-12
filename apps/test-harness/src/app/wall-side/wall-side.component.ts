@@ -98,8 +98,7 @@ export class WallSideComponent implements OnChanges, OnDestroy {
         }
     }
 
-    protected click(tileIndex: TileIndex) {
-        console.log(`clicking tile `, tileIndex, this.tileClickBehaviour$.value)
+    protected clickTile(tileIndex: TileIndex) {
         switch (this.tileClickBehaviour$.value) {
             case TileClickBehaviour.SplitAfter: {
                 this.gameService.move.splitWall(tileIndex);
@@ -117,14 +116,10 @@ export class WallSideComponent implements OnChanges, OnDestroy {
                 this.gameService.move.takeTile(tileIndex);
                 break;
             }
+            case TileClickBehaviour.Discard: {
+                this.gameService.move.discard(tileIndex);
+                break;
+            }
         }
-        // this.tileClick.emit({
-        //     tileIndex: this.sideStart + offset,
-        //     type: this.readyToBreak ? 'split'
-        //         : findInLedger(this.gameState, LogEntryType.FlippedTileInWall) ? 'take'
-        //         : 'flip'
-        // });
     }
-
-
 }

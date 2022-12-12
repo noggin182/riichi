@@ -1,4 +1,4 @@
 <riichi-tile
-    *ngFor="let discard of discards"
-    [tile]="discard"
+    *ngFor="let discard of (gameService.players$[seat] | async)?.discards | pad:24"
+    [tile]="discard === undefined ? undefined : ((gameService.tileValues$[discard] | async) ?? 'xx')"
 ></riichi-tile>

@@ -3,6 +3,7 @@
     [attr.data-tile-click-behaviour]="tileClickBehaviour$ | async"
 ></rth-wall-side>
 <rth-hand [gameService]="gameService" [seat]="seat" ></rth-hand>
+<rth-discards [gameService]="gameService" [seat]="seat" ></rth-discards>
 
 <div>
     <!-- <label for="active_seat_{{seat}}"><b>{{gameService.players[seat].name}}</b></label> -->

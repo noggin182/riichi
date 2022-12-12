@@ -3,5 +3,5 @@
     [tile]="(gameService.wall$[tileIndex] | async) ?? undefined"
     [attr.data-tile-index]="tileIndex"
     [class.rth-wall-side__tile--split-after]="gameService.log$ | tileIsSplit:tileIndex | async"
-    (click)="click(tileIndex)"
+    (click)="clickTile(tileIndex)"
 ></riichi-tile>
