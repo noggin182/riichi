@@ -1,3 +1,8 @@
+<div style="margin: 10px 0">
+    <input type="checkbox" id="training_wheels" #inputTrainingWheels [checked]="testServer.useTrainingWheels"
+    (input)="testServer.useTrainingWheels = inputTrainingWheels.checked" />
+    <label for="training_wheels">Training wheels</label>
+</div>
 <div style="display:flex;justify-content: space-between; width: 648px">
     <rth-player-select [(playerIndex)]="activePlayerIndex">
     </rth-player-select>

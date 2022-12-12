@@ -32,6 +32,8 @@ export class TestServer {
         ]));
     }
 
+    useTrainingWheels = true;
+
     connect(playerIndex: PlayerIndex): GameService {
         const playerId = this.playerData[playerIndex].id;
         const gameDocument$ = this.store.get$(this.gameId, playerId);
@@ -40,7 +42,7 @@ export class TestServer {
         const trainingProxy = new Proxy(moveProxy, {
             get: (target, prop, reciever) => {
                 return (...args: unknown[]) => {
-                    const valid = (moveValidators as unknown as Record<string | symbol, (...args: unknown[]) => ReturnType<typeof moveValidators['rollDice']>>)[prop]
+                    const valid = !this.useTrainingWheels || (moveValidators as unknown as Record<string | symbol, (...args: unknown[]) => ReturnType<typeof moveValidators['rollDice']>>)[prop]
                         (this.store.get(this.gameId, playerId), playerIndex, ...args);
                     if (valid !== true) {
                         console.warn(valid)

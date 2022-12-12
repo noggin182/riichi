@@ -99,7 +99,10 @@ export const moveValidators: {[K in keyof MoveFunctions]: MoveFunctions[K] exten
         if (!game.players[callingPlayer].hand.includes(tileIndex)) {
             return 'Cannot discard a tile you don\'t have';
         }
-        return true
+        if (game.players[callingPlayer].hand.length + game.players[callingPlayer].melds.length != 14) {
+            return 'Not your turn to discard';
+        }
+        return true;
     },
 
     makeCall(game: GameDocument, callingPlayer: PlayerIndex, call: CallType) {
