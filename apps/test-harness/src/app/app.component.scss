@@ -14,3 +14,12 @@
         opacity: 0.3;
     }
 }
+
+riichi-tile[data-tile="xx"]:after {
+    content: attr(data-tile-index);
+    display: block;
+    text-align: center;
+    line-height: 32px;
+    font-size: x-small;
+    color: rgba(255, 255, 255, 0.6);
+}

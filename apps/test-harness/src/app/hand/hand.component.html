@@ -1,8 +1,9 @@
 <ng-container *ngIf="gameService.players$[seat] | async as player">
     <riichi-tile
-    *ngFor="let slot of slots"
-    [tile]="slot >= player.hand.length ? undefined : (gameService.tileValues$[player.hand[slot]] | async) ?? 'xx'"
-    (click)="tileClick.emit(player.hand[slot])"
+        *ngFor="let slot of slots"
+        [attr.data-tile-index]="player.hand[slot]"
+        [tile]="slot >= player.hand.length ? undefined : (gameService.tileValues$[player.hand[slot]] | async) ?? 'xx'"
+        (click)="tileClick.emit(player.hand[slot])"
 ></riichi-tile>
 
 </ng-container>
